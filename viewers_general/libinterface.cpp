@@ -251,7 +251,7 @@ const wchar_t* macroGetPropertyWidgetComponent(MacroHandle handle) {
 DataDescriptor* macroGetInputs(MacroHandle handle, unsigned int* count) {
   MacroBase* macro = (MacroBase*)handle;
   const MacroBase::ValueVector& inputs = macro->getInputs();
-  *count = inputs.size();
+  *count = static_cast<unsigned int>(inputs.size());
   if (inputs.size() > 0) {
     return inputs[0]->getDescriptorPtr();
   }
@@ -263,7 +263,7 @@ DataDescriptor* macroGetInputs(MacroHandle handle, unsigned int* count) {
 DataDescriptor* macroGetOutputs(MacroHandle handle, unsigned int* count) {
   MacroBase* macro = (MacroBase*)handle;
   const MacroBase::ValueVector& outputs = macro->getOutputs();
-  *count = outputs.size();
+  *count = static_cast<unsigned int>(outputs.size());
   if (outputs.size() > 0) {
     return outputs[0]->getDescriptorPtr();
   }
@@ -275,7 +275,7 @@ DataDescriptor* macroGetOutputs(MacroHandle handle, unsigned int* count) {
 DataDescriptor* macroGetParameters(MacroHandle handle, unsigned int* count) {
   MacroBase* macro = (MacroBase*)handle;
   const MacroBase::ValueVector& params = macro->getParameters();
-  *count = params.size();
+  *count = static_cast<unsigned int>(params.size());
   if (params.size() > 0) {
     return params[0]->getDescriptorPtr();
   }

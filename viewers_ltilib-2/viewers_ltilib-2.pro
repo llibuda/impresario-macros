@@ -23,24 +23,28 @@ win32 {
   DEFINES += _IMPRESARIO_WIN
   DESTDIR = ../lib
   CONFIG(release, release|debug) {
-    if(win32-g++*) {
-      LIBS += $$quote(-L../../../ltilib-2-build/MinGW_32bit-Release/lib) -lltilib-2_mingw
-      TARGET = viewers_ltilib-2_mingw
-    }
-    if(win32-msvc*) {
-      LIBS += $$quote(-L../../../ltilib-2-build/MSVC2012_32bit-Release/lib) -lltilib-2_msvc
-      TARGET = viewers_ltilib-2_msvc
+    contains(QT_ARCH, i386) {
+      if(win32-g++*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MinGW_32bit-Release/lib) -lltilib-2_mingw
+        TARGET = viewers_ltilib-2_mingw
+      }
+      if(win32-msvc*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Release/lib) -lltilib-2_msvc
+        TARGET = viewers_ltilib-2_msvc
+      }
     }
   }
   CONFIG(debug, release|debug) {
     DEFINES += _IMPRESARIO_DEBUG
-    if(win32-g++*) {
-      LIBS += $$quote(-L../../../ltilib-2-build/MinGW_32bit-Debug/lib) -lltilib-2d_mingw
-      TARGET = viewers_ltilib-2d_mingw
-    }
-    if(win32-msvc*) {
-      LIBS += $$quote(-L../../../ltilib-2-build/MSVC2012_32bit-Debug/lib) -lltilib-2d_msvc
-      TARGET = viewers_ltilib-2d_msvc
+    contains(QT_ARCH, i386) {
+      if(win32-g++*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MinGW_32bit-Debug/lib) -lltilib-2d_mingw
+        TARGET = viewers_ltilib-2d_mingw
+      }
+      if(win32-msvc*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Debug/lib) -lltilib-2d_msvc
+        TARGET = viewers_ltilib-2d_msvc
+      }
     }
   }
 }

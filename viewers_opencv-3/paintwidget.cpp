@@ -103,17 +103,17 @@ void PaintWidget::updateImage(const cv::Mat* source) {
   switch(cvImage.channels()) {
     case 1: {
       cv::cvtColor(tempImage,imageBuffer,CV_GRAY2RGB);
-      image = QImage(imageBuffer.data, imageBuffer.cols, imageBuffer.rows, imageBuffer.step[0], QImage::Format_RGB888);
+      image = QImage(imageBuffer.data, imageBuffer.cols, imageBuffer.rows, static_cast<int>(imageBuffer.step[0]), QImage::Format_RGB888);
       break;
     }
     case 3: {
       cv::cvtColor(tempImage,imageBuffer,CV_BGR2RGB);
-      image = QImage(imageBuffer.data, imageBuffer.cols, imageBuffer.rows, imageBuffer.step[0], QImage::Format_RGB888);
+      image = QImage(imageBuffer.data, imageBuffer.cols, imageBuffer.rows, static_cast<int>(imageBuffer.step[0]), QImage::Format_RGB888);
       break;
     }
     case 4: {
       cv::cvtColor(tempImage,imageBuffer,CV_BGR2RGB);
-      image = QImage(imageBuffer.data, imageBuffer.cols, imageBuffer.rows, imageBuffer.step[0], QImage::Format_RGBA8888);
+      image = QImage(imageBuffer.data, imageBuffer.cols, imageBuffer.rows, static_cast<int>(imageBuffer.step[0]), QImage::Format_RGBA8888);
       break;
     }
   }

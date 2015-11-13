@@ -40,8 +40,6 @@ unix {
 
   CONFIG(debug, release|debug) {
     DEFINES += _IMPRESARIO_DEBUG
-    LIBS += $$quote(-L../../../ltilib-2/lib) -lltid
-    LIBS += $$quote(-L../../../opencv-3.0.0-beta/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
     TARGET = viewers_generald_gcc
   }
 }
