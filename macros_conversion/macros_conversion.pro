@@ -69,6 +69,7 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.0.0/modules/videoio/include)
   INCLUDEPATH += $$quote(../../opencv-3.0.0/modules/highgui/include)
   INCLUDEPATH += $$quote(../../opencv-3.0.0/modules/ml/include)
+  INCLUDEPATH += $$quote(../../opencv-3.0.0/modules/hal/include)
 
   CONFIG += dll
   DEFINES += _IMPRESARIO_LINUX
