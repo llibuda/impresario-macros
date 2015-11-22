@@ -420,7 +420,7 @@ protected:
     MacroParameter<T>* param = static_cast<MacroParameter<T>*>(m_vecParams.at(index));
     if (value != param->getValue()) {
       param->setValue(value);
-      notifyParameterChanged((MacroHandle)this,index,m_ptrImpresarioData);
+      notifyParameterChanged((MacroHandle)this,static_cast<unsigned int>(index),m_ptrImpresarioData);
     }
   }
 
