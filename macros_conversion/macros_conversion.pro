@@ -32,6 +32,13 @@ win32 {
         TARGET = conversion_ltilib-2_opencv-3_msvc
       }
     }
+    else {
+      if(win32-msvc*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Release/lib) -lltilib-2_msvc
+        LIBS += $$quote(-L../../../opencv-3.0.0/build/x64/vc12/lib) -lopencv_world300
+        TARGET = conversion_ltilib-2_opencv-3_msvc
+      }
+    }
   }
   CONFIG(debug, release|debug) {
     DEFINES += _IMPRESARIO_DEBUG
@@ -39,6 +46,13 @@ win32 {
       if(win32-msvc*) {
         LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Debug/lib) -lltilib-2d_msvc
         LIBS += $$quote(-L../../../opencv-3.0.0/build/x86/vc12/lib) -lopencv_world300d
+        TARGET = conversion_ltilib-2_opencv-3d_msvc
+      }
+    }
+    else {
+      if(win32-msvc*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Debug/lib) -lltilib-2d_msvc
+        LIBS += $$quote(-L../../../opencv-3.0.0/build/x64/vc12/lib) -lopencv_world300d
         TARGET = conversion_ltilib-2_opencv-3d_msvc
       }
     }

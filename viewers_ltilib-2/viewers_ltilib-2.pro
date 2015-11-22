@@ -33,6 +33,12 @@ win32 {
         TARGET = viewers_ltilib-2_msvc
       }
     }
+    else {
+      if(win32-msvc*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Release/lib) -lltilib-2_msvc
+        TARGET = viewers_ltilib-2_msvc
+      }
+    }
   }
   CONFIG(debug, release|debug) {
     DEFINES += _IMPRESARIO_DEBUG
@@ -43,6 +49,12 @@ win32 {
       }
       if(win32-msvc*) {
         LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Debug/lib) -lltilib-2d_msvc
+        TARGET = viewers_ltilib-2d_msvc
+      }
+    }
+    else {
+      if(win32-msvc*) {
+        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Debug/lib) -lltilib-2d_msvc
         TARGET = viewers_ltilib-2d_msvc
       }
     }
