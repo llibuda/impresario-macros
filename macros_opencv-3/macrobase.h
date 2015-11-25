@@ -48,6 +48,63 @@
 #endif
 
 //------------------------------------------
+// Helper classes for determining type names
+//------------------------------------------
+template <typename T>
+struct TypeName {
+  static std::string get() {
+    std::string strTypeName;
+#if defined(__GNUC__)
+    int status;
+    char* szTypeName = abi::__cxa_demangle(typeid(T).name(), 0, 0, &status);
+    strTypeName = std::string(szTypeName);
+    free(szTypeName);
+#else
+    strTypeName = std::string(typeid(T).name());
+    // if the type name contains "class ", we will erase this to make this type
+    // name compatible with those created by GCC
+    std::size_t pos = strTypeName.find("class ",0);
+    while(pos != std::string::npos)
+    {
+      strTypeName.erase(pos,6);
+      pos = strTypeName.find("class ",0);
+    }
+    // if the type name contains an asterix with leading white space, we'll erase the
+    // white space to make this type name compatible with those created by GCC
+    pos = strTypeName.find(" *",0);
+    while(pos != std::string::npos)
+    {
+      strTypeName.erase(pos,1);
+      pos = strTypeName.find(" *",0);
+    }
+    // if the type name contains an asterix with leading white space, we'll erase the
+    // white space to make this type name compatible with those created by GCC
+    pos = strTypeName.find(" __ptr64",0);
+    while(pos != std::string::npos)
+    {
+      strTypeName.erase(pos,8);
+      pos = strTypeName.find(" __ptr64",0);
+    }
+#endif
+    return strTypeName;
+  }
+};
+
+template <>
+struct TypeName<std::string> {
+  static std::string get() {
+    return std::string("std::string");
+  }
+};
+
+template <>
+struct TypeName<std::wstring> {
+  static std::string get() {
+    return std::string("std::wstring");
+  }
+};
+
+//------------------------------------------
 // Class ValueBase
 //------------------------------------------
 class ValueBase {
@@ -60,35 +117,11 @@ public:
   DataDescriptor* getDescriptorPtr()         { return &m_dataDescriptor; }
 
 protected:
-  ValueBase(const std::wstring& strName, const std::wstring& strDescription, void* dataPtr, const std::type_info& ti) : m_strName(strName), m_strDescription(strDescription), m_strTypeName() {
+  ValueBase(const std::wstring& strName, const std::wstring& strDescription, void* dataPtr, const std::string& typeName) : m_strName(strName), m_strDescription(strDescription), m_strTypeName(typeName) {
     m_dataDescriptor.name = m_strName.c_str();
     m_dataDescriptor.description = m_strDescription.c_str();
     m_dataDescriptor.valuePtr = dataPtr;
     m_dataDescriptor.next = 0;
-#if defined(__GNUC__)
-    int status;
-    char* szTypeName = abi::__cxa_demangle(ti.name(), 0, 0, &status);
-    m_strTypeName = std::string(szTypeName);
-    free(szTypeName);
-#else
-    m_strTypeName = std::string(ti.name());
-    // if the type name contains "class ", we will erase this to make this type
-    // name compatible with those created by GCC
-    std::size_t pos = m_strTypeName.find("class ",0);
-    while(pos != std::string::npos)
-    {
-      m_strTypeName.erase(pos,6);
-      pos = m_strTypeName.find("class ",0);
-    }
-    // if the type name contains an asterix with leading white space, we'll erase the
-    // white space to make this type name compatible with those created by GCC
-    pos = m_strTypeName.find(" *",0);
-    while(pos != std::string::npos)
-    {
-      m_strTypeName.erase(pos,1);
-      pos = m_strTypeName.find(" *",0);
-    }
-#endif
     m_dataDescriptor.type = m_strTypeName.c_str();
   }
 
@@ -105,7 +138,7 @@ private:
 template <class T>
 class MacroInput : public ValueBase {
 public:
-  MacroInput(const std::wstring& strName, const std::wstring& strDescription) : ValueBase(strName,strDescription,&m_ptValue,typeid(T)), m_ptValue(0) {}
+  MacroInput(const std::wstring& strName, const std::wstring& strDescription) : ValueBase(strName,strDescription,&m_ptValue,TypeName<T>::get()), m_ptValue(0) {}
   virtual ~MacroInput() {}
   const T* readAccess() const { return m_ptValue; }
 
@@ -119,7 +152,7 @@ private:
 template <class T>
 class MacroOutput : public ValueBase {
 public:
-  MacroOutput(const std::wstring& strName, const std::wstring& strDescription) : ValueBase(strName,strDescription,&m_tValue,typeid(T)), m_tValue(T()) {}
+  MacroOutput(const std::wstring& strName, const std::wstring& strDescription) : ValueBase(strName,strDescription,&m_tValue,TypeName<T>::get()), m_tValue(T()) {}
   virtual ~MacroOutput()  {}
   T& writeAccess() { return m_tValue; }
 
@@ -132,7 +165,7 @@ private:
 //------------------------------------------
 class ValueParameter : public ValueBase {
 public:
-  ValueParameter(const std::wstring& strName, const std::wstring& strDescription, void* dataPtr, const std::type_info& ti) : ValueBase(strName,strDescription,dataPtr,ti) {
+  ValueParameter(const std::wstring& strName, const std::wstring& strDescription, void* dataPtr, const std::string& typeName) : ValueBase(strName,strDescription,dataPtr,typeName) {
   }
 
   // abstract methods to set and get a parameter as string
@@ -199,7 +232,7 @@ public:
 template <class T>
 class MacroParameter : public ValueParameter {
 public:
-  MacroParameter(const std::wstring& strName, const std::wstring strDescription, const T& tDefaultValue, const std::wstring& qmlUIComponent, const std::wstring& qmlUIProperties, const ParameterValueConverter<T>& converter) : ValueParameter(strName,strDescription,0,typeid(T)),
+  MacroParameter(const std::wstring& strName, const std::wstring strDescription, const T& tDefaultValue, const std::wstring& qmlUIComponent, const std::wstring& qmlUIProperties, const ParameterValueConverter<T>& converter) : ValueParameter(strName,strDescription,0,TypeName<T>::get()),
     m_converter(converter), m_tValue(tDefaultValue), m_tDefaultValue(tDefaultValue), m_strValue(), m_strAttributes() {
     m_strValue = m_converter.toString(m_tValue);
     m_strAttributes = qmlUIComponent + L'|' + qmlUIProperties;
