@@ -100,11 +100,13 @@ const wchar_t* libGetCompiler() {
   wcsncat(g_szCompiler,L" (Visual C++ 2012)",sizeof(g_szCompiler));
 #elif _MSC_VER == 1800
   wcsncat(g_szCompiler,L" (Visual C++ 2013)",sizeof(g_szCompiler));
+#elif _MSC_VER == 1900
+  wcsncat(g_szCompiler,L" (Visual C++ 2015)",sizeof(g_szCompiler));
 #endif
   return g_szCompiler;
 #else
   // no supported compiler
-  wcsncpy(g_szCompiler,"Not recognized",sizeof(g_szCompiler));
+  wcsncpy(g_szCompiler,L"Not recognized",sizeof(g_szCompiler));
   return g_szCompiler;
 #endif
 }
@@ -113,9 +115,9 @@ unsigned int libGetCompilerId() {
   bool is64bit = (sizeof (void *) * CHAR_BIT == 64) ? true : false;
 #if defined(__GNUC__)
   // GCC
-  return ((is64bit) ? 11 : 1) * 1000000 + __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__;
+  return ((is64bit) ? 641 : 321) * 1000000 + __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__;
 #elif defined(_MSC_VER)
-  return ((is64bit) ? 12 : 2) * 1000000 + (_MSC_VER / 100) * 10000 + (_MSC_VER % 100) * 100;
+  return ((is64bit) ? 642 : 322) * 1000000 + (_MSC_VER / 100) * 10000 + (_MSC_VER % 100) * 100;
 #else
   // no supported compiler
   return 0;
