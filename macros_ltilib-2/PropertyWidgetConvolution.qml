@@ -28,8 +28,8 @@
 **   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 *****************************************************************************************************/
-import QtQuick 2.0
-import QtQuick.Controls 1.1
+import QtQuick 2.5
+import QtQuick.Controls 1.4
 
 Item {
     width: 300
@@ -47,42 +47,48 @@ Item {
         }
 
         onDataChanged: {
+            //console.log("onDataChanged",propertyView.currentRow);
             if (propertyView.currentRow >= 0 && propertyView.currentRow < itemProperties.count) {
                 var index = itemProperties.get(propertyView.currentRow).tagIndex;
                 props[index].value = itemProperties.get(propertyView.currentRow).value;
                 if (index === 0) {
-                    propertyView.currentRow = -1; // This is important. Without setting currentRow to -1, an infinite loop will be caused
                     adaptList(props[index].value);
                 }
             }
         }
 
         onAdaptList: {
+            //console.log("adaptList",selection);
+            propertyView.currentRow = -1;
             if (count > 1) {
                 remove(1,count-1);
             }
             var prop;
+            var elements = [];
             switch(selection) {
             case 2:
                 for(prop = 1; prop <= 2; prop++) {
-                    append({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
+                    elements.push({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
                 }
+                append(elements);
                 break;
             case 0:
             case 1:
             case 7:
             case 8:
                 for(prop = 1; prop <= 1; prop++) {
-                    append({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
+                    elements.push({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
                 }
+                append(elements);
                 break;
             case 9:
             case 10:
             case 13:
             case 14:
                 for(prop = 3; prop <= 3; prop++) {
-                    append({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
+                    elements.push({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
                 }
+                append(elements);
                 break;
             case 3:
             case 4:
@@ -95,6 +101,7 @@ Item {
             default:
                 break;
             }
+            propertyView.currentRow = 0;
         }
     }
 
@@ -115,7 +122,7 @@ Item {
             Component.onCompleted: {
                 if (styleData.column === 0) {
                     Qt.createQmlObject(
-                        'import QtQuick 2.0
+                        'import QtQuick 2.5
                          Text {
                             id: propertyDelegateText
                             anchors.fill: parent
@@ -211,9 +218,10 @@ Item {
         anchors.fill: parent;
         itemDelegate: propertyDelegate
         rowDelegate: propertyRowDelegate
+        selectionMode: SelectionMode.SingleSelection;
 
         onClicked: {
-            macro.showDescription(row);
+            macro.showDescription(itemProperties.get(row).tagIndex);
         }
 
         TableViewColumn {
