@@ -39,7 +39,7 @@ CvVideoInput::CvVideoInput() : MacroBase(), ptrCapture(0) {
   setGroup(L"Image Sources");
   setDescription(L"Loads images from a video");
   addOutput<cv::Mat>(L"Frame",L"Currently loaded video frame");
-  addParameter<std::string>(L"Video file",L"Path to video file for playback","",L"StringFileSelector",L"{\"title\": \"Select video file\", \"filters\": [\"Video files (*.mp4;*.avi;*.mkv)\",\"All files (*.*)\"]}");
+  addParameter<std::string>(L"Video file",L"Path to video file for playback","",L"StringFileSelector",L"{\"title\": \"Select video file\", \"filters\": [\"Video files (*.mp4 *.avi *.mkv)\",\"All files (*.*)\"]}");
 }
 
 CvVideoInput::~CvVideoInput() {
