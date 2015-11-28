@@ -19,6 +19,15 @@ The Libraries in this repository depend on one or more of the following third pa
 * [Qt Toolkit](http://www.qt.io/)
   Copyright (C) 2015 The Qt Company Ltd.
   Contact: [http://www.qt.io/licensing/](http://www.qt.io/licensing/)
+
+## Credits
+The Libraries in this repository depend on one or more of the following third party products:
+* [OpenCV 3.0.0](http://opencv.org/) computer vision library licensed under the 3-clause BSD license.
+* [LTI-Lib-2](http://www.ie.itcr.ac.cr/palvarado/ltilib-2/homepage/) computer vision library licensed
+  under the 3-clause BSD license.
+* [Qt Toolkit](http://www.qt.io/)
+  Copyright (C) 2015 The Qt Company Ltd.
+  Contact: [http://www.qt.io/licensing/](http://www.qt.io/licensing/)
   The Qt Toolkit is used under the terms of the GNU Lesser General Public
   License version 3 as published by the Free Software Foundation
   ([http://www.gnu.org/licenses/lgpl-3.0.html](http://www.gnu.org/licenses/lgpl-3.0.html))
