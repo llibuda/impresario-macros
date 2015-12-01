@@ -37,7 +37,35 @@
 #define LIB_VERSION_MAJOR  1
 #define LIB_VERSION_MINOR  0
 #define LIB_VERSION_PATCH  0
-#define LIB_DESCRIPTION    L"<html><body><p>Library with viewers for main types of ltilib-2.</p></body></html>"
+#define LIB_DESCRIPTION    L"<html><body>"\
+  L"<p><b>Library with viewers for main types of ltilib-2.</b></p>"\
+  L"<p>Copyright (C) 2015  Lars Libuda</p>"\
+  L"<p>All rights reserved.</p>"\
+  L"<p>"\
+  L"Redistribution and use in source and binary forms, with or without" \
+  L"modification, are permitted provided that the following conditions are met:" \
+  L"</p><ul>" \
+  L"<li> Redistributions of source code must retain the above copyright" \
+  L"     notice, this list of conditions and the following disclaimer.</li>" \
+  L"<li> Redistributions in binary form must reproduce the above copyright" \
+  L"     notice, this list of conditions and the following disclaimer in the" \
+  L"     documentation and/or other materials provided with the distribution.</li>" \
+  L"<li> Neither the name of the copyright holder nor the" \
+  L"     names of its contributors may be used to endorse or promote products" \
+  L"     derived from this software without specific prior written permission.</li>" \
+  L"</ul><p>" \
+  L"THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND" \
+  L"ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED" \
+  L"WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE" \
+  L"DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY" \
+  L"DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES" \
+  L"(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;" \
+  L"LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND" \
+  L"ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT" \
+  L"(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS" \
+  L"SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."\
+  L"</p>"\
+  L"</body></html>"
 
 #include "viewerimage.h"
 
