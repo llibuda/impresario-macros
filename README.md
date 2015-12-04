@@ -8,7 +8,7 @@ Impresario's GitHub pages also give details about how to compile the libraries.
 
 ## License
 All code in this repository is licensed under the
-[3-clause BSD license](./licenses/LICENSE.BSD) as follows:
+[3-clause BSD license](./licenses/LICENSE_ImpresarioMacros.BSD) as follows:
 
 Copyright (C) 2015  Lars Libuda
 All rights reserved.
