@@ -36,7 +36,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Credits
-The Libraries in this repository depend on one or more of the following third party products:
+The Libraries in this repository depend on one or more of the following third party products. Their
+source code is available for download on their respective home pages given by the links:
 * [OpenCV 3.0.0](http://opencv.org/) computer vision library:
   The library is licensed under the [3-clause BSD license](./licenses/LICENSE_OpenCV-3.0.0.BSD).
 * [LTI-Lib-2](http://www.ie.itcr.ac.cr/palvarado/ltilib-2/homepage/) computer vision library:
