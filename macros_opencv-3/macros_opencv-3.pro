@@ -9,7 +9,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 win32 {
-  INCLUDEPATH += $$quote(../../opencv-3.0.0/build/include)
+  INCLUDEPATH += $$quote(../../opencv-3.1.0/build/include)
 
   CONFIG += dll
   DEFINES += _IMPRESARIO_WIN
@@ -18,10 +18,10 @@ win32 {
     if(win32-msvc*) {
       TARGET = imgproc_opencv-3_msvc
       contains(QT_ARCH, i386) {
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x86/vc12/lib) -lopencv_world300
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310
       }
       else {
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x64/vc12/lib) -lopencv_world300
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310
       }
     }
   }
@@ -30,10 +30,10 @@ win32 {
     if(win32-msvc*) {
       TARGET = imgproc_opencv-3d_msvc
       contains(QT_ARCH, i386) {
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x86/vc12/lib) -lopencv_world300d
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310d
       }
       else {
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x64/vc12/lib) -lopencv_world300d
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310d
       }
     }
   }

@@ -19,7 +19,7 @@ win32 {
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/system)
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/types)
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/viewer)
-  INCLUDEPATH += $$quote(../../opencv-3.0.0/build/include)
+  INCLUDEPATH += $$quote(../../opencv-3.1.0/build/include)
 
   CONFIG += dll
   DEFINES += _IMPRESARIO_WIN
@@ -28,14 +28,14 @@ win32 {
     contains(QT_ARCH, i386) {
       if(win32-msvc*) {
         LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Release/lib) -lltilib-2_msvc
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x86/vc12/lib) -lopencv_world300
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310
         TARGET = conversion_ltilib-2_opencv-3_msvc
       }
     }
     else {
       if(win32-msvc*) {
         LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Release/lib) -lltilib-2_msvc
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x64/vc12/lib) -lopencv_world300
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310
         TARGET = conversion_ltilib-2_opencv-3_msvc
       }
     }
@@ -45,14 +45,14 @@ win32 {
     contains(QT_ARCH, i386) {
       if(win32-msvc*) {
         LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Debug/lib) -lltilib-2d_msvc
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x86/vc12/lib) -lopencv_world300d
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310d
         TARGET = conversion_ltilib-2_opencv-3d_msvc
       }
     }
     else {
       if(win32-msvc*) {
         LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Debug/lib) -lltilib-2d_msvc
-        LIBS += $$quote(-L../../../opencv-3.0.0/build/x64/vc12/lib) -lopencv_world300d
+        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310d
         TARGET = conversion_ltilib-2_opencv-3d_msvc
       }
     }
