@@ -2,7 +2,7 @@
 **   Impresario Interface - Image Processing Engineering System applying Reusable Interactive Objects
 **   This file is part of the Impresario Interface.
 **
-**   Copyright (C) 2015  Lars Libuda
+**   Copyright (C) 2015-2016  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
 #define LIB_VERSION_MINOR  1
 #define LIB_VERSION_PATCH  0
 #define LIB_DESCRIPTION    L"<html><body>"\
-  L"<p><b>Library with macros dedicated to image processing with the OpenCV Library 3.1.0.</b></p>"\
+  L"<p><b>Library with macros dedicated to image processing with the OpenCV Library version 3.</b></p>"\
   L"<p>Copyright (C) 2015-2016  Lars Libuda</p>"\
   L"<p>All rights reserved.</p>"\
   L"<p>"\
