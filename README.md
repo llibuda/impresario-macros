@@ -10,7 +10,7 @@ Impresario's GitHub pages also give details about how to compile the libraries.
 All code in this repository is licensed under the
 [3-clause BSD license](./licenses/LICENSE_ImpresarioMacros.BSD) as follows:
 
-Copyright (C) 2015  Lars Libuda
+Copyright (C) 2015-2016  Lars Libuda
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -38,8 +38,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ## Credits
 The Libraries in this repository depend on one or more of the following third party products. Their
 source code is available for download on their respective home pages given by the links:
-* [OpenCV 3.0.0](http://opencv.org/) computer vision library:
-  The library is licensed under the [3-clause BSD license](./licenses/LICENSE_OpenCV-3.0.0.BSD).
+* [OpenCV 3](http://opencv.org/) computer vision library:
+  The library is licensed under the [3-clause BSD license](./licenses/LICENSE_OpenCV-3.BSD).
 * [LTI-Lib-2](http://www.ie.itcr.ac.cr/palvarado/ltilib-2/homepage/) computer vision library:
   The library is licensed under the [3-clause BSD license](./licenses/LICENSE_LTILib-2.BSD).
 * [Qt Toolkit](http://www.qt.io/):

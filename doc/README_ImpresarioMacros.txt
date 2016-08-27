@@ -2,7 +2,7 @@ Legal information about GitHub repository impresario-macros:
 
 LICENSE:
 
-Copyright (C) 2015  Lars Libuda
+Copyright (C) 2015-2016  Lars Libuda
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -42,9 +42,9 @@ CREDITS:
 The libraries in the GitHub repository impresario-macros depend on one or more of the following 
 third party products. Their source code is available for download on their respective home pages 
 given by the links:
-* OpenCV 3.0.0 computer vision library (http://opencv.org/):
+* OpenCV 3 computer vision library (http://opencv.org/):
   The library is licensed under the 3-clause BSD license as documented in file
-  ../licenses/LICENSE_OpenCV-3.0.0.BSD.
+  ../licenses/LICENSE_OpenCV-3.BSD.
 * LTI-Lib-2 computer vision library (http://www.ie.itcr.ac.cr/palvarado/ltilib-2/homepage/):
   The library is licensed under the 3-clause BSD license as documented in file
   ../licenses/LICENSE_LTILib-2.BSD.
