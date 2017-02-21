@@ -5,10 +5,22 @@
 #-------------------------------------------------
 
 TEMPLATE = lib
+CONFIG += shared
 CONFIG -= app_bundle
 CONFIG -= qt
 
+VERSION = 1.1.0
+DESTDIR = ../lib
+
+TARGET = conversion_ltilib-2_opencv-3
+win32: TARGET = $${TARGET}_$${VERSION}
+
+include(../target_def.pri)
+
 win32 {
+  CONFIG += skip_target_version_ext
+  DEFINES += _IMPRESARIO_WIN
+
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/basics)
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/classifiers)
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/draw)
@@ -21,42 +33,27 @@ win32 {
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/viewer)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/build/include)
 
-  CONFIG += dll
-  DEFINES += _IMPRESARIO_WIN
-  DESTDIR = ../lib
-  CONFIG(release, release|debug) {
+  LIBS += $$quote(-L../../../ltilib-2-build/lib) -lltilib-2_$${BUILD_POSTFIX}
+
+  # check support for open-cv
+  OPENCV_BASE_PATH = "../../opencv-3.1.0/build"
+  OPENCV_LIB_PATH =
+  if(win32-msvc*) {
     contains(QT_ARCH, i386) {
-      if(win32-msvc*) {
-        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Release/lib) -lltilib-2_msvc
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310
-        TARGET = conversion_ltilib-2_opencv-3_msvc
-      }
+      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x86/vc$${section(MSVC_VER,.,0,0)}/lib
     }
     else {
-      if(win32-msvc*) {
-        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Release/lib) -lltilib-2_msvc
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310
-        TARGET = conversion_ltilib-2_opencv-3_msvc
-      }
+      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x64/vc$${section(MSVC_VER,.,0,0)}/lib
     }
   }
-  CONFIG(debug, release|debug) {
-    DEFINES += _IMPRESARIO_DEBUG
-    contains(QT_ARCH, i386) {
-      if(win32-msvc*) {
-        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_32bit-Debug/lib) -lltilib-2d_msvc
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310d
-        TARGET = conversion_ltilib-2_opencv-3d_msvc
-      }
-    }
-    else {
-      if(win32-msvc*) {
-        LIBS += $$quote(-L../../../ltilib-2-build/MSVC2013_64bit-Debug/lib) -lltilib-2d_msvc
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310d
-        TARGET = conversion_ltilib-2_opencv-3d_msvc
-      }
-    }
+  OPENCV_LIB = opencv_world310
+  CONFIG(debug, release|debug):OPENCV_LIB = $${OPENCV_LIB}d
+  !exists($${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib) {
+    error(Current Kit is not supported by OpenCV-3. Library $${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib does not exist.)
   }
+
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/include)
+  LIBS += $$quote(-L../$${OPENCV_LIB_PATH}) -l$${OPENCV_LIB}
 }
 
 unix {
@@ -85,22 +82,20 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/ml/include)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/hal/include)
 
-  CONFIG += dll
   DEFINES += _IMPRESARIO_LINUX
-  DESTDIR = ../lib
+
   CONFIG(release, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltir
     LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
-    TARGET = conversion_ltilib-2_opencv-3_gcc
   }
 
   CONFIG(debug, release|debug) {
-    DEFINES += _IMPRESARIO_DEBUG
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltid
     LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
-    TARGET = conversion_ltilib-2_opencv-3d_gcc
   }
 }
+
+CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG
 
 SOURCES += \
     libinterface.cpp \

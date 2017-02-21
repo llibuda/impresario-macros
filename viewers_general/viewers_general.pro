@@ -5,44 +5,29 @@
 #-------------------------------------------------
 
 TEMPLATE = lib
-QT       += core widgets gui
+CONFIG += shared
+QT += core widgets gui
 
-win32 {
-  CONFIG += dll
+VERSION = 1.0.0
+DESTDIR = ../lib
+
+TARGET = viewers_general
+win32: TARGET = $${TARGET}_$${VERSION}
+
+include(../target_def.pri)
+
+win32
+{
+  CONFIG += skip_target_version_ext
   DEFINES += _IMPRESARIO_WIN
-  DESTDIR = ../lib
-  CONFIG(release, release|debug) {
-    if(win32-g++*) {
-      TARGET = viewers_general_mingw
-    }
-    if(win32-msvc*) {
-      TARGET = viewers_general_msvc
-    }
-  }
-  CONFIG(debug, release|debug) {
-    DEFINES += _IMPRESARIO_DEBUG
-    if(win32-g++*) {
-      TARGET = viewers_generald_mingw
-    }
-    if(win32-msvc*) {
-      TARGET = viewers_generald_msvc
-    }
-  }
 }
 
-unix {
-  CONFIG += dll
+unix
+{
   DEFINES += _IMPRESARIO_LINUX
-  DESTDIR = ../lib
-  CONFIG(release, release|debug) {
-    TARGET = viewers_general_gcc
-  }
-
-  CONFIG(debug, release|debug) {
-    DEFINES += _IMPRESARIO_DEBUG
-    TARGET = viewers_generald_gcc
-  }
 }
+
+CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG
 
 SOURCES += \
     libinterface.cpp \

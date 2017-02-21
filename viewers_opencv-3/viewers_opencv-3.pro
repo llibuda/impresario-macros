@@ -5,40 +5,45 @@
 #-------------------------------------------------
 
 TEMPLATE = lib
-QT       += core widgets gui
+CONFIG += shared
+QT += core widgets gui
+
+VERSION = 1.1.0
+DESTDIR = ../lib
+
+TARGET = viewers_opencv-3
+win32: TARGET = $${TARGET}_$${VERSION}
+
+include(../target_def.pri)
 
 win32 {
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/build/include)
-
-  CONFIG += dll
+  CONFIG += skip_target_version_ext
   DEFINES += _IMPRESARIO_WIN
-  DESTDIR = ../lib
-  CONFIG(release, release|debug) {
-    if(win32-msvc*) {
-      TARGET = viewers_opencv-3_msvc
-      contains(QT_ARCH, i386) {
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310
-      }
-      else {
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310
-      }
+
+  # check support for open-cv
+  OPENCV_BASE_PATH = "../../opencv-3.1.0/build"
+  OPENCV_LIB_PATH =
+  if(win32-msvc*) {
+    contains(QT_ARCH, i386) {
+      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x86/vc$${section(MSVC_VER,.,0,0)}/lib
+    }
+    else {
+      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x64/vc$${section(MSVC_VER,.,0,0)}/lib
     }
   }
-  CONFIG(debug, release|debug) {
-    DEFINES += _IMPRESARIO_DEBUG
-    if(win32-msvc*) {
-      TARGET = viewers_opencv-3d_msvc
-      contains(QT_ARCH, i386) {
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x86/vc12/lib) -lopencv_world310d
-      }
-      else {
-        LIBS += $$quote(-L../../../opencv-3.1.0/build/x64/vc12/lib) -lopencv_world310d
-      }
-    }
+  OPENCV_LIB = opencv_world310
+  CONFIG(debug, release|debug):OPENCV_LIB = $${OPENCV_LIB}d
+  !exists($${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib) {
+    error(Current Kit is not supported by OpenCV-3. Library $${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib does not exist.)
   }
+
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/include)
+  LIBS += $$quote(-L../$${OPENCV_LIB_PATH}) -l$${OPENCV_LIB}
 }
 
 unix {
+  DEFINES += _IMPRESARIO_LINUX
+
   INCLUDEPATH += $$quote(../../opencv-3.1.0/include)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/core/include)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/imgproc/include)
@@ -54,20 +59,10 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/ml/include)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/hal/include)
 
-  CONFIG += dll
-  DEFINES += _IMPRESARIO_LINUX
-  DESTDIR = ../lib
-  CONFIG(release, release|debug) {
-    LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
-    TARGET = viewers_opencv-3_gcc
-  }
-
-  CONFIG(debug, release|debug) {
-    DEFINES += _IMPRESARIO_DEBUG
-    LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
-    TARGET = viewers_opencv-3d_gcc
-  }
+  LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
 }
+
+CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG
 
 SOURCES += \
     libinterface.cpp \
