@@ -57,6 +57,9 @@ win32 {
 }
 
 unix {
+  QMAKE_LN_SHLIB = :
+  DEFINES += _IMPRESARIO_LINUX
+
   INCLUDEPATH += $$quote(../../ltilib-2/src/basics)
   INCLUDEPATH += $$quote(../../ltilib-2/src/classifiers)
   INCLUDEPATH += $$quote(../../ltilib-2/src/draw)
@@ -81,8 +84,6 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/highgui/include)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/ml/include)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/hal/include)
-
-  DEFINES += _IMPRESARIO_LINUX
 
   CONFIG(release, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltir

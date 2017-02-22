@@ -35,6 +35,7 @@ win32 {
 }
 
 unix {
+  QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 
   INCLUDEPATH += $$quote(../../ltilib-2/src/basics)

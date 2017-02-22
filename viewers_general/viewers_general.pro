@@ -16,14 +16,13 @@ win32: TARGET = $${TARGET}_$${VERSION}
 
 include(../target_def.pri)
 
-win32
-{
+win32 {
   CONFIG += skip_target_version_ext
   DEFINES += _IMPRESARIO_WIN
 }
 
-unix
-{
+unix {
+  QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 }
 

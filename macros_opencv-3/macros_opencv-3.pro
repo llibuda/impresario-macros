@@ -43,6 +43,7 @@ win32 {
 }
 
 unix {
+  QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 
   INCLUDEPATH += $$quote(../../opencv-3.1.0/include)
