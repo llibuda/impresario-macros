@@ -44,6 +44,10 @@ Item {
         Component.onCompleted: {
             append({"property": props[0].name, "value": props[0].value, "component": props[0].component, "properties": props[0].properties, "tagIndex": 0 });
             adaptList(props[0].value);
+            // NOTE: There is a nasty bug in the TableView component introduced in Qt 5.6
+            // It seems like a racing condition between this method and loading the TableView
+            // Assigned the model to the TableView here fixes this problem
+            propertyView.model = this;
         }
 
         onDataChanged: {
@@ -214,7 +218,8 @@ Item {
 
     TableView {
         id : propertyView;
-        model: itemProperties;
+        // NOTE: No model assignment here any more, see also comment in ListModel:Component.onCompleted
+        //model: itemProperties;
         anchors.fill: parent;
         itemDelegate: propertyDelegate
         rowDelegate: propertyRowDelegate
