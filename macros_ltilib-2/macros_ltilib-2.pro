@@ -74,4 +74,7 @@ SOURCES += \
     convolution.cpp \
     channelconversion.cpp
 
+DISTFILES += \
+    PropertyWidgetConvolution.qml
+
 

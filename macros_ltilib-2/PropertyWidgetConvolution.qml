@@ -30,6 +30,7 @@
 *****************************************************************************************************/
 import QtQuick 2.5
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 
 Item {
     width: 300
@@ -134,6 +135,7 @@ Item {
                             text: styleData.value
                             elide: styleData.elideMode
                             verticalAlignment: Text.AlignVCenter
+                            renderType: Text.NativeRendering
                             color: if (styleData.selected) {
                                 return palette.highlightedText
                             }
@@ -210,8 +212,9 @@ Item {
 
         Rectangle {
             SystemPalette { id: palette; colorGroup: SystemPalette.Active }
+            FontMetrics { id: defaultFont; }
             id: rowRectangle
-            height: 19
+            height: defaultFont.height + 7
             color: palette.base
         }
     }
