@@ -1,8 +1,8 @@
 /****************************************************************************************************
-**   Impresario Library Viewers_opencv-3.0.0
-**   This file is part of the Impresario Library Viewers_opencv-3.0.0.
+**   Impresario Library Viewers_opencv-3
+**   This file is part of the Impresario Library Viewers_opencv-3.
 **
-**   Copyright (C) 2015  Lars Libuda
+**   Copyright (C) 2015-2017  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without

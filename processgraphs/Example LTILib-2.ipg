@@ -7,7 +7,7 @@
     <autoUpdateTopologicalOrder>true</autoUpdateTopologicalOrder>
     <autoUpdateStrongComponents>false</autoUpdateStrongComponents>
     <vertices>
-        <vertex class="graph::Vertex" id="{095001d2-d2a5-47bf-8304-4bb881d22482}" dataTypeSignature="lti::loadImages_ImageProcessing_ltilib-2_1.0.0_642180000r">
+        <vertex class="graph::Vertex" id="{095001d2-d2a5-47bf-8304-4bb881d22482}" dataTypeSignature="lti::loadImages_ImageProcessing_ltilib-2_1.0.0_642190000r">
             <data class="app::MacroDLL">
                 <parameters>
                     <parameter name="Source directory" type="std::string"></parameter>
@@ -16,7 +16,7 @@
                 </parameters>
             </data>
             <visualization class="graph::VertexItem">
-                <position>{360;79}</position>
+                <position>{360.545;69.1818}</position>
                 <size>{100;70}</size>
             </visualization>
             <topologyForced>false</topologyForced>
@@ -37,10 +37,10 @@
                 </pin>
             </pins>
         </vertex>
-        <vertex class="graph::Vertex" id="{9568e4f9-2ff3-4266-9014-b0e01b1e32ba}" dataTypeSignature="lti::convolution_ImageProcessing_ltilib-2_1.0.0_642180000r">
+        <vertex class="graph::Vertex" id="{9568e4f9-2ff3-4266-9014-b0e01b1e32ba}" dataTypeSignature="lti::convolution_ImageProcessing_ltilib-2_1.0.0_642190000r">
             <data class="app::MacroDLL">
                 <parameters>
-                    <parameter name="Kernel" type="int">2</parameter>
+                    <parameter name="Kernel" type="int">13</parameter>
                     <parameter name="Kernel size" type="int">15</parameter>
                     <parameter name="Kernel variance" type="float">1.3</parameter>
                     <parameter name="Normalize" type="bool">1</parameter>
@@ -68,7 +68,7 @@
                 </pin>
             </pins>
         </vertex>
-        <vertex class="graph::Vertex" id="{d62e01af-b4e2-4893-bcca-ffb8707011bd}" dataTypeSignature="lti::splitImageToHSI_ImageProcessing_ltilib-2_1.0.0_642180000r">
+        <vertex class="graph::Vertex" id="{d62e01af-b4e2-4893-bcca-ffb8707011bd}" dataTypeSignature="lti::splitImageToHSI_ImageProcessing_ltilib-2_1.0.0_642190000r">
             <data class="app::MacroDLL">
                 <parameters/>
             </data>
@@ -108,7 +108,7 @@
                 </pin>
             </pins>
         </vertex>
-        <vertex class="graph::Vertex" id="{e2c8c9fb-3b5c-401f-8bcf-b60d9acbc654}" dataTypeSignature="lti::channel8_to_lti::channel_ImageProcessing_ltilib-2_1.0.0_642180000r">
+        <vertex class="graph::Vertex" id="{e2c8c9fb-3b5c-401f-8bcf-b60d9acbc654}" dataTypeSignature="lti::channel8_to_lti::channel_ImageProcessing_ltilib-2_1.0.0_642190000r">
             <data class="app::MacroDLL">
                 <parameters/>
             </data>
@@ -134,11 +134,11 @@
                 </pin>
             </pins>
         </vertex>
-        <vertex class="graph::Vertex" id="{fb778111-7511-4cda-ad8e-de2a240a6693}" dataTypeSignature="lti::cannyEdges_ImageProcessing_ltilib-2_1.0.0_642180000r">
+        <vertex class="graph::Vertex" id="{fb778111-7511-4cda-ad8e-de2a240a6693}" dataTypeSignature="lti::cannyEdges_ImageProcessing_ltilib-2_1.0.0_642190000r">
             <data class="app::MacroDLL">
                 <parameters>
-                    <parameter name="Edge Treshold" type="int">147</parameter>
-                    <parameter name="No Edge Treshold" type="int">253</parameter>
+                    <parameter name="Edge Treshold" type="int">255</parameter>
+                    <parameter name="No Edge Treshold" type="int">0</parameter>
                 </parameters>
             </data>
             <visualization class="graph::VertexItem">

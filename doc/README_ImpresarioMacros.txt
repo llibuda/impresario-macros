@@ -2,7 +2,7 @@ Legal information about GitHub repository impresario-macros:
 
 LICENSE:
 
-Copyright (C) 2015-2016  Lars Libuda
+Copyright (C) 2015-2017  Lars Libuda
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
