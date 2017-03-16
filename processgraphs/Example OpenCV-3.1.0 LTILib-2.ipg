@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graph class="app::ProcessGraph" id="{d99bf0a2-006a-41bb-94d8-546f1ae94245}">
+    <name>Example OpenCV-3.0.0 LTILib-2.ipg</name>
+    <visualization class="graph::Scene">
+        <layout>TopToBottom</layout>
+    </visualization>
+    <autoUpdateTopologicalOrder>true</autoUpdateTopologicalOrder>
+    <autoUpdateStrongComponents>false</autoUpdateStrongComponents>
+    <vertices>
+        <vertex class="graph::Vertex" id="{60fc7902-bb9a-47e2-916e-7b2e94031528}" dataTypeSignature="cv::Canny_ImageProcessing_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="High threshold" type="double">50</parameter>
+                    <parameter name="Low threshold" type="double">40</parameter>
+                    <parameter name="Sobel kernel size" type="int">3</parameter>
+                    <parameter name="Gradient norm" type="int">0</parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{233;425}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{54081c76-abf0-480c-8712-86d15bd8d710}">
+                    <data class="app::MacroInput">
+                        <name>Input image</name>
+                        <input>cv::Mat</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{8bc3eb13-2d05-4cac-9587-b79394e6490b}">
+                    <data class="app::MacroOutput">
+                        <name>Output image</name>
+                        <output>cv::Mat</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{a3ce5fa6-ffeb-485a-98e7-a6d702023d4a}" dataTypeSignature="cv::Mat_to_lti::image_Conversion_ltilib-2_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters/>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{401;215}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{82e465c5-afa1-4eca-8d18-87d3b45bdfda}">
+                    <data class="app::MacroInput">
+                        <name>OpenCV image</name>
+                        <input>cv::Mat</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{f17cff4d-ccb6-49f3-9d94-c7886df9bfd0}">
+                    <data class="app::MacroOutput">
+                        <name>LTILib image</name>
+                        <output>lti::image</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{a616ccb3-5de1-4e05-a33d-b9586a6d0c08}" dataTypeSignature="cv::cvtColor_ImageProcessing_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="Conversion" type="int">0</parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{233;317}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{7562f622-a3fc-40b9-a1d2-6b5fb4812dd9}">
+                    <data class="app::MacroInput">
+                        <name>Image input</name>
+                        <input>cv::Mat</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{6bf8a607-25bb-4da5-b333-e96f6f0266cd}">
+                    <data class="app::MacroOutput">
+                        <name>Image output</name>
+                        <output>cv::Mat</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{adb1d9a6-aa45-47cc-9e1b-d9d39f5c5631}" dataTypeSignature="cv::VideoInput_ImageProcessing_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="Video file" type="std::string"></parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{310;91}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{c7bd109d-08ed-48a3-bfdd-0af45b80e127}">
+                    <data class="app::MacroOutput">
+                        <name>Frame</name>
+                        <output>cv::Mat</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{cb7b04ea-9108-408d-8eef-ac22cb90caae}" dataTypeSignature="lti::splitImageToHSI_ImageProcessing_ltilib-2_1.0.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters/>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{401;316}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{2dbe768f-9a4a-4085-a4dd-4aeeab5d6f00}">
+                    <data class="app::MacroInput">
+                        <name>Input image</name>
+                        <input>lti::image</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{1ab92615-1c71-4b6a-9267-e6d89dd6b5a6}">
+                    <data class="app::MacroOutput">
+                        <name>S-component</name>
+                        <output>lti::channel8</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{05c4da18-9ce2-4ac9-88f1-3871805d6ecf}">
+                    <data class="app::MacroOutput">
+                        <name>I-component</name>
+                        <output>lti::channel8</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{356efd3d-e732-437e-b007-2e0a10845c87}">
+                    <data class="app::MacroOutput">
+                        <name>H-component</name>
+                        <output>lti::channel8</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{f1b9cc54-8dd4-424f-8562-49d546513efe}" dataTypeSignature="lti::cannyEdges_ImageProcessing_ltilib-2_1.0.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="Edge Treshold" type="int">255</parameter>
+                    <parameter name="No Edge Treshold" type="int">0</parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{401;426}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{ae8ddf34-1a63-46d1-9ab8-d66332ea15b6}">
+                    <data class="app::MacroInput">
+                        <name>Input image</name>
+                        <input>lti::channel8</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{b45c41a9-a9e4-4ef9-b1ba-176ce95840e5}">
+                    <data class="app::MacroOutput">
+                        <name>Output image</name>
+                        <output>lti::channel8</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+    </vertices>
+    <edges>
+        <edge class="graph::Edge" id="{75a94de1-6e27-423b-92ca-5d9221c768f0}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{c7bd109d-08ed-48a3-bfdd-0af45b80e127}" destPinId="{82e465c5-afa1-4eca-8d18-87d3b45bdfda}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+        <edge class="graph::Edge" id="{7cba4f6a-74cc-4da6-8829-d92d2ea31b8f}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{6bf8a607-25bb-4da5-b333-e96f6f0266cd}" destPinId="{54081c76-abf0-480c-8712-86d15bd8d710}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+        <edge class="graph::Edge" id="{92874f11-ebe1-485d-a49d-f63481a966a1}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{c7bd109d-08ed-48a3-bfdd-0af45b80e127}" destPinId="{7562f622-a3fc-40b9-a1d2-6b5fb4812dd9}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+        <edge class="graph::Edge" id="{d6978d85-b6d1-4ba7-bb4f-7c840a54049e}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{05c4da18-9ce2-4ac9-88f1-3871805d6ecf}" destPinId="{ae8ddf34-1a63-46d1-9ab8-d66332ea15b6}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+        <edge class="graph::Edge" id="{d91a0a60-6aeb-4821-a58e-6f1b055c8bc5}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{f17cff4d-ccb6-49f3-9d94-c7886df9bfd0}" destPinId="{2dbe768f-9a4a-4085-a4dd-4aeeab5d6f00}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+    </edges>
+</graph>

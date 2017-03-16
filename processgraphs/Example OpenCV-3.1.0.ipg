@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graph class="app::ProcessGraph" id="{866140ea-a21b-44a6-bf78-4a3c3e62ff0d}">
+    <name>Example OpenCV-3.1.0.ipg</name>
+    <visualization class="graph::Scene">
+        <layout>TopToBottom</layout>
+    </visualization>
+    <autoUpdateTopologicalOrder>true</autoUpdateTopologicalOrder>
+    <autoUpdateStrongComponents>false</autoUpdateStrongComponents>
+    <vertices>
+        <vertex class="graph::Vertex" id="{452e9d62-c17d-4b0e-9423-6236eac633c2}" dataTypeSignature="cv::cvtColor_ImageProcessing_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="Conversion" type="int">0</parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{356;192}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{e0603d8e-bbd2-4a46-ad2f-ddf81ee5bb84}">
+                    <data class="app::MacroInput">
+                        <name>Image input</name>
+                        <input>cv::Mat</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{6d70447a-d8ac-4960-8926-329b9b2007b9}">
+                    <data class="app::MacroOutput">
+                        <name>Image output</name>
+                        <output>cv::Mat</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{7e04ee34-f4f6-4236-83e8-5b607b1f74f0}" dataTypeSignature="cv::Canny_ImageProcessing_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="High threshold" type="double">100</parameter>
+                    <parameter name="Low threshold" type="double">80</parameter>
+                    <parameter name="Sobel kernel size" type="int">3</parameter>
+                    <parameter name="Gradient norm" type="int">0</parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{356;313}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{5daf345d-edfd-4b69-a25c-ddfebb9c40a4}">
+                    <data class="app::MacroInput">
+                        <name>Input image</name>
+                        <input>cv::Mat</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{bea393a8-8969-48f5-b70a-5b1e403b64c2}">
+                    <data class="app::MacroOutput">
+                        <name>Output image</name>
+                        <output>cv::Mat</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{a988bb47-216f-4f17-b14a-5ea7578a54a7}" dataTypeSignature="cv::VideoInput_ImageProcessing_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="Video file" type="std::string"></parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{356;88}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{682672bf-3ce2-464c-aca2-0724cdc6e6ed}">
+                    <data class="app::MacroOutput">
+                        <name>Frame</name>
+                        <output>cv::Mat</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+        <vertex class="graph::Vertex" id="{bd7fac00-8f5b-4c42-b7b3-3d0c5e587d9c}" dataTypeSignature="cv::Mat::convertTo_ImageProcessing_opencv-3_1.1.0_642190000r">
+            <data class="app::MacroDLL">
+                <parameters>
+                    <parameter name="Conversion type" type="int">2</parameter>
+                </parameters>
+            </data>
+            <visualization class="graph::VertexItem">
+                <position>{506;195}</position>
+                <size>{100;70}</size>
+            </visualization>
+            <topologyForced>false</topologyForced>
+            <pins>
+                <pin class="graph::Pin" id="{33387e1c-f381-4254-b907-852c62c15286}">
+                    <data class="app::MacroInput">
+                        <name>Image input</name>
+                        <input>cv::Mat</input>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+                <pin class="graph::Pin" id="{3e51c984-97f0-4fb7-bd0d-312e2b5fc5a8}">
+                    <data class="app::MacroOutput">
+                        <name>Image output</name>
+                        <output>cv::Mat</output>
+                    </data>
+                    <visualization class="graph::PinItem"/>
+                </pin>
+            </pins>
+        </vertex>
+    </vertices>
+    <edges>
+        <edge class="graph::Edge" id="{1a031f34-616b-4997-951c-1f35303f4378}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{6d70447a-d8ac-4960-8926-329b9b2007b9}" destPinId="{5daf345d-edfd-4b69-a25c-ddfebb9c40a4}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+        <edge class="graph::Edge" id="{1e77cb4e-bf91-42cb-8b93-74f41879eb4c}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{682672bf-3ce2-464c-aca2-0724cdc6e6ed}" destPinId="{e0603d8e-bbd2-4a46-ad2f-ddf81ee5bb84}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+        <edge class="graph::Edge" id="{9f0ca44b-1cda-44a7-b631-7416f3b436f9}" dataTypeSignature="Impresario::DataFlowEdge" srcPinId="{682672bf-3ce2-464c-aca2-0724cdc6e6ed}" destPinId="{33387e1c-f381-4254-b907-852c62c15286}">
+            <data class="app::MacroLink"/>
+            <visualization class="graph::EdgeItem"/>
+        </edge>
+    </edges>
+</graph>
