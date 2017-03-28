@@ -111,12 +111,12 @@ unix {
 
   CONFIG(release, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltir
-    LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
+    LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
   }
 
   CONFIG(debug, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltid
-    LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
+    LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
   }
 }
 

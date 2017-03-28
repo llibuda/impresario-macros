@@ -84,7 +84,7 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/ml/include)
   INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/hal/include)
 
-  LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
+  LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_imgproc #-lopencv_highgui -lopencv_video -lopencv_videoio
 }
 
 CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG
