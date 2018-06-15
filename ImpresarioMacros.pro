@@ -1,7 +1,7 @@
 #****************************************************************************************************
 #   Impresario Macro Libraries for LTI-Lib 2 and OpenCV 3
 #
-#   Copyright (C) 2015-2017  Lars Libuda
+#   Copyright (C) 2015-2018  Lars Libuda
 #   All rights reserved.
 #
 #   Redistribution and use in source and binary forms, with or without

@@ -2,7 +2,7 @@
 **   Impresario Library ImageProcessing_ltilib-2
 **   This file is part of the Impresario Library ImageProcessing_ltilib-2.
 **
-**   Copyright (C) 2015  Lars Libuda
+**   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
@@ -34,15 +34,15 @@
 #include "macrobase.h"
 #include "ltiCannyEdges.h"
 
-class CannyEdge : public MacroBase {
+class CvCannyEdge : public MacroBase {
 public:
   // standard constructor
-  CannyEdge(void);
+  CvCannyEdge(void);
   // standard destructor
-  virtual ~CannyEdge(void);
+  virtual ~CvCannyEdge(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CannyEdge(); }
+  virtual MacroBase* clone() const { return new CvCannyEdge(); }
 
 protected:
   virtual Status onInit();

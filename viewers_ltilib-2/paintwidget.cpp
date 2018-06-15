@@ -2,7 +2,7 @@
 **   Impresario Library Viewers_ltilib-2
 **   This file is part of the Impresario Library Viewers_ltilib-2.
 **
-**   Copyright (C) 2015  Lars Libuda
+**   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without

@@ -2,7 +2,7 @@
 #   Impresario Library Viewers_BasicTypes
 #   This file is part of the Impresario Library Viewers_BasicTypes.
 #
-#   Copyright (C) 2015-2017  Lars Libuda
+#   Copyright (C) 2015-2018  Lars Libuda
 #   All rights reserved.
 #
 #   Redistribution and use in source and binary forms, with or without

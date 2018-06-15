@@ -2,7 +2,7 @@
 **   Impresario Interface - Image Processing Engineering System applying Reusable Interactive Objects
 **   This file is part of the Impresario Interface.
 **
-**   Copyright (C) 2015-2017  Lars Libuda
+**   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without

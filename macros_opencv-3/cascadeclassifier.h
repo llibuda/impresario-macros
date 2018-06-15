@@ -1,6 +1,6 @@
 /****************************************************************************************************
-**   Impresario Library ImageProcessing_ltilib-2
-**   This file is part of the Impresario Library ImageProcessing_ltilib-2.
+**   Impresario Library ImageProcessing_opencv-3
+**   This file is part of the Impresario Library ImageProcessing_opencv-3.
 **
 **   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
@@ -28,39 +28,36 @@
 **   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 *****************************************************************************************************/
-#include "splitimagetoyuv.h"
-#include "ltiImage.h"
-#include "ltiChannel8.h"
+#ifndef CASCADECLASSIFIER_H_
+#define CASCADECLASSIFIER_H_
 
-SplitImageToYUV::SplitImageToYUV() : MacroBase() {
-  // set up macro description
-  setName(L"lti::splitImageToYUV");
-  setCreator(L"Lars Libuda");
-  setGroup(L"Image Processing");
-  setDescription(L"Splits a color image into its YUV components");
-  addInput<lti::image>(L"Input image",L"color image to be split");
-  addOutput<lti::channel8>(L"Y-component",L"8-bit grey scale image denoting the Y-component");
-  addOutput<lti::channel8>(L"U-component",L"8-bit grey scale image denoting the U-component");
-  addOutput<lti::channel8>(L"V-component",L"8-bit grey scale image denoting the V-component");
-}
+#include "macrobase.h"
+#include <opencv/cv.h>
+#include "opencv2/objdetect.hpp"
+#include <vector>
 
-SplitImageToYUV::~SplitImageToYUV() {
-}
+class CvCascadeClassifier : public MacroBase {
+public:
+  // standard constructor
+  CvCascadeClassifier(void);
+  // standard destructor
+  virtual ~CvCascadeClassifier(void);
 
-MacroBase::Status SplitImageToYUV::onInit() {
-  const lti::image* input = accessInput<lti::image>(0);
-  if (input == 0) {
-    setErrorMsg(L"Input is not connected.");
-    return Error;
-  }
-  return Ok;
-}
+  // override clone method to provide correct class instance
+  virtual MacroBase* clone() const { return new CvCascadeClassifier(); }
 
-MacroBase::Status SplitImageToYUV::onApply() {
-  const lti::image* input = accessInput<lti::image>(0);
-  lti::channel8& outputY = accessOutput<lti::channel8>(0);
-  lti::channel8& outputU = accessOutput<lti::channel8>(1);
-  lti::channel8& outputV = accessOutput<lti::channel8>(2);
-  return (splitFunctor.apply(*input,outputY,outputU,outputV)) ? Ok : Error;
-}
+  typedef std::vector<cv::Rect> FaceRegions;
 
+protected:
+  virtual Status onInit();
+  virtual Status onApply();
+  virtual Status onExit();
+  virtual void onParametersChanged(ParameterSet&);
+
+private:
+  Status createAndLoadClassifier(const std::string& fileName);
+
+  cv::CascadeClassifier* classifier;
+};
+
+#endif /* CASCADECLASSIFIER_H_ */

@@ -2,7 +2,7 @@
 **   Impresario Library ImageProcessing_ltilib-2
 **   This file is part of the Impresario Library ImageProcessing_ltilib-2.
 **
-**   Copyright (C) 2015  Lars Libuda
+**   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
 #include "cannyedge.h"
 #include "ltiChannel8.h"
 
-CannyEdge::CannyEdge(void) : MacroBase() {
+CvCannyEdge::CvCannyEdge(void) : MacroBase() {
   // set up macro description
   setName(L"lti::cannyEdges");
   setCreator(L"Lars Libuda");
@@ -43,10 +43,10 @@ CannyEdge::CannyEdge(void) : MacroBase() {
   addParameter<int>(L"No Edge Treshold",L"Value used to denote a no-edge pixel",0,L"IntSpinBox",L"{ \"minValue\": 0, \"maxValue\": 255 }");
 }
 
-CannyEdge::~CannyEdge(void) {
+CvCannyEdge::~CvCannyEdge(void) {
 }
 
-MacroBase::Status CannyEdge::onInit() {
+MacroBase::Status CvCannyEdge::onInit() {
   const lti::channel8* input = accessInput<lti::channel8>(0);
   if (input == 0) {
     setErrorMsg(L"Input is not connected.");
@@ -55,13 +55,13 @@ MacroBase::Status CannyEdge::onInit() {
   return Ok;
 }
 
-MacroBase::Status CannyEdge::onApply() {
+MacroBase::Status CvCannyEdge::onApply() {
   const lti::channel8* input = accessInput<lti::channel8>(0);
   lti::channel8& output = accessOutput<lti::channel8>(0);
   return (cannyFunctor.apply(*input,output)) ? Ok : Error;
 }
 
-void CannyEdge::onParametersChanged(ParameterSet &) {
+void CvCannyEdge::onParametersChanged(ParameterSet &) {
   params.edgeValue = (lti::ubyte)getParameterValue<int>(0);
   params.noEdgeValue = (lti::ubyte)getParameterValue<int>(1);
   cannyFunctor.setParameters(params);

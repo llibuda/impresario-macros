@@ -2,7 +2,7 @@
 **   Impresario Library ImageProcessing_opencv-3
 **   This file is part of the Impresario Library ImageProcessing_opencv-3.
 **
-**   Copyright (C) 2015-2017  Lars Libuda
+**   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
 #include <opencv/cv.h>
 #include <iostream>
 
-CannyEdge::CannyEdge(void) : MacroBase() {
+CvCannyEdge::CvCannyEdge(void) : MacroBase() {
   // set up macro description
   setName(L"cv::Canny");
   setCreator(L"Lars Libuda");
@@ -48,10 +48,10 @@ CannyEdge::CannyEdge(void) : MacroBase() {
   addParameter<int>(L"Gradient norm",L"Gradient norm to be used.",0,L"IntComboBox",L"{ \"items\": [\"L1 norm\", \"L2 norm\"]}");
 }
 
-CannyEdge::~CannyEdge(void) {
+CvCannyEdge::~CvCannyEdge(void) {
 }
 
-MacroBase::Status CannyEdge::onInit() {
+MacroBase::Status CvCannyEdge::onInit() {
   const cv::Mat* input = accessInput<cv::Mat>(0);
   if (input == 0) {
     setErrorMsg(L"Input is not connected.");
@@ -60,7 +60,7 @@ MacroBase::Status CannyEdge::onInit() {
   return Ok;
 }
 
-MacroBase::Status CannyEdge::onApply() {
+MacroBase::Status CvCannyEdge::onApply() {
   const cv::Mat* input = accessInput<cv::Mat>(0);
   if (!input || input->dims != 2 || input->type() != CV_8UC1) {
     setErrorMsg(L"Type of input is not supported. Type CV_8UC1 is required.");
@@ -83,7 +83,7 @@ MacroBase::Status CannyEdge::onApply() {
   return Ok;
 }
 
-void CannyEdge::onParametersChanged(ParameterSet &) {
+void CvCannyEdge::onParametersChanged(ParameterSet &) {
 
 }
 

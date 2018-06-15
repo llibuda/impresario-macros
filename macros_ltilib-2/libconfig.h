@@ -2,7 +2,7 @@
 **   Impresario Interface - Image Processing Engineering System applying Reusable Interactive Objects
 **   This file is part of the Impresario Interface.
 **
-**   Copyright (C) 2015  Lars Libuda
+**   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
 #define LIB_VERSION_PATCH  0
 #define LIB_DESCRIPTION    L"<html><body>"\
   L"<p><b>Library with macros dedicated to image processing with the ltilib-2.</b></p>"\
-  L"<p>Copyright (C) 2015  Lars Libuda</p>"\
+  L"<p>Copyright (C) 2015-2018  Lars Libuda</p>"\
   L"<p>All rights reserved.</p>"\
   L"<p>"\
   L"Redistribution and use in source and binary forms, with or without" \
@@ -76,7 +76,7 @@
 #include "channelconversion.h"
 
 MACRO_REGISTRATION_BEGIN
-  MACRO_ADD(CannyEdge)
+  MACRO_ADD(CvCannyEdge)
   MACRO_ADD(SplitImageToHSI)
   MACRO_ADD(SplitImageToYUV)
   MACRO_ADD(CvVideoInput)

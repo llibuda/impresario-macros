@@ -2,7 +2,7 @@
 #   Impresario Library Viewers_opencv-3
 #   This file is part of the Impresario Library Viewers_opencv-3.
 #
-#   Copyright (C) 2015-2017  Lars Libuda
+#   Copyright (C) 2015-2018  Lars Libuda
 #   All rights reserved.
 #
 #   Redistribution and use in source and binary forms, with or without
@@ -45,17 +45,17 @@ win32 {
   DEFINES += _IMPRESARIO_WIN
 
   # check support for open-cv
-  OPENCV_BASE_PATH = "../../opencv-3.1.0/build"
+  OPENCV_BASE_PATH = "../../opencv-3.4.1/build"
   OPENCV_LIB_PATH =
   if(win32-msvc*) {
     contains(QT_ARCH, i386) {
-      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x86/vc$${section(MSVC_VER,.,0,0)}/lib
+      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x32/vc$${section(MSVC_VER,.,0,0)}/lib
     }
     else {
       OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x64/vc$${section(MSVC_VER,.,0,0)}/lib
     }
   }
-  OPENCV_LIB = opencv_world310
+  OPENCV_LIB = opencv_world341
   CONFIG(debug, release|debug):OPENCV_LIB = $${OPENCV_LIB}d
   !exists($${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib) {
     error(Current Kit is not supported by OpenCV-3. Library $${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib does not exist.)
@@ -69,22 +69,22 @@ unix {
   QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/core/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/imgproc/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/photo/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/video/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/features2d/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/flann/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/objdetect/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/calib3d/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/imgcodecs/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/videoio/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/highgui/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/ml/include)
-  INCLUDEPATH += $$quote(../../opencv-3.1.0/modules/hal/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/core/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/imgproc/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/photo/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/video/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/features2d/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/flann/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/objdetect/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/calib3d/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/imgcodecs/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/videoio/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/highgui/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/ml/include)
+  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/hal/include)
 
-  LIBS += $$quote(-L../../../opencv-3.1.0/lib) -lopencv_core -lopencv_imgproc #-lopencv_highgui -lopencv_video -lopencv_videoio
+  LIBS += $$quote(-L../../../opencv-3.4.1/lib) -lopencv_core -lopencv_imgproc #-lopencv_highgui -lopencv_video -lopencv_videoio
 }
 
 CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG

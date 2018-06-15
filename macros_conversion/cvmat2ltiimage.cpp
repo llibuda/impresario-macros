@@ -2,7 +2,7 @@
 **   Impresario Library Conversion_ltilib-2_opencv-3
 **   This file is part of the Impresario Library Conversion_ltilib-2_opencv-3.
 **
-**   Copyright (C) 2015-2017  Lars Libuda
+**   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
