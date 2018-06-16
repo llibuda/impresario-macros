@@ -31,7 +31,7 @@
 #include "cannyedge.h"
 #include "ltiChannel8.h"
 
-CvCannyEdge::CvCannyEdge(void) : MacroBase() {
+LtiCannyEdge::LtiCannyEdge(void) : MacroBase() {
   // set up macro description
   setName(L"lti::cannyEdges");
   setCreator(L"Lars Libuda");
@@ -43,10 +43,10 @@ CvCannyEdge::CvCannyEdge(void) : MacroBase() {
   addParameter<int>(L"No Edge Treshold",L"Value used to denote a no-edge pixel",0,L"IntSpinBox",L"{ \"minValue\": 0, \"maxValue\": 255 }");
 }
 
-CvCannyEdge::~CvCannyEdge(void) {
+LtiCannyEdge::~LtiCannyEdge(void) {
 }
 
-MacroBase::Status CvCannyEdge::onInit() {
+MacroBase::Status LtiCannyEdge::onInit() {
   const lti::channel8* input = accessInput<lti::channel8>(0);
   if (input == 0) {
     setErrorMsg(L"Input is not connected.");
@@ -55,13 +55,13 @@ MacroBase::Status CvCannyEdge::onInit() {
   return Ok;
 }
 
-MacroBase::Status CvCannyEdge::onApply() {
+MacroBase::Status LtiCannyEdge::onApply() {
   const lti::channel8* input = accessInput<lti::channel8>(0);
   lti::channel8& output = accessOutput<lti::channel8>(0);
   return (cannyFunctor.apply(*input,output)) ? Ok : Error;
 }
 
-void CvCannyEdge::onParametersChanged(ParameterSet &) {
+void LtiCannyEdge::onParametersChanged(ParameterSet &) {
   params.edgeValue = (lti::ubyte)getParameterValue<int>(0);
   params.noEdgeValue = (lti::ubyte)getParameterValue<int>(1);
   cannyFunctor.setParameters(params);

@@ -34,7 +34,7 @@
 #include <opencv/cv.h>
 #include "ltiImage.h"
 
-Channel8ToChannel::Channel8ToChannel() : MacroBase() {
+CvMat2LtiImage::CvMat2LtiImage() : MacroBase() {
   // set up macro description
   setName(L"cv::Mat_to_lti::image");
   setCreator(L"Lars Libuda");
@@ -44,10 +44,10 @@ Channel8ToChannel::Channel8ToChannel() : MacroBase() {
   addOutput<lti::image>(L"LTILib image",L"lti::image containing conversion result");
 }
 
-Channel8ToChannel::~Channel8ToChannel() {
+CvMat2LtiImage::~CvMat2LtiImage() {
 }
 
-MacroBase::Status Channel8ToChannel::onInit() {
+MacroBase::Status CvMat2LtiImage::onInit() {
   const cv::Mat* input = accessInput<cv::Mat>(0);
   if (!input) {
     setErrorMsg(L"No input image connected.");
@@ -58,7 +58,7 @@ MacroBase::Status Channel8ToChannel::onInit() {
   }
 }
 
-MacroBase::Status Channel8ToChannel::onApply() {
+MacroBase::Status CvMat2LtiImage::onApply() {
   const cv::Mat* input = accessInput<cv::Mat>(0);
   lti::image& output = accessOutput<lti::image>(0);
   output.resize(input->rows,input->cols);
@@ -78,6 +78,6 @@ MacroBase::Status Channel8ToChannel::onApply() {
   }
 }
 
-MacroBase::Status Channel8ToChannel::onExit() {
+MacroBase::Status CvMat2LtiImage::onExit() {
   return Ok;
 }

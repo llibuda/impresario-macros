@@ -33,15 +33,15 @@
 
 #include "macrobase.h"
 
-class Channel8ToChannel : public MacroBase {
+class LtiChannel8ToChannel : public MacroBase {
 public:
   // standard constructor
-  Channel8ToChannel(void);
+  LtiChannel8ToChannel(void);
   // standard destructor
-  virtual ~Channel8ToChannel(void);
+  virtual ~LtiChannel8ToChannel(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new Channel8ToChannel(); }
+  virtual MacroBase* clone() const { return new LtiChannel8ToChannel(); }
 
 protected:
   virtual Status onInit();
@@ -50,15 +50,15 @@ protected:
 
 };
 
-class ChannelToChannel8 : public MacroBase {
+class LtiChannelToChannel8 : public MacroBase {
 public:
   // standard constructor
-  ChannelToChannel8(void);
+  LtiChannelToChannel8(void);
   // standard destructor
-  virtual ~ChannelToChannel8(void);
+  virtual ~LtiChannelToChannel8(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new ChannelToChannel8(); }
+  virtual MacroBase* clone() const { return new LtiChannelToChannel8(); }
 
 protected:
   virtual Status onInit();

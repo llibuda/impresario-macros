@@ -34,15 +34,15 @@
 #include "macrobase.h"
 #include "ltiLoadImageList.h"
 
-class CvVideoInput : public MacroBase {
+class LtiLoadImages : public MacroBase {
 public:
   // standard constructor
-  CvVideoInput(void);
+  LtiLoadImages(void);
   // standard destructor
-  virtual ~CvVideoInput(void);
+  virtual ~LtiLoadImages(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvVideoInput(); }
+  virtual MacroBase* clone() const { return new LtiLoadImages(); }
 
 protected:
   virtual Status onInit();

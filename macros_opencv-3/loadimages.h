@@ -1,6 +1,6 @@
 /****************************************************************************************************
-**   Impresario Library ImageProcessing_ltilib-2
-**   This file is part of the Impresario Library ImageProcessing_ltilib-2.
+**   Impresario Library ImageProcessing_opencv-3
+**   This file is part of the Impresario Library ImageProcessing_opencv-3.
 **
 **   Copyright (C) 2015-2018  Lars Libuda
 **   All rights reserved.
@@ -28,28 +28,30 @@
 **   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 *****************************************************************************************************/
-#ifndef SPLITIMAGETOYUV_H_
-#define SPLITIMAGETOYUV_H_
+#ifndef LOADIMAGES_H_
+#define LOADIMAGES_H_
 
 #include "macrobase.h"
-#include "ltiSplitImageToYUV.h"
+#include <vector>
 
-class LtiSplitImageToYUV : public MacroBase {
+class CvLoadImages : public MacroBase {
 public:
   // standard constructor
-  LtiSplitImageToYUV(void);
+  CvLoadImages(void);
   // standard destructor
-  virtual ~LtiSplitImageToYUV(void);
+  virtual ~CvLoadImages(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiSplitImageToYUV(); }
+  virtual MacroBase* clone() const { return new CvLoadImages(); }
 
 protected:
   virtual Status onInit();
   virtual Status onApply();
+  virtual Status onExit();
 
 private:
-  lti::splitImageToYUV splitFunctor;
+  std::vector<std::string> fileList;
+  std::size_t              fileIndex;
 };
 
-#endif // SPLITIMAGETOYUV_H_
+#endif // LOADIMAGES_H_

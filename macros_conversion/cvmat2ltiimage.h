@@ -34,15 +34,15 @@
 #include "macrobase.h"
 #include <opencv2/core.hpp>
 
-class Channel8ToChannel : public MacroBase {
+class CvMat2LtiImage : public MacroBase {
 public:
   // standard constructor
-  Channel8ToChannel(void);
+  CvMat2LtiImage(void);
   // standard destructor
-  virtual ~Channel8ToChannel(void);
+  virtual ~CvMat2LtiImage(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new Channel8ToChannel(); }
+  virtual MacroBase* clone() const { return new CvMat2LtiImage(); }
 
 protected:
   virtual Status onInit();

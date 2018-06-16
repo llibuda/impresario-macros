@@ -35,7 +35,7 @@
 #include "ltiOgdKernels.h"
 #include "ltiGaussKernels.h"
 
-Convolution::Convolution() : MacroBase() {
+LtiConvolution::LtiConvolution() : MacroBase() {
   // set up macro description
   setName(L"lti::convolution");
   setCreator(L"Lars Libuda");
@@ -54,10 +54,10 @@ Convolution::Convolution() : MacroBase() {
   addParameter<bool>(L"Normalize",L"Normalize result of convolution",true,L"BoolComboBox");
 }
 
-Convolution::~Convolution() {
+LtiConvolution::~LtiConvolution() {
 }
 
-MacroBase::Status Convolution::onInit() {
+MacroBase::Status LtiConvolution::onInit() {
   const lti::channel* input = accessInput<lti::channel>(0);
   if (input == 0) {
     setErrorMsg(L"Input is not connected.");
@@ -66,7 +66,7 @@ MacroBase::Status Convolution::onInit() {
   return Ok;
 }
 
-MacroBase::Status Convolution::onApply() {
+MacroBase::Status LtiConvolution::onApply() {
 
   const lti::channel* input = accessInput<lti::channel>(0);
   lti::channel& output = accessOutput<lti::channel>(0);
@@ -79,7 +79,7 @@ MacroBase::Status Convolution::onApply() {
   }
 }
 
-void Convolution::onParametersChanged(ParameterSet &) {
+void LtiConvolution::onParametersChanged(ParameterSet &) {
   int kernelIndex = getParameterValue<int>(0);
   switch(kernelIndex) {
     case 0: {

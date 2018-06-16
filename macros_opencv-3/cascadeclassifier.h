@@ -46,7 +46,7 @@ public:
   // override clone method to provide correct class instance
   virtual MacroBase* clone() const { return new CvCascadeClassifier(); }
 
-  typedef std::vector<cv::Rect> FaceRegions;
+  typedef std::vector<cv::Rect> RegionsOfInterest;
 
 protected:
   virtual Status onInit();

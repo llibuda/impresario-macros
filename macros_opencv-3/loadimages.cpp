@@ -29,74 +29,98 @@
 **
 *****************************************************************************************************/
 #include "loadimages.h"
-#include "ltiImage.h"
+#include <opencv/cv.h>
+#include "opencv2/imgcodecs.hpp"
 #include <iostream>
+#include <filesystem>
 
-LtiLoadImages::LtiLoadImages() : MacroBase() {
+CvLoadImages::CvLoadImages() : MacroBase(), fileList(), fileIndex(0) {
   // set up macro description
-  setName(L"lti::loadImages");
+  setName(L"cv::loadImages");
   setCreator(L"Lars Libuda");
   setGroup(L"Image Sources");
   setDescription(L"Loads images from a given directory in alphabetical order");
-  addOutput<lti::image>(L"Image",L"Color image currently loaded");
+  addOutput<cv::Mat>(L"Image",L"Image currently loaded");
   addOutput<char *>(L"Image path",L"Full path of the currently loaded image");
   addParameter<std::string>(L"Source directory",L"Directory where to load images from","",L"StringDirSelector");
   addParameter<bool>(L"Repeat",L"Starts loading images from beginning when end was reached.",false,L"BoolComboBox");
   addParameter<std::string>(L"Current File",L"Current loaded image","",L"StringFileSelector");
 }
 
-LtiLoadImages::~LtiLoadImages() {
+CvLoadImages::~CvLoadImages() {
 }
 
-MacroBase::Status LtiLoadImages::onInit() {
+MacroBase::Status CvLoadImages::onInit() {
+  fileIndex = 0;
+  fileList.clear();
   const std::string& directory = getParameterValue<std::string>(0);
   if (directory.empty()) {
     setErrorMsg(L"No directory specified in parameters.");
     return Error;
   }
-  if (!loadFunctor.useDirectory(directory)) {
+  std::filesystem::path p(directory);
+  try  {
+    if (!std::filesystem::exists(p)) {
+      std::basic_ostringstream<wchar_t> errorMsg;
+      errorMsg << L"Given path '" << directory.c_str() << L"' does not exist.";
+      setErrorMsg(errorMsg.str());
+      return Error;
+    }
+    if (!std::filesystem::is_directory(p)) {
+      std::basic_ostringstream<wchar_t> errorMsg;
+      errorMsg << L"Given path '" << directory.c_str() << L"' is not a valid directory.";
+      setErrorMsg(errorMsg.str());
+      return Error;
+    }
+    for (const std::filesystem::directory_entry& x : std::filesystem::directory_iterator(p)) {
+      fileList.push_back(x.path().string());
+    }
+  }
+  catch (const std::filesystem::filesystem_error& ex) {
     std::basic_ostringstream<wchar_t> errorMsg;
-    errorMsg << L"Directory '" << directory.c_str() << L"' does not exist.";
+    errorMsg << L"Error while accessing file system: " << ex.what();
     setErrorMsg(errorMsg.str());
     return Error;
   }
-  if (!loadFunctor.hasNext()) {
-    setErrorMsg(L"Directory does not contain valid images.");
+  if (fileList.empty()) {
+    std::basic_ostringstream<wchar_t> errorMsg;
+    errorMsg << L"Given directory '" << directory.c_str() << L"' does not contain any files.";
+    setErrorMsg(errorMsg.str());
     return Error;
   }
   return Ok;
 }
 
-MacroBase::Status LtiLoadImages::onApply() {
-  lti::image& output = accessOutput<lti::image>(0);
+MacroBase::Status CvLoadImages::onApply() {
+  cv::Mat& output = accessOutput<cv::Mat>(0);
   char* & filename = accessOutput<char*>(1);
-  if (loadFunctor.hasNext()) {
-    filename = const_cast<char*>(loadFunctor.getNextFilename().c_str());
-    setParameterValue<std::string>(2,std::string(filename));
-    if (!loadFunctor.load(output)) {
+  if (fileIndex < fileList.size()) {
+    filename = const_cast<char*>(fileList[fileIndex].c_str());
+    setParameterValue<std::string>(2,std::string(fileList[fileIndex]));
+    output = cv::imread(cv::String(fileList[fileIndex]), cv::IMREAD_COLOR);
+    if (output.empty()) {
       std::basic_ostringstream<wchar_t> errorMsg;
-      errorMsg << L"Failed to load image '" << filename << L"'.";
+      errorMsg << L"Failed to load file '" << fileList[fileIndex].c_str() << L"'.";
       setErrorMsg(errorMsg.str());
       return Error;
     }
-    else {
-      return Ok;
+    fileIndex++;
+    if (fileIndex >= fileList.size()) {
+      const bool& repeat = getParameterValue<bool>(1);
+      if (repeat)
+      {
+        fileIndex = 0;
+        return Ok;
+      }
+      else
+      {
+        return Stop;
+      }
     }
   }
-  else {
-    const bool& repeat = getParameterValue<bool>(1);
-    if (repeat)
-    {
-      loadFunctor.rewind();
-      return Ok;
-    }
-    else
-    {
-      return Stop;
-    }
-  }
+  return Ok;
 }
 
-MacroBase::Status LtiLoadImages::onExit() {
+MacroBase::Status CvLoadImages::onExit() {
   return Ok;
 }

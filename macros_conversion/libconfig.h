@@ -70,7 +70,7 @@
 #include "cvmat2ltiimage.h"
 
 MACRO_REGISTRATION_BEGIN
-  MACRO_ADD(Channel8ToChannel)
+  MACRO_ADD(CvMat2LtiImage)
 MACRO_REGISTRATION_END
 
 #endif // LIBCONFIG_H_

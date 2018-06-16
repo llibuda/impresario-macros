@@ -73,6 +73,7 @@
 #include "cvmatconvert.h"
 #include "cannyedge.h"
 #include "cascadeclassifier.h"
+#include "loadimages.h"
 
 MACRO_REGISTRATION_BEGIN
   MACRO_ADD(CvVideoInput)
@@ -81,6 +82,7 @@ MACRO_REGISTRATION_BEGIN
   MACRO_ADD(CvMatConvert)
   MACRO_ADD(CvCannyEdge)
   MACRO_ADD(CvCascadeClassifier)
+  MACRO_ADD(CvLoadImages)
 MACRO_REGISTRATION_END
 
 #endif // LIBCONFIG_H_

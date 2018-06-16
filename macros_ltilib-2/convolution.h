@@ -34,15 +34,15 @@
 #include "macrobase.h"
 #include "ltiConvolution.h"
 
-class Convolution : public MacroBase {
+class LtiConvolution : public MacroBase {
 public:
   // standard constructor
-  Convolution(void);
+  LtiConvolution(void);
   // standard destructor
-  virtual ~Convolution(void);
+  virtual ~LtiConvolution(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new Convolution(); }
+  virtual MacroBase* clone() const { return new LtiConvolution(); }
 
 protected:
   virtual Status onInit();

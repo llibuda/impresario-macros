@@ -32,7 +32,7 @@ TEMPLATE = lib
 CONFIG += shared
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG += c++11
+CONFIG += c++17
 
 VERSION = 1.1.0
 DESTDIR = ../lib
@@ -43,8 +43,10 @@ win32: TARGET = $${TARGET}_$${VERSION}
 include(../target_def.pri)
 
 win32 {
+  QMAKE_CXXFLAGS += -std:c++17
   CONFIG += skip_target_version_ext
   DEFINES += _IMPRESARIO_WIN
+  DEFINES += _HAS_CXX17
 
   # check support for open-cv
   OPENCV_BASE_PATH = "../../opencv-3.4.1/build"
@@ -98,7 +100,8 @@ SOURCES += \
     cvtcolor.cpp \
     cvmatconvert.cpp \
     cannyedge.cpp \
-    cascadeclassifier.cpp
+    cascadeclassifier.cpp \
+    loadimages.cpp
 
 HEADERS +=\
     libconfig.h \
@@ -109,4 +112,5 @@ HEADERS +=\
     cvtcolor.h \
     cvmatconvert.h \
     cannyedge.h \
-    cascadeclassifier.h
+    cascadeclassifier.h \
+    loadimages.h

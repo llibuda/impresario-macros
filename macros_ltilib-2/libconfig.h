@@ -76,13 +76,13 @@
 #include "channelconversion.h"
 
 MACRO_REGISTRATION_BEGIN
-  MACRO_ADD(CvCannyEdge)
-  MACRO_ADD(SplitImageToHSI)
-  MACRO_ADD(SplitImageToYUV)
-  MACRO_ADD(CvVideoInput)
-  MACRO_ADD(Convolution)
-  MACRO_ADD(Channel8ToChannel)
-  MACRO_ADD(ChannelToChannel8)
+  MACRO_ADD(LtiCannyEdge)
+  MACRO_ADD(LtiSplitImageToHSI)
+  MACRO_ADD(LtiSplitImageToYUV)
+  MACRO_ADD(LtiLoadImages)
+  MACRO_ADD(LtiConvolution)
+  MACRO_ADD(LtiChannel8ToChannel)
+  MACRO_ADD(LtiChannelToChannel8)
 MACRO_REGISTRATION_END
 
 #endif // LIBCONFIG_H_

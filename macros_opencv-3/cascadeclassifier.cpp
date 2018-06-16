@@ -42,10 +42,10 @@ CvCascadeClassifier::CvCascadeClassifier(void) : MacroBase(), classifier(nullptr
   addInput<cv::Mat>(L"Input image",L"8-bit grey scale image for object detection");
   addOutput<cv::Mat>(L"Output image",L"Visualization of detected results");
   addParameter<std::string>(L"Classifier file",L"Path to classifier defition file","",L"StringFileSelector",L"{\"title\": \"Select classifier\", \"filters\": [\"Classifier files (*.xml)\",\"All files (*.*)\"]}");
-  addParameter<double>(L"Scale factor",L"Parameter specifying how much the image size is reduced at each image scale.",1.1,L"RealSpinBox",L"{ \"minValue\": 1.0, \"maxValue\": 2.0, \"step\": 0.1, \"decimals\": 1 }");
+  addParameter<double>(L"Scale factor",L"Parameter specifying how much the image size is reduced at each image scale.",1.1,L"RealSpinBox",L"{ \"minValue\": 1.1, \"maxValue\": 2.0, \"step\": 0.1, \"decimals\": 1 }");
   addParameter<int>(L"Min. Neighbors",L"Parameter specifying how many neighbors each candidate rectangle should have to retain it.",2,L"IntSpinBox",L"{ \"minValue\": 1, \"maxValue\": 5, \"step\": 1 }");
-  addParameter<int>(L"Min. Size",L"Minimum size for detected object.",30,L"IntSpinBox",L"{ \"minValue\": 1, \"maxValue\": 1000, \"step\": 1 }");
-  addParameter<int>(L"Max. Size",L"Maximum size for detected object.",30,L"IntSpinBox",L"{ \"minValue\": 1, \"maxValue\": 1000, \"step\": 1 }");
+  addParameter<int>(L"Min. Size",L"Minimum size for detected object.",10,L"IntSpinBox",L"{ \"minValue\": 1, \"maxValue\": 1000, \"step\": 1 }");
+  addParameter<int>(L"Max. Size",L"Maximum size for detected object.",50,L"IntSpinBox",L"{ \"minValue\": 1, \"maxValue\": 1000, \"step\": 1 }");
 }
 
 CvCascadeClassifier::~CvCascadeClassifier(void) {
@@ -67,11 +67,13 @@ MacroBase::Status CvCascadeClassifier::onApply() {
     return Error;
   }
   cv::Mat& output = accessOutput<cv::Mat>(0);
-  FaceRegions regions;
+  RegionsOfInterest regions;
   const double& scaleFactor = getParameterValue<double>(1);
   const int& minNeighbors = getParameterValue<int>(2);
+  const int& minSize = getParameterValue<int>(3);
+  const int& maxSize = getParameterValue<int>(3);
   try {
-    classifier->detectMultiScale(*input,regions,scaleFactor,minNeighbors,0);
+    classifier->detectMultiScale(*input,regions,scaleFactor,minNeighbors,0,cv::Size(minSize,minSize),cv::Size(maxSize,maxSize));
   }
   catch(cv::Exception& ex) {
     std::basic_ostringstream<wchar_t> errorMsg;
@@ -79,16 +81,47 @@ MacroBase::Status CvCascadeClassifier::onApply() {
     setErrorMsg(errorMsg.str());
     return Error;
   }
-  std::cout << "Detected " << regions.size() << " face regions" << std::endl;
+  std::cout << "Detected " << regions.size() << " regions of interest." << std::endl;
+
+  // draw regions of interest
+  const static cv::Scalar colors[] =
+  {
+      cv::Scalar(255,0,0),
+      cv::Scalar(255,128,0),
+      cv::Scalar(255,255,0),
+      cv::Scalar(0,255,0),
+      cv::Scalar(0,128,255),
+      cv::Scalar(0,255,255),
+      cv::Scalar(0,0,255),
+      cv::Scalar(255,0,255)
+  };
+  cv::cvtColor(*input,output,CV_GRAY2RGB);
+  int colorIndex = 0;
+  for(RegionsOfInterest::const_iterator it = regions.begin(); it != regions.end(); ++it)
+  {
+    cv::rectangle(output,*it,colors[colorIndex++ % 8]);
+  }
   return Ok;
 }
 
-void CvCascadeClassifier::onParametersChanged(ParameterSet &) {
+void CvCascadeClassifier::onParametersChanged(ParameterSet & parameters) {
+  for(ParameterSet::iterator it = parameters.begin(); it != parameters.end(); ++it)
+  {
+    switch (*it) {
+      case 0: {
+        break;
+      }
+      case 1: {
 
+        break;
+      }
+      default:
+        break;
+    }
+  }
 }
 
-MacroBase::Status CvCascadeClassifier::onExit()
-{
+MacroBase::Status CvCascadeClassifier::onExit() {
   if (classifier)
   {
     delete classifier;
@@ -97,8 +130,7 @@ MacroBase::Status CvCascadeClassifier::onExit()
   return Ok;
 }
 
-MacroBase::Status CvCascadeClassifier::createAndLoadClassifier(const std::string &fileName)
-{
+MacroBase::Status CvCascadeClassifier::createAndLoadClassifier(const std::string &fileName) {
   if (classifier) {
     delete classifier;
     classifier = nullptr;

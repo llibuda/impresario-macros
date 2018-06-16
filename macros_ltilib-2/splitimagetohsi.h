@@ -34,15 +34,15 @@
 #include "macrobase.h"
 #include "ltiSplitImageToHSI.h"
 
-class SplitImageToHSI : public MacroBase {
+class LtiSplitImageToHSI : public MacroBase {
 public:
   // standard constructor
-  SplitImageToHSI(void);
+  LtiSplitImageToHSI(void);
   // standard destructor
-  virtual ~SplitImageToHSI(void);
+  virtual ~LtiSplitImageToHSI(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new SplitImageToHSI(); }
+  virtual MacroBase* clone() const { return new LtiSplitImageToHSI(); }
 
 protected:
   virtual Status onInit();

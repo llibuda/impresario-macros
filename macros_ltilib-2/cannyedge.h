@@ -34,15 +34,15 @@
 #include "macrobase.h"
 #include "ltiCannyEdges.h"
 
-class CvCannyEdge : public MacroBase {
+class LtiCannyEdge : public MacroBase {
 public:
   // standard constructor
-  CvCannyEdge(void);
+  LtiCannyEdge(void);
   // standard destructor
-  virtual ~CvCannyEdge(void);
+  virtual ~LtiCannyEdge(void);
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvCannyEdge(); }
+  virtual MacroBase* clone() const { return new LtiCannyEdge(); }
 
 protected:
   virtual Status onInit();
