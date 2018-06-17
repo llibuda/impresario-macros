@@ -33,6 +33,7 @@
 #include "opencv2/imgcodecs.hpp"
 #include <iostream>
 #include <filesystem>
+#include <regex>
 
 CvLoadImages::CvLoadImages() : MacroBase(), fileList(), fileIndex(0) {
   // set up macro description
@@ -43,6 +44,7 @@ CvLoadImages::CvLoadImages() : MacroBase(), fileList(), fileIndex(0) {
   addOutput<cv::Mat>(L"Image",L"Image currently loaded");
   addOutput<char *>(L"Image path",L"Full path of the currently loaded image");
   addParameter<std::string>(L"Source directory",L"Directory where to load images from","",L"StringDirSelector");
+  addParameter<std::string>(L"File pattern",L"Regular expression for matching file names (including suffix) found in source directory",".*\\.(jpg|png)",L"StringLineEdit");
   addParameter<bool>(L"Repeat",L"Starts loading images from beginning when end was reached.",false,L"BoolComboBox");
   addParameter<std::string>(L"Current File",L"Current loaded image","",L"StringFileSelector");
 }
@@ -51,9 +53,9 @@ CvLoadImages::~CvLoadImages() {
 }
 
 MacroBase::Status CvLoadImages::onInit() {
-  fileIndex = 0;
   fileList.clear();
   const std::string& directory = getParameterValue<std::string>(0);
+  const std::string& pattern = getParameterValue<std::string>(1);
   if (directory.empty()) {
     setErrorMsg(L"No directory specified in parameters.");
     return Error;
@@ -72,8 +74,12 @@ MacroBase::Status CvLoadImages::onInit() {
       setErrorMsg(errorMsg.str());
       return Error;
     }
+    const std::regex filter(pattern, std::regex_constants::icase);
+
     for (const std::filesystem::directory_entry& x : std::filesystem::directory_iterator(p)) {
-      fileList.push_back(x.path().string());
+      if (std::filesystem::is_regular_file(x.path()) && std::regex_match(x.path().filename().string(),filter)) {
+        fileList.push_back(x.path().generic_string());
+      }
     }
   }
   catch (const std::filesystem::filesystem_error& ex) {
@@ -82,12 +88,19 @@ MacroBase::Status CvLoadImages::onInit() {
     setErrorMsg(errorMsg.str());
     return Error;
   }
-  if (fileList.empty()) {
+  catch (const std::regex_error& ex) {
     std::basic_ostringstream<wchar_t> errorMsg;
-    errorMsg << L"Given directory '" << directory.c_str() << L"' does not contain any files.";
+    errorMsg << L"Error in regular expression for parameter 'File pattern': " << ex.what();
     setErrorMsg(errorMsg.str());
     return Error;
   }
+  if (fileList.empty()) {
+    std::basic_ostringstream<wchar_t> errorMsg;
+    errorMsg << L"Given directory '" << directory.c_str() << L"' does not contain any files matching pattern '" << pattern.c_str() << "'.";
+    setErrorMsg(errorMsg.str());
+    return Error;
+  }
+  if (fileIndex >= fileList.size()) fileIndex = 0;
   return Ok;
 }
 
@@ -96,17 +109,18 @@ MacroBase::Status CvLoadImages::onApply() {
   char* & filename = accessOutput<char*>(1);
   if (fileIndex < fileList.size()) {
     filename = const_cast<char*>(fileList[fileIndex].c_str());
-    setParameterValue<std::string>(2,std::string(fileList[fileIndex]));
+    setParameterValue<std::string>(3,std::string(fileList[fileIndex]));
     output = cv::imread(cv::String(fileList[fileIndex]), cv::IMREAD_COLOR);
     if (output.empty()) {
       std::basic_ostringstream<wchar_t> errorMsg;
       errorMsg << L"Failed to load file '" << fileList[fileIndex].c_str() << L"'.";
       setErrorMsg(errorMsg.str());
+      fileIndex = 0;
       return Error;
     }
     fileIndex++;
     if (fileIndex >= fileList.size()) {
-      const bool& repeat = getParameterValue<bool>(1);
+      const bool& repeat = getParameterValue<bool>(2);
       if (repeat)
       {
         fileIndex = 0;
