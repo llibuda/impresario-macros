@@ -69,6 +69,7 @@ unix {
   QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 
+  INCLUDEPATH += $$quote(../../opencv-3.4.1-build)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/core/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/imgproc/include)
@@ -84,7 +85,7 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/ml/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/hal/include)
 
-  LIBS += $$quote(-L../../../opencv-3.4.1/lib) -lopencv_core -lopencv_imgproc #-lopencv_highgui -lopencv_video -lopencv_videoio
+  LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core -lopencv_imgproc #-lopencv_highgui -lopencv_video -lopencv_videoio
 }
 
 CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG

@@ -94,6 +94,8 @@ unix {
   INCLUDEPATH += $$quote(../../ltilib-2/src/system)
   INCLUDEPATH += $$quote(../../ltilib-2/src/types)
   INCLUDEPATH += $$quote(../../ltilib-2/src/viewer)
+
+  INCLUDEPATH += $$quote(../../opencv-3.4.1-build)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/core/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/imgproc/include)
@@ -111,12 +113,12 @@ unix {
 
   CONFIG(release, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltir
-    LIBS += $$quote(-L../../../opencv-3.4.1/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
+    LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
   }
 
   CONFIG(debug, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltid
-    LIBS += $$quote(-L../../../opencv-3.4.1/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
+    LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
   }
 }
 

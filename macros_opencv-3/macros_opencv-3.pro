@@ -32,7 +32,7 @@ TEMPLATE = lib
 CONFIG += shared
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG += c++17
+#CONFIG += c++17
 
 VERSION = 1.1.0
 DESTDIR = ../lib
@@ -70,9 +70,11 @@ win32 {
 }
 
 unix {
+  QMAKE_CXXFLAGS += -std=c++17 -lstdc++fs
   QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 
+  INCLUDEPATH += $$quote(../../opencv-3.4.1-build)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/core/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/imgproc/include)
@@ -88,7 +90,7 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/ml/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/hal/include)
 
-  LIBS += $$quote(-L../../../opencv-3.4.1/lib) -lopencv_core -lopencv_imgproc -lopencv_videoio #-lopencv_video -lopencv_highgui
+  LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core -lopencv_calib3d -lopencv_dnn -lopencv_features2d -lopencv_flann -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_video -lopencv_videoio -lopencv_videostab
 }
 
 CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG
