@@ -32,7 +32,7 @@ TEMPLATE = lib
 CONFIG += shared
 CONFIG -= app_bundle
 CONFIG -= qt
-#CONFIG += c++17
+#CONFIG += c++17 # not yet supported by QMAKE
 
 VERSION = 1.1.0
 DESTDIR = ../lib
@@ -43,10 +43,12 @@ win32: TARGET = $${TARGET}_$${VERSION}
 include(../target_def.pri)
 
 win32 {
-  QMAKE_CXXFLAGS += -std:c++17
   CONFIG += skip_target_version_ext
   DEFINES += _IMPRESARIO_WIN
+
+  # C++17 support for MSVC
   DEFINES += _HAS_CXX17
+  QMAKE_CXXFLAGS += -std:c++17
 
   # check support for open-cv
   OPENCV_BASE_PATH = "../../opencv-3.4.1/build"
@@ -70,7 +72,10 @@ win32 {
 }
 
 unix {
-  QMAKE_CXXFLAGS += -std=c++17 -lstdc++fs
+  # C++17 support for GCC
+  QMAKE_CXXFLAGS += -std=c++17
+  LIBS += -lstdc++fs
+
   QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 
@@ -90,7 +95,7 @@ unix {
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/ml/include)
   INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/hal/include)
 
-  LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core -lopencv_calib3d -lopencv_dnn -lopencv_features2d -lopencv_flann -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_video -lopencv_videoio -lopencv_videostab
+  LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_videoio -lopencv_objdetect
 }
 
 CONFIG(debug, release|debug):DEFINES += _IMPRESARIO_DEBUG
