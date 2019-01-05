@@ -32,7 +32,8 @@
 #define LOADIMAGES_H_
 
 #include "macrobase.h"
-#include "ltiLoadImageList.h"
+#include <vector>
+#include "ltiIOImage.h"
 
 class LtiLoadImages : public MacroBase {
 public:
@@ -50,7 +51,9 @@ protected:
   virtual Status onExit();
 
 private:
-  lti::loadImageList loadFunctor;
+  std::vector<std::string> fileList;
+  std::size_t              fileIndex;
+  lti::ioImage             loadFunctor;
 };
 
 #endif // LOADIMAGES_H_

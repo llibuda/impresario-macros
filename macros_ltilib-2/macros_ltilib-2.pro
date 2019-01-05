@@ -45,6 +45,10 @@ win32 {
   CONFIG += skip_target_version_ext
   DEFINES += _IMPRESARIO_WIN
 
+  # C++17 support for MSVC
+  DEFINES += _HAS_CXX17
+  QMAKE_CXXFLAGS += -std:c++17
+
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/basics)
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/classifiers)
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/draw)
@@ -60,6 +64,10 @@ win32 {
 }
 
 unix {
+  # C++17 support for GCC
+  QMAKE_CXXFLAGS += -std=c++17
+  LIBS += -lstdc++fs
+
   QMAKE_LN_SHLIB = :
   DEFINES += _IMPRESARIO_LINUX
 
