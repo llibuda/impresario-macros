@@ -159,7 +159,7 @@ Item {
                         var errorCaught = false;
                         var props;
                         try {
-                            props = eval(itemProperties.props[index].properties);
+                            props = JSON.parse(itemProperties.props[index].properties);
                         }
                         catch(error) {
                             errorCaught = true;
