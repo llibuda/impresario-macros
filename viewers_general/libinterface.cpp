@@ -41,9 +41,9 @@
 #include <climits>
 
 wchar_t                     g_szCompiler[256];
-wchar_t                     g_szDate[16];
+wchar_t                     g_szBuildDate[16];
 std::vector<MacroHandle>    g_Macros;
-std::editstreambuf*         g_coutStream = 0;
+std::editstreambuf*         g_coutStream = nullptr;
 std::editstreambuf*         g_cerrStream = 0;
 std::basic_streambuf<char>* g_pCoutOld = 0;
 std::basic_streambuf<char>* g_pCerrOld = 0;
@@ -67,8 +67,8 @@ void initConsoleRedirect(PFN_CONSOLE_REDIRECT cbStdCout, PFN_CONSOLE_REDIRECT cb
 // is defined via preprocessor macro expansion in libconfig.h
 
 const wchar_t* libGetBuildDate() {
-  mbstowcs(g_szDate,__DATE__,16);
-  return g_szDate;
+  mbstowcs(g_szBuildDate,__DATE__,16);
+  return g_szBuildDate;
 }
 
 const wchar_t* libGetCompiler() {

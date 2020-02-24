@@ -31,10 +31,6 @@
 #ifndef MACROBASE_H_
 #define MACROBASE_H_
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1400)
-  #define _CRT_SECURE_NO_DEPRECATE
-#endif
-
 #include "libinterface.h"
 #include <assert.h>
 #include <stdlib.h>

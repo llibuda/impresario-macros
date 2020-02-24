@@ -48,7 +48,7 @@ LtiCannyEdge::~LtiCannyEdge(void) {
 
 MacroBase::Status LtiCannyEdge::onInit() {
   const lti::channel8* input = accessInput<lti::channel8>(0);
-  if (input == 0) {
+  if (input == nullptr) {
     setErrorMsg(L"Input is not connected.");
     return Error;
   }
@@ -61,9 +61,19 @@ MacroBase::Status LtiCannyEdge::onApply() {
   return (cannyFunctor.apply(*input,output)) ? Ok : Error;
 }
 
-void LtiCannyEdge::onParametersChanged(ParameterSet &) {
-  params.edgeValue = (lti::ubyte)getParameterValue<int>(0);
-  params.noEdgeValue = (lti::ubyte)getParameterValue<int>(1);
+void LtiCannyEdge::onParametersChanged(ParameterSet & paramSet) {
+  for(ParameterSet::iterator it = paramSet.begin(); it != paramSet.end(); ++it)
+  {
+    switch (*it)
+    {
+      case 0:
+        params.edgeValue = lti::ubyte(getParameterValue<int>(0));
+        break;
+      case 1:
+        params.noEdgeValue = lti::ubyte(getParameterValue<int>(1));
+        break;
+    }
+  }
   cannyFunctor.setParameters(params);
 }
 

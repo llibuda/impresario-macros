@@ -2,7 +2,7 @@
 **   Impresario Interface - Image Processing Engineering System applying Reusable Interactive Objects
 **   This file is part of the Impresario Interface.
 **
-**   Copyright (C) 2015  Lars Libuda
+**   Copyright (C) 2015, 2020  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
@@ -36,11 +36,11 @@
 class MacroExtBase : public MacroBase {
 public:
   // standard constructor
-  MacroExtBase(void) : MacroBase() {
+  MacroExtBase() : MacroBase() {
   }
 
   // standard destructor
-  virtual ~MacroExtBase(void) {
+  virtual ~MacroExtBase() {
   }
 
   // methods to access private attributes, neccessary for the main application
@@ -55,11 +55,11 @@ template <class T>
 class ViewerBase : public MacroExtBase {
 public:
   // standard constructor
-  ViewerBase(void) : MacroExtBase(), widgetPtr(0) {
+  ViewerBase() : MacroExtBase(), widgetPtr(0) {
   }
 
   // standard destructor
-  virtual ~ViewerBase(void) {
+  virtual ~ViewerBase() {
   }
 
   // methods to create and destroy custom widget

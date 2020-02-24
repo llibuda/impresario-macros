@@ -40,7 +40,7 @@ The Libraries in this repository depend on one or more of the following third pa
 source code is available for download on their respective home pages given by the links:
 * [OpenCV 3](http://opencv.org/) computer vision library:
   The library is licensed under the [3-clause BSD license](./licenses/LICENSE_OpenCV-3.BSD).
-* [LTI-Lib-2](http://www.ie.itcr.ac.cr/palvarado/ltilib-2/homepage/) computer vision library:
+* [LTI-Lib-2](http://www.ie.tec.ac.cr/palvarado/ltilib-2/html/) computer vision library:
   The library is licensed under the [3-clause BSD license](./licenses/LICENSE_LTILib-2.BSD).
 * [Qt Toolkit](http://www.qt.io/):
   Copyright (C) 2015 The Qt Company Ltd.
