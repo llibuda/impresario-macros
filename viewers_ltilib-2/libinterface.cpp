@@ -534,7 +534,8 @@ void* macroCreateWidget(MacroHandle handle) {
   MacroBase* macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   if (macro->getType() != Macro) {
-    MacroExtBase* macroExt = static_cast<MacroExtBase*>(macro);
+    MacroExtBase* macroExt = dynamic_cast<MacroExtBase*>(macro);
+    assert(macroExt != nullptr);
     return reinterpret_cast<void*>(macroExt->createWidget());
   }
   return nullptr;
@@ -544,7 +545,8 @@ void macroDestroyWidget(MacroHandle handle) {
   MacroBase* macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   if (macro->getType() != Macro) {
-    MacroExtBase* macroExt = static_cast<MacroExtBase*>(macro);
+    MacroExtBase* macroExt = dynamic_cast<MacroExtBase*>(macro);
+    assert(macroExt != nullptr);
     macroExt->destroyWidget();
   }
 }
