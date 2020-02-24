@@ -366,10 +366,10 @@ void libTerminate() {
 }
 
 MacroHandle macroClone(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   try {
-    MacroBase* clone = macro->clone();
+    auto clone = macro->clone();
     return static_cast<MacroHandle>(clone);
   }
   catch(...) {
@@ -378,13 +378,13 @@ MacroHandle macroClone(MacroHandle handle) {
 }
 
 void macroSetImpresarioDataPtr(MacroHandle handle, void *dataPtr) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   macro->setImpresarioDataPtr(dataPtr);
 }
 
 void* macroGetImpresarioDataPtr(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   return macro->getImpresarioDataPtr();
 }
@@ -393,64 +393,64 @@ bool macroDelete(MacroHandle handle) {
   if (handle == nullptr || std::find(g_Macros.cbegin(),g_Macros.cend(),handle) != g_Macros.cend()) {
     return false;
   }
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   delete macro;
   return true;
 }
 
 unsigned int macroGetType(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   return static_cast<unsigned int>(macro->getType());
 }
 
 const wchar_t* macroGetName(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   const std::wstring& str = macro->getName();
   return str.c_str();
 }
 
 const wchar_t* macroGetCreator(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   const std::wstring& str = macro->getCreator();
   return str.c_str();
 }
 
 const wchar_t* macroGetGroup(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   const std::wstring& str = macro->getGroup();
   return str.c_str();
 }
 
 const wchar_t* macroGetDescription(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   const std::wstring& str = macro->getDescription();
   return str.c_str();
 }
 
 const wchar_t* macroGetErrorMsg(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   const std::wstring& str = macro->getErrorMsg();
   return str.c_str();
 }
 
 const wchar_t* macroGetPropertyWidgetComponent(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   const std::wstring& str = macro->getPropertyWidgetComponent();
   return str.c_str();
 }
 
 DataDescriptor* macroGetInputs(MacroHandle handle, unsigned int* count) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  const MacroBase::ValueVector& inputs = macro->getInputs();
+  auto inputs = macro->getInputs();
   *count = static_cast<unsigned int>(inputs.size());
   if (inputs.size() > 0) {
     return inputs[0]->getDescriptorPtr();
@@ -461,9 +461,9 @@ DataDescriptor* macroGetInputs(MacroHandle handle, unsigned int* count) {
 }
 
 DataDescriptor* macroGetOutputs(MacroHandle handle, unsigned int* count) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  const MacroBase::ValueVector& outputs = macro->getOutputs();
+  auto outputs = macro->getOutputs();
   *count = static_cast<unsigned int>(outputs.size());
   if (outputs.size() > 0) {
     return outputs[0]->getDescriptorPtr();
@@ -474,9 +474,9 @@ DataDescriptor* macroGetOutputs(MacroHandle handle, unsigned int* count) {
 }
 
 DataDescriptor* macroGetParameters(MacroHandle handle, unsigned int* count) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  const MacroBase::ValueVector& params = macro->getParameters();
+  auto params = macro->getParameters();
   *count = static_cast<unsigned int>(params.size());
   if (params.size() > 0) {
     return params[0]->getDescriptorPtr();
@@ -487,27 +487,27 @@ DataDescriptor* macroGetParameters(MacroHandle handle, unsigned int* count) {
 }
 
 int macroStart(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   return static_cast<int>(macro->init());
 }
 
 int macroApply(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   return static_cast<int>(macro->apply());
 }
 
 int macroStop(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   return static_cast<int>(macro->exit());
 }
 
 void macroSetParameterValue(MacroHandle handle, unsigned int parameter, const wchar_t* strValue) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  const MacroBase::ValueVector& params = macro->getParameters();
+  auto params = macro->getParameters();
   if (parameter < params.size()) {
     std::wstring value(strValue);
     macro->setParameterValueAsString(parameter,value);
@@ -515,9 +515,9 @@ void macroSetParameterValue(MacroHandle handle, unsigned int parameter, const wc
 }
 
 const wchar_t* macroGetParameterValue(MacroHandle handle, unsigned int parameter) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  const MacroBase::ValueVector& params = macro->getParameters();
+  auto params = macro->getParameters();
   if (parameter < params.size()) {
     return macro->getParameterValueAsString(parameter).c_str();
   }
@@ -531,10 +531,10 @@ const wchar_t* macroGetParameterValue(MacroHandle handle, unsigned int parameter
 #include "macroextended.h"
 
 void* macroCreateWidget(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   if (macro->getType() != Macro) {
-    MacroExtBase* macroExt = dynamic_cast<MacroExtBase*>(macro);
+    auto macroExt = dynamic_cast<MacroExtBase*>(macro);
     assert(macroExt != nullptr);
     return reinterpret_cast<void*>(macroExt->createWidget());
   }
@@ -542,10 +542,10 @@ void* macroCreateWidget(MacroHandle handle) {
 }
 
 void macroDestroyWidget(MacroHandle handle) {
-  MacroBase* macro = static_cast<MacroBase*>(handle);
+  auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
   if (macro->getType() != Macro) {
-    MacroExtBase* macroExt = dynamic_cast<MacroExtBase*>(macro);
+    auto macroExt = dynamic_cast<MacroExtBase*>(macro);
     assert(macroExt != nullptr);
     macroExt->destroyWidget();
   }
