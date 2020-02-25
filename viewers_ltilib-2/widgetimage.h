@@ -40,24 +40,23 @@
 #include <QScrollArea>
 #include <QSpinBox>
 
-class WidgetImage : public QWidget
-{
+class WidgetImage : public QWidget {
   Q_OBJECT
 public:
-  explicit WidgetImage(QWidget *parent = 0);
+  explicit WidgetImage(QWidget *parent = nullptr);
 
   void updateImage(const lti::image* source) {
-    Q_ASSERT(paintWnd != 0);
+    Q_ASSERT(paintWnd != nullptr);
     paintWnd->updateImage(source);
   }
 
   void updateImage(const lti::channel8* source) {
-    Q_ASSERT(paintWnd != 0);
+    Q_ASSERT(paintWnd != nullptr);
     paintWnd->updateImage(source);
   }
 
   void updateImage(const lti::channel* source) {
-    Q_ASSERT(paintWnd != 0);
+    Q_ASSERT(paintWnd != nullptr);
     paintWnd->updateImage(source);
   }
 

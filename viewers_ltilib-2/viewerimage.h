@@ -34,20 +34,19 @@
 #include "macroextended.h"
 #include "widgetimage.h"
 
-class ViewerImage : public ViewerBase<WidgetImage>
-{
+class ViewerImage : public ViewerBase<WidgetImage> {
 public:
   ViewerImage();
-  virtual ~ViewerImage() {}
+  ~ViewerImage() override {};
 
-  virtual MacroBase* clone() const {
+  MacroBase* clone() const override {
     return new ViewerImage();
   }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 };
 
 #endif // VIEWERIMAGE_H

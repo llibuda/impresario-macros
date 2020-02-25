@@ -43,6 +43,7 @@
   #define MACRO_API
 #endif
 
+// definition of Impresario interface
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -103,7 +104,12 @@ extern "C" {
 #ifdef __cplusplus
 } /* extern C */
 #endif
+// end of definition of Impresario interface
 
+// definitions for internal use
+#define MACRO_REGISTRATION_BEGIN
+#define MACRO_ADD(class_name)
+#define MACRO_REGISTRATION_END
 void notifyParameterChanged(MacroHandle handle, unsigned int parameter, void* dataPtr);
 
 #endif /* LIBINTERFACE_H_ */

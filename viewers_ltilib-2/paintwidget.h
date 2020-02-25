@@ -41,11 +41,10 @@
 #include <QMutex>
 #include <QRect>
 
-class PaintWidget : public QWidget
-{
+class PaintWidget : public QWidget {
   Q_OBJECT
 public:
-  explicit PaintWidget(QWidget *parent = 0);
+  explicit PaintWidget(QWidget *parent = nullptr);
 
   void updateImage(const lti::image* source);
   void updateImage(const lti::channel8* source);
@@ -65,19 +64,19 @@ public slots:
   void zoomImage100();
 
 protected:
-  virtual void paintEvent(QPaintEvent* event);
-  virtual void mouseMoveEvent(QMouseEvent * event);
-  virtual void mousePressEvent(QMouseEvent * event);
-  virtual void mouseReleaseEvent(QMouseEvent * event);
+  void paintEvent(QPaintEvent* event) override;
+  void mouseMoveEvent(QMouseEvent * event) override;
+  void mousePressEvent(QMouseEvent * event) override;
+  void mouseReleaseEvent(QMouseEvent * event) override;
 
 private:
+  lti::channel   ltiChannel;
   QImage         image;
+  QRect          targetRect;
   int            imgType;
   bool           fitToWindow;
   double         zoomFactor;
-  QRect          targetRect;
   mutable QMutex mutex;
-  lti::channel   ltiChannel;
 };
 
 #endif // PAINTWIDGET_H

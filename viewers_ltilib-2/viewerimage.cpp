@@ -32,7 +32,7 @@
 #include <QWidget>
 #include <iostream>
 
-ViewerImage::ViewerImage() : ViewerBase() {
+ViewerImage::ViewerImage() : ViewerBase{} {
   setName(L"LTI-Lib-2 Image viewer");
   setDescription(L"Displays image types used in ltilib-2");
   setCreator(L"Lars Libuda");
@@ -47,20 +47,20 @@ MacroBase::Status ViewerImage::onInit() {
 }
 
 MacroBase::Status ViewerImage::onApply() {
-  const lti::image* srcImg = accessInput<lti::image>(0);
-  const lti::channel8* srcChannel8 = accessInput<lti::channel8>(1);
-  const lti::channel* srcChannel = accessInput<lti::channel>(2);
-  WidgetImage* widget = accessWidget();
-  if (srcImg != 0) {
+  auto srcImg = accessInput<lti::image>(0);
+  auto srcChannel8 = accessInput<lti::channel8>(1);
+  auto srcChannel = accessInput<lti::channel>(2);
+  auto widget = accessWidget();
+  if (srcImg != nullptr) {
     widget->updateImage(srcImg);
   }
-  else if (srcChannel8 != 0) {
+  else if (srcChannel8 != nullptr) {
     widget->updateImage(srcChannel8);
   }
-  else if (srcChannel != 0) {
+  else if (srcChannel != nullptr) {
     widget->updateImage(srcChannel);
   }
-  return (srcImg != 0 || srcChannel8 != 0 || srcChannel != 0) ? Ok : Error;
+  return (srcImg != nullptr || srcChannel8 != nullptr || srcChannel != nullptr) ? Ok : Error;
 }
 
 MacroBase::Status ViewerImage::onExit() {

@@ -32,59 +32,59 @@
 #define MACROEXTENDED_H_
 
 #include "macrobase.h"
+#include <memory>
 
 class MacroExtBase : public MacroBase {
 public:
   // standard constructor
-  MacroExtBase() : MacroBase() {
+  MacroExtBase() : MacroBase{} {
   }
 
   // standard destructor
-  virtual ~MacroExtBase() {
+  ~MacroExtBase() override {
   }
 
   // methods to access private attributes, neccessary for the main application
-  virtual MacroType getType() const { return ExtendedMacro; }
+  MacroType getType() const override { return ExtendedMacro; }
 
   // methods to create and destroy custom widget
   virtual void* createWidget() = 0;
   virtual void destroyWidget() = 0;
 };
 
-template <class T>
+template <typename T>
 class ViewerBase : public MacroExtBase {
 public:
   // standard constructor
-  ViewerBase() : MacroExtBase(), widgetPtr(0) {
+    ViewerBase() : MacroExtBase{} {
   }
 
   // standard destructor
-  virtual ~ViewerBase() {
+  ~ViewerBase() override {
   }
 
   // methods to create and destroy custom widget
-  virtual void* createWidget() {
-    if (widgetPtr == 0) {
-      widgetPtr = new T();
+  void* createWidget() override {
+    if (widgetPtr == nullptr) {
+      widgetPtr = std::unique_ptr<T>{new T()};
     }
-    return reinterpret_cast<void*>(widgetPtr);
+    return reinterpret_cast<void*>(widgetPtr.get());
   }
 
-  void destroyWidget() {
-    delete widgetPtr;
-    widgetPtr = 0;
+  void destroyWidget() override {
+    widgetPtr = nullptr;
   }
 
   // methods to access private attributes, neccessary for the main application
-  virtual MacroType getType() const { return Viewer; }
+  MacroType getType() const override { return Viewer; }
 
 protected:
   T* accessWidget() const {
-    return widgetPtr;
+    return widgetPtr.get();
   }
 
 private:
-  T* widgetPtr;
+  std::unique_ptr<T> widgetPtr;
 };
 
 

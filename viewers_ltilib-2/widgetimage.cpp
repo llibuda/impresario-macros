@@ -37,8 +37,8 @@
 #include <QLabel>
 #include <QSpinBox>
 
-WidgetImage::WidgetImage(QWidget *parent) : QWidget(parent), toolbar(0),
-  statusbar(0), paintWnd(0), scrollArea(0), zoomBox(0) {
+WidgetImage::WidgetImage(QWidget *parent) : QWidget{parent}, toolbar{nullptr},
+  statusbar{nullptr}, paintWnd{nullptr}, scrollArea{nullptr}, zoomBox{nullptr} {
   toolbar = new QToolBar(tr("Image"),this);
   statusbar = new QStatusBar(this);
   paintWnd = new PaintWidget();
@@ -85,7 +85,7 @@ WidgetImage::WidgetImage(QWidget *parent) : QWidget(parent), toolbar(0),
   connect(paintWnd,SIGNAL(printImageSize(QString)),sizeLabel,SLOT(setText(QString)),Qt::QueuedConnection);
   connect(paintWnd,SIGNAL(printImagePos(QString)),posLabel,SLOT(setText(QString)),Qt::QueuedConnection);
 
-  QVBoxLayout* layout = new QVBoxLayout();
+  auto layout = new QVBoxLayout(this);
   layout->addWidget(toolbar);
   layout->addWidget(scrollArea,1);
   layout->addWidget(statusbar);

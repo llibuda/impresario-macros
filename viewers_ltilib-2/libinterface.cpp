@@ -267,6 +267,7 @@ namespace {
 // NOTE: The function
 // libInitialize(MacroHandle** list, unsigned int* count, PFN_CONSOLE_REDIRECT cbStdCout, PFN_CONSOLE_REDIRECT cbStdCerr, PFN_MACROPARAM_CHANGED cbMacroParamChanged);
 // is defined via preprocessor expansion in libconfig.h with the following macros
+#undef MACRO_REGISTRATION_BEGIN
 #define MACRO_REGISTRATION_BEGIN bool libInitialize(MacroHandle** list, unsigned int* count, PFN_CONSOLE_REDIRECT cbStdCout, \
                                                     PFN_CONSOLE_REDIRECT cbStdCerr, PFN_MACROPARAM_CHANGED cbMacroParamChanged) { \
                                       initCompiler();                              \
@@ -278,8 +279,10 @@ namespace {
                                       initConsoleRedirect(cbStdCout,cbStdCerr);    \
                                       try {
 
+#undef MACRO_ADD
 #define MACRO_ADD(class_name) g_Macros.push_back(new class_name);
 
+#undef MACRO_REGISTRATION_END
 #define MACRO_REGISTRATION_END   }                                       \
                                  catch(...) {                            \
                                    libTerminate();                       \

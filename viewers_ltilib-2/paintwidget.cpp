@@ -35,13 +35,13 @@
 #include <QRgb>
 #include <QFileDialog>
 
-PaintWidget::PaintWidget(QWidget *parent) : QWidget(parent), image(), imgType(0), fitToWindow(true), zoomFactor(1.0), targetRect(), ltiChannel() {
+PaintWidget::PaintWidget(QWidget *parent) : QWidget{parent}, imgType{0}, fitToWindow{true}, zoomFactor{1.0} {
   setMinimumSize(10,10);
   connect(this,SIGNAL(updateGUI()),this,SLOT(update()),Qt::QueuedConnection);
 }
 
 void PaintWidget::updateImage(const lti::image* source) {
-  if (source == 0) return;
+  if (source == nullptr) return;
 
   QMutexLocker lock(&mutex);
   const int rows = source->rows();
@@ -50,7 +50,7 @@ void PaintWidget::updateImage(const lti::image* source) {
 
   for(int y = 0; y < rows; ++y) {
     const lti::vector<lti::rgbaPixel>& srcRow = source->getRow(y);
-    QRgb* destRow = (QRgb*)image.scanLine(y);
+    QRgb* destRow = reinterpret_cast<QRgb*>(image.scanLine(y));
     for (int x = 0; x < cols; ++x) {
       const lti::rgbaPixel& px = srcRow.at(x);
       destRow[x] = qRgba(px.red,px.green,px.blue,255);
@@ -62,7 +62,7 @@ void PaintWidget::updateImage(const lti::image* source) {
 }
 
 void PaintWidget::updateImage(const lti::channel8* source) {
-  if (source == 0) return;
+  if (source == nullptr) return;
 
   QMutexLocker lock(&mutex);
   const int rows = source->rows();
@@ -71,7 +71,7 @@ void PaintWidget::updateImage(const lti::channel8* source) {
 
   for(int y = 0; y < rows; ++y) {
     const lti::vector<lti::ubyte>& srcRow = source->getRow(y);
-    QRgb* destRow = (QRgb*)image.scanLine(y);
+    QRgb* destRow = reinterpret_cast<QRgb*>(image.scanLine(y));
     for (int x = 0; x < cols; ++x) {
       const lti::ubyte& px = srcRow.at(x);
       destRow[x] = qRgba(px,px,px,255);
@@ -83,7 +83,7 @@ void PaintWidget::updateImage(const lti::channel8* source) {
 }
 
 void PaintWidget::updateImage(const lti::channel* source) {
-  if (source == 0) return;
+  if (source == nullptr) return;
 
   QMutexLocker lock(&mutex);
   ltiChannel = *source;
@@ -95,7 +95,7 @@ void PaintWidget::updateImage(const lti::channel* source) {
   temp.castFrom(*source,true,true);
   for(int y = 0; y < rows; ++y) {
     const lti::vector<lti::ubyte>& srcRow = temp.getRow(y);
-    QRgb* destRow = (QRgb*)image.scanLine(y);
+    QRgb* destRow = reinterpret_cast<QRgb*>(image.scanLine(y));
     for (int x = 0; x < cols; ++x) {
       const lti::ubyte& px = srcRow.at(x);
       destRow[x] = qRgba(px,px,px,255);
@@ -146,14 +146,14 @@ void PaintWidget::paintEvent(QPaintEvent* /*event*/) {
     double arTarget = (double)targetRect.height() / (double)targetRect.width();
     if (arTarget < arImg) {
       int height = targetRect.height();
-      int width = height / arImg;
+      int width = static_cast<int>(height / arImg);
       int x = (targetRect.width() - width) / 2;
       targetRect = QRect(x,0,width,height);
       zoomFactor = (double)targetRect.width() / imgRect.width();
     }
     else {
       int width = targetRect.width();
-      int height = width * arImg;
+      int height = static_cast<int>(width * arImg);
       int y = (targetRect.height() - height) / 2;
       targetRect = QRect(0,y,width,height);
       zoomFactor = (double)targetRect.height() / imgRect.height();
