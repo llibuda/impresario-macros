@@ -36,13 +36,17 @@
 
 class MacroExtBase : public MacroBase {
 public:
+  MacroExtBase(const MacroExtBase&) = delete;
+  MacroExtBase& operator=(const MacroExtBase&) = delete;
+  MacroExtBase(MacroExtBase&&) = delete;
+  MacroExtBase& operator=(MacroExtBase&&) = delete;
+
   // standard constructor
   MacroExtBase() : MacroBase{} {
   }
 
   // standard destructor
-  ~MacroExtBase() override {
-  }
+  ~MacroExtBase() override = default;
 
   // methods to access private attributes, neccessary for the main application
   MacroType getType() const override { return ExtendedMacro; }
@@ -55,13 +59,17 @@ public:
 template <typename T>
 class ViewerBase : public MacroExtBase {
 public:
+  ViewerBase(const ViewerBase&) = delete;
+  ViewerBase& operator=(const ViewerBase&) = delete;
+  ViewerBase(ViewerBase&&) = delete;
+  ViewerBase& operator=(ViewerBase&&) = delete;
+
   // standard constructor
     ViewerBase() : MacroExtBase{} {
   }
 
   // standard destructor
-  ~ViewerBase() override {
-  }
+  ~ViewerBase() override = default;
 
   // methods to create and destroy custom widget
   void* createWidget() override {

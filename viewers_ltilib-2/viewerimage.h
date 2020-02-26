@@ -37,7 +37,7 @@
 class ViewerImage : public ViewerBase<WidgetImage> {
 public:
   ViewerImage();
-  ~ViewerImage() override {};
+  ~ViewerImage() override = default;
 
   MacroBase* clone() const override {
     return new ViewerImage();

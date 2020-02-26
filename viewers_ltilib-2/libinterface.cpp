@@ -50,7 +50,7 @@ namespace std
   class basic_editstreambuf : public std::basic_streambuf< E, T >
   {
   public:
-    basic_editstreambuf(PFN_CONSOLE_REDIRECT callback) : std::basic_streambuf<E,T>(), cbStream(callback)
+      basic_editstreambuf(PFN_CONSOLE_REDIRECT callback) : std::basic_streambuf<E,T>{}, cbStream{callback}
     {
       psz = new typename T::char_type[ BUF_SIZE ];
       this->pubsetbuf( psz, BUF_SIZE );
@@ -58,7 +58,7 @@ namespace std
       this->setp( psz, psz + BUF_SIZE - 2 );
     }
 
-    basic_editstreambuf() : std::basic_streambuf<E,T>(), cbStream(nullptr)
+      basic_editstreambuf() : std::basic_streambuf<E,T>{}
     {
       psz = new typename T::char_type[ BUF_SIZE ];
       this->pubsetbuf( psz, BUF_SIZE );
@@ -141,7 +141,7 @@ namespace std
     PFN_CONSOLE_REDIRECT   cbStream;
   };
 
-  typedef basic_editstreambuf<char> editstreambuf;
+  using editstreambuf = basic_editstreambuf<char>;
 }
 
 //----------------------------------------------------------------------------------------------
@@ -362,7 +362,7 @@ void libTerminate() {
   undoConsoleRedirect();
   // delete macro list
   for(MacroHandle gMacroHandle : g_Macros) {
-    MacroBase* macro = static_cast<MacroBase*>(gMacroHandle);
+    auto macro = static_cast<MacroBase*>(gMacroHandle);
     delete macro;
   }
   g_Macros.clear();
