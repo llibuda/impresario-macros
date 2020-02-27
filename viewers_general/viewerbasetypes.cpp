@@ -52,7 +52,7 @@ MacroBase::Status ViewerBaseTypes::onApply() {
   const bool* srcBool = accessInput<bool>(1);
   const char* const* srcCString = accessInput<char*>(2);
   const float* srcFloat = accessInput<float>(3);
-  const double* srcDouble = accessInput<double>(3);
+  const double* srcDouble = accessInput<double>(4);
   WidgetBaseTypes* widget = accessWidget();
   if (srcInt != 0) {
     widget->updateValue(srcInt);
