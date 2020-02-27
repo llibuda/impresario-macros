@@ -2,7 +2,7 @@ Legal information about GitHub repository impresario-macros:
 
 LICENSE:
 
-Copyright (C) 2015-2017  Lars Libuda
+Copyright (C) 2015, 2020  Lars Libuda
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,7 @@ given by the links:
   The library is licensed under the 3-clause BSD license as documented in file
   ../licenses/LICENSE_LTILib-2.BSD.
 * Qt Toolkit (http://www.qt.io/):
-  Copyright (C) 2015 The Qt Company Ltd.
+  Copyright (C) 2019 The Qt Company Ltd.
   Contact: http://www.qt.io/licensing/.
   The Qt Toolkit is used under the terms of the GNU Lesser General Public
   License version 3 as published by the Free Software Foundation at

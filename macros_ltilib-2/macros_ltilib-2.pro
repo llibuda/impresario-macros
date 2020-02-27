@@ -2,7 +2,7 @@
 #   Impresario Library ImageProcessing_ltilib-2
 #   This file is part of the Impresario Library ImageProcessing_ltilib-2.
 #
-#   Copyright (C) 2015-2018  Lars Libuda
+#   Copyright (C) 2015-2020  Lars Libuda
 #   All rights reserved.
 #
 #   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@ CONFIG += shared
 CONFIG -= app_bundle
 CONFIG -= qt
 
-VERSION = 1.0.0
+VERSION = 1.0.1
 DESTDIR = ../lib
 
 TARGET = imgproc-ltilib-2

@@ -74,8 +74,8 @@ struct TypeName {
       strTypeName.erase(pos,1);
       pos = strTypeName.find(" *",0);
     }
-    // if the type name contains an asterix with leading white space, we'll erase the
-    // white space to make this type name compatible with those created by GCC
+    // if the type name contains the suffix __ptr64, we'll erase the
+    // suffix to make this type name compatible with those created by GCC
     pos = strTypeName.find(" __ptr64",0);
     while(pos != std::string::npos)
     {
@@ -238,8 +238,16 @@ template <>
 class ParameterValueConverter<std::string> {
 public:
   virtual std::string fromString(const std::wstring& strValue) const {
-    char* str = new char[strValue.length() + 1];
+    auto str = new char[strValue.length() + 1];
+  #ifdef _MSC_VER
+    size_t      outSize;
+    mbstate_t   conversionState;
+    memset(&conversionState,0,sizeof(conversionState));
+    const wchar_t* wstr = strValue.c_str();
+    wcsrtombs_s(&outSize, str, strValue.length() + 1, &wstr, strValue.length(), &conversionState);
+  #else
     wcstombs(str,strValue.c_str(),strValue.length() + 1);
+  #endif
     std::string string(str);
     delete [] str;
     return string;
@@ -247,7 +255,15 @@ public:
 
   virtual std::wstring toString(const std::string& value) const {
     auto wstr = new wchar_t[value.length() + 1];
+  #ifdef _MSC_VER
+    size_t      outSize;
+    mbstate_t   conversionState;
+    memset(&conversionState,0,sizeof(conversionState));
+    const char* cstr = value.c_str();
+    mbsrtowcs_s(&outSize, wstr, value.length() + 1, &cstr, value.length(), &conversionState);
+  #else
     mbstowcs(wstr,value.c_str(),value.length() + 1);
+  #endif
     std::wstring wstring(wstr);
     delete [] wstr;
     return wstring;
@@ -266,8 +282,8 @@ public:
   MacroParameter(MacroParameter&&) = delete;
   MacroParameter& operator=(MacroParameter&&) = delete;
 
-  MacroParameter(const std::wstring& strName, const std::wstring strDescription, const T& tDefaultValue, const std::wstring& qmlUIComponent, const std::wstring& qmlUIProperties, const ParameterValueConverter<T>& converter) :
-    ValueParameter{strName,strDescription,0,TypeName<T>::get()}, m_converter{converter}, m_tValue{tDefaultValue}, m_tDefaultValue{tDefaultValue}, m_strValue{}, m_strAttributes{} {
+  MacroParameter(const std::wstring& strName, const std::wstring& strDescription, const T& tDefaultValue, const std::wstring& qmlUIComponent, const std::wstring& qmlUIProperties, const ParameterValueConverter<T>& converter) :
+    ValueParameter{strName,strDescription,0,TypeName<T>::get()}, m_converter{converter}, m_tValue{tDefaultValue}, m_tDefaultValue{tDefaultValue} {
     m_strValue = m_converter.toString(m_tValue);
     m_strAttributes = qmlUIComponent + L'|' + qmlUIProperties;
     DataDescriptor* data = getDescriptorPtr();
@@ -424,7 +440,7 @@ protected:
       return false;
     }
     auto input = new MacroInput<T>{name,description};
-    if (m_vecInput.size() > 0) {
+    if (!m_vecInput.empty()) {
       auto descr = m_vecInput.back()->getDescriptorPtr();
       descr->next = input->getDescriptorPtr();
     }
@@ -447,7 +463,7 @@ protected:
       return false;
     }
     auto output = new MacroOutput<T>{name,description};
-    if (m_vecOutput.size() > 0) {
+    if (!m_vecOutput.empty()) {
       auto descr = m_vecOutput.back()->getDescriptorPtr();
       descr->next = output->getDescriptorPtr();
     }
@@ -469,7 +485,7 @@ protected:
       return false;
     }
     auto param = new MacroParameter<T>{name,description,tDefaultValue,qmlUIComponent,qmlUIProperties,converter};
-    if (m_vecParams.size() > 0) {
+    if (!m_vecParams.empty()) {
       auto descr = m_vecParams.back()->getDescriptorPtr();
       descr->next = param->getDescriptorPtr();
     }

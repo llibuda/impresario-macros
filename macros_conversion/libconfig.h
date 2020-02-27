@@ -2,7 +2,7 @@
 **   Impresario Interface - Image Processing Engineering System applying Reusable Interactive Objects
 **   This file is part of the Impresario Interface.
 **
-**   Copyright (C) 2015-2018  Lars Libuda
+**   Copyright (C) 2015-2020  Lars Libuda
 **   All rights reserved.
 **
 **   Redistribution and use in source and binary forms, with or without
@@ -36,10 +36,10 @@
 #define LIB_NAME           L"Conversion_ltilib-2_opencv-3"
 #define LIB_VERSION_MAJOR  1
 #define LIB_VERSION_MINOR  1
-#define LIB_VERSION_PATCH  0
+#define LIB_VERSION_PATCH  1
 #define LIB_DESCRIPTION    L"<html><body>"\
   L"<p><b>Library with macros for converting image types between ltilib-2 and OpenCV 3.</b></p>"\
-  L"<p>Copyright (C) 2015-2016  Lars Libuda</p>"\
+  L"<p>Copyright (C) 2015-2020  Lars Libuda</p>"\
   L"<p>All rights reserved.</p>"\
   L"<p>"\
   L"Redistribution and use in source and binary forms, with or without" \

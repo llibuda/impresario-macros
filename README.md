@@ -10,7 +10,7 @@ Impresario's GitHub pages also give details about how to compile the libraries.
 All code in this repository is licensed under the
 [3-clause BSD license](./licenses/LICENSE_ImpresarioMacros.BSD) as follows:
 
-Copyright (C) 2015-2017  Lars Libuda
+Copyright (C) 2015, 2020  Lars Libuda
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,7 @@ source code is available for download on their respective home pages given by th
 * [LTI-Lib-2](http://www.ie.tec.ac.cr/palvarado/ltilib-2/html/) computer vision library:
   The library is licensed under the [3-clause BSD license](./licenses/LICENSE_LTILib-2.BSD).
 * [Qt Toolkit](http://www.qt.io/):
-  Copyright (C) 2015 The Qt Company Ltd.
+  Copyright (C) 2019 The Qt Company Ltd.
   Contact: [http://www.qt.io/licensing/](http://www.qt.io/licensing/).
   The Qt Toolkit is used under the terms of the GNU Lesser General Public
   License version 3 as published by the Free Software Foundation

@@ -74,8 +74,8 @@ struct TypeName {
       strTypeName.erase(pos,1);
       pos = strTypeName.find(" *",0);
     }
-    // if the type name contains an asterix with leading white space, we'll erase the
-    // white space to make this type name compatible with those created by GCC
+    // if the type name contains the suffix __ptr64, we'll erase the
+    // suffix to make this type name compatible with those created by GCC
     pos = strTypeName.find(" __ptr64",0);
     while(pos != std::string::npos)
     {
@@ -238,8 +238,16 @@ template <>
 class ParameterValueConverter<std::string> {
 public:
   virtual std::string fromString(const std::wstring& strValue) const {
-    char* str = new char[strValue.length() + 1];
+    auto str = new char[strValue.length() + 1];
+  #ifdef _MSC_VER
+    size_t      outSize;
+    mbstate_t   conversionState;
+    memset(&conversionState,0,sizeof(conversionState));
+    const wchar_t* wstr = strValue.c_str();
+    wcsrtombs_s(&outSize, str, strValue.length() + 1, &wstr, strValue.length(), &conversionState);
+  #else
     wcstombs(str,strValue.c_str(),strValue.length() + 1);
+  #endif
     std::string string(str);
     delete [] str;
     return string;
@@ -247,7 +255,15 @@ public:
 
   virtual std::wstring toString(const std::string& value) const {
     auto wstr = new wchar_t[value.length() + 1];
+  #ifdef _MSC_VER
+    size_t      outSize;
+    mbstate_t   conversionState;
+    memset(&conversionState,0,sizeof(conversionState));
+    const char* cstr = value.c_str();
+    mbsrtowcs_s(&outSize, wstr, value.length() + 1, &cstr, value.length(), &conversionState);
+  #else
     mbstowcs(wstr,value.c_str(),value.length() + 1);
+  #endif
     std::wstring wstring(wstr);
     delete [] wstr;
     return wstring;
