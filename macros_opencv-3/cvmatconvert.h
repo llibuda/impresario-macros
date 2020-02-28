@@ -36,17 +36,17 @@
 class CvMatConvert : public MacroBase {
 public:
   // standard constructor
-  CvMatConvert(void);
+  CvMatConvert();
   // standard destructor
-  virtual ~CvMatConvert(void);
+  ~CvMatConvert() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvMatConvert(); }
+  MacroBase* clone() const override { return new CvMatConvert(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 private:
 };

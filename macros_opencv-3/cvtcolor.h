@@ -36,17 +36,17 @@
 class CvtColor : public MacroBase {
 public:
   // standard constructor
-  CvtColor(void);
+  CvtColor();
   // standard destructor
-  virtual ~CvtColor(void);
+  ~CvtColor() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvtColor(); }
+  MacroBase* clone() const override { return new CvtColor(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 private:
 };

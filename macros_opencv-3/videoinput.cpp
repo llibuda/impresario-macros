@@ -32,7 +32,7 @@
 #include <opencv2/core.hpp>
 #include <iostream>
 
-CvVideoInput::CvVideoInput() : MacroBase(), ptrCapture(0) {
+CvVideoInput::CvVideoInput() : MacroBase{}, ptrCapture{nullptr} {
   // set up macro description
   setName(L"cv::VideoInput");
   setCreator(L"Lars Libuda");
@@ -42,11 +42,8 @@ CvVideoInput::CvVideoInput() : MacroBase(), ptrCapture(0) {
   addParameter<std::string>(L"Video file",L"Path to video file for playback","",L"StringFileSelector",L"{\"title\": \"Select video file\", \"filters\": [\"Video files (*.mp4 *.avi *.mkv)\",\"All files (*.*)\"]}");
 }
 
-CvVideoInput::~CvVideoInput() {
-}
-
 MacroBase::Status CvVideoInput::onInit() {
-  const std::string& videoFilePath = getParameterValue<std::string>(0);
+  const auto& videoFilePath = getParameterValue<std::string>(0);
   if (videoFilePath.empty()) {
     setErrorMsg(L"No video file specified in parameters.");
     return Error;
@@ -60,7 +57,7 @@ MacroBase::Status CvVideoInput::onInit() {
 }
 
 MacroBase::Status CvVideoInput::onApply() {
-  cv::Mat& output = accessOutput<cv::Mat>(0);
+  auto& output = accessOutput<cv::Mat>(0);
   if (ptrCapture) {
     return (ptrCapture->read(output)) ? Ok : Stop;
   }
@@ -69,6 +66,6 @@ MacroBase::Status CvVideoInput::onApply() {
 
 MacroBase::Status CvVideoInput::onExit() {
   delete ptrCapture;
-  ptrCapture = 0;
+  ptrCapture = nullptr;
   return Ok;
 }

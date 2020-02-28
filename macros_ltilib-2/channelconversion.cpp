@@ -32,7 +32,7 @@
 #include "ltiChannel8.h"
 #include "ltiChannel.h"
 
-LtiChannel8ToChannel::LtiChannel8ToChannel() : MacroBase() {
+LtiChannel8ToChannel::LtiChannel8ToChannel() : MacroBase{} {
   // set up macro description
   setName(L"lti::channel8_to_lti::channel");
   setCreator(L"Lars Libuda");
@@ -42,11 +42,8 @@ LtiChannel8ToChannel::LtiChannel8ToChannel() : MacroBase() {
   addOutput<lti::channel>(L"Floating point gray scale image",L"Floating point gray scale image containing conversion result");
 }
 
-LtiChannel8ToChannel::~LtiChannel8ToChannel() {
-}
-
 MacroBase::Status LtiChannel8ToChannel::onInit() {
-  const lti::channel8* input = accessInput<lti::channel8>(0);
+  const auto* input = accessInput<lti::channel8>(0);
   if (!input) {
     setErrorMsg(L"No input channel connected.");
     return Error;
@@ -57,8 +54,8 @@ MacroBase::Status LtiChannel8ToChannel::onInit() {
 }
 
 MacroBase::Status LtiChannel8ToChannel::onApply() {
-  const lti::channel8* input = accessInput<lti::channel8>(0);
-  lti::channel& output = accessOutput<lti::channel>(0);
+  const auto* input = accessInput<lti::channel8>(0);
+  auto& output = accessOutput<lti::channel>(0);
   output.castFrom(*input);
   return Ok;
 }
@@ -68,7 +65,7 @@ MacroBase::Status LtiChannel8ToChannel::onExit() {
 }
 
 
-LtiChannelToChannel8::LtiChannelToChannel8() : MacroBase() {
+LtiChannelToChannel8::LtiChannelToChannel8() : MacroBase{} {
   // set up macro description
   setName(L"lti::channel_to_lti::channel8");
   setCreator(L"Lars Libuda");
@@ -79,11 +76,8 @@ LtiChannelToChannel8::LtiChannelToChannel8() : MacroBase() {
   addParameter<bool>(L"Scale",L"Map minimum to black and maximum to white",true,L"BoolComboBox");
 }
 
-LtiChannelToChannel8::~LtiChannelToChannel8() {
-}
-
 MacroBase::Status LtiChannelToChannel8::onInit() {
-  const lti::channel* input = accessInput<lti::channel>(0);
+  const auto* input = accessInput<lti::channel>(0);
   if (!input) {
     setErrorMsg(L"No input channel connected.");
     return Error;
@@ -94,9 +88,9 @@ MacroBase::Status LtiChannelToChannel8::onInit() {
 }
 
 MacroBase::Status LtiChannelToChannel8::onApply() {
-  const lti::channel* input = accessInput<lti::channel>(0);
-  lti::channel8& output = accessOutput<lti::channel8>(0);
-  bool scale = getParameterValue<bool>(0);
+  const auto* input = accessInput<lti::channel>(0);
+  auto& output = accessOutput<lti::channel8>(0);
+  const auto& scale = getParameterValue<bool>(0);
   output.castFrom(*input,scale,scale);
   return Ok;
 }

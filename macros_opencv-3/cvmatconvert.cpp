@@ -33,7 +33,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv/cv.h>
 
-CvMatConvert::CvMatConvert() : MacroBase() {
+CvMatConvert::CvMatConvert() : MacroBase{} {
   // set up macro description
   setName(L"cv::Mat::convertTo");
   setCreator(L"Lars Libuda");
@@ -46,11 +46,8 @@ CvMatConvert::CvMatConvert() : MacroBase() {
                     L"\"CV_32S\",\"CV_32F\",\"CV_64F\"] }");
 }
 
-CvMatConvert::~CvMatConvert() {
-}
-
 MacroBase::Status CvMatConvert::onInit() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
+  const auto* input = accessInput<cv::Mat>(0);
   if (!input) {
     setErrorMsg(L"Input image not connected.");
     return Error;
@@ -59,9 +56,9 @@ MacroBase::Status CvMatConvert::onInit() {
 }
 
 MacroBase::Status CvMatConvert::onApply() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
-  cv::Mat& output = accessOutput<cv::Mat>(0);
-  const int& type = getParameterValue<int>(0);
+  const auto* input = accessInput<cv::Mat>(0);
+  auto& output = accessOutput<cv::Mat>(0);
+  auto type = getParameterValue<int>(0);
   int conversion;
   switch(type) {
     case 0:

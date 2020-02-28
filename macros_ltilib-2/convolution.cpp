@@ -35,7 +35,7 @@
 #include "ltiOgdKernels.h"
 #include "ltiGaussKernels.h"
 
-LtiConvolution::LtiConvolution() : MacroBase() {
+LtiConvolution::LtiConvolution() : MacroBase{} {
   // set up macro description
   setName(L"lti::convolution");
   setCreator(L"Lars Libuda");
@@ -50,16 +50,13 @@ LtiConvolution::LtiConvolution() : MacroBase() {
                                   L"\"lti::ogd1Kernel\",\"lti::odg2Kernel\",\"lti::prewittKernelX\",\"lti::prewittKernelY\","
                                   L"\"lti::robinsonKernelX\",\"lti::robinsonKernelY\",\"lti::sobelKernelX\",\"lti::sobelKernelY\"] }");
   addParameter<int>(L"Kernel size",L"Size of kernel",3,L"IntSpinBox",L"{ \"minValue\": 3, \"maxValue\": 15 }");
-  addParameter<float>(L"Kernel variance",L"Variance of kernel",1.3f,L"RealSpinBox",L"{ \"minValue\": 1.0, \"maxValue\": 150.0 }");
+  addParameter<float>(L"Kernel variance",L"Variance of kernel",1.3F,L"RealSpinBox",L"{ \"minValue\": 1.0, \"maxValue\": 150.0 }");
   addParameter<bool>(L"Normalize",L"Normalize result of convolution",true,L"BoolComboBox");
 }
 
-LtiConvolution::~LtiConvolution() {
-}
-
 MacroBase::Status LtiConvolution::onInit() {
-  const lti::channel* input = accessInput<lti::channel>(0);
-  if (input == 0) {
+  const auto* input = accessInput<lti::channel>(0);
+  if (input == nullptr) {
     setErrorMsg(L"Input is not connected.");
     return Error;
   }
@@ -67,9 +64,8 @@ MacroBase::Status LtiConvolution::onInit() {
 }
 
 MacroBase::Status LtiConvolution::onApply() {
-
-  const lti::channel* input = accessInput<lti::channel>(0);
-  lti::channel& output = accessOutput<lti::channel>(0);
+  const auto* input = accessInput<lti::channel>(0);
+  auto& output = accessOutput<lti::channel>(0);
   if (convolveFunctor.apply(*input,output)) {
     return Ok;
   }
@@ -80,10 +76,10 @@ MacroBase::Status LtiConvolution::onApply() {
 }
 
 void LtiConvolution::onParametersChanged(ParameterSet &) {
-  int kernelIndex = getParameterValue<int>(0);
+  const auto& kernelIndex = getParameterValue<int>(0);
   switch(kernelIndex) {
     case 0: {
-      int size = getParameterValue<int>(1);
+      auto size = getParameterValue<int>(1);
       if (size > 5) {
         size = 5;
         setParameterValue<int>(1,size);
@@ -97,7 +93,7 @@ void LtiConvolution::onParametersChanged(ParameterSet &) {
       break;
     }
     case 1: {
-      int size = getParameterValue<int>(1);
+      auto size = getParameterValue<int>(1);
       if (size > 5) {
         size = 5;
         setParameterValue<int>(1,size);
@@ -111,8 +107,8 @@ void LtiConvolution::onParametersChanged(ParameterSet &) {
       break;
     }
     case 2: {
-      int size = getParameterValue<int>(1);
-      float variance = getParameterValue<float>(2);
+      auto size = getParameterValue<int>(1);
+      auto variance = getParameterValue<float>(2);
       lti::gaussKernel2D<lti::channel::value_type> kernel(size,variance);
       convolveFunctor.setKernel(kernel);
       break;
@@ -138,26 +134,26 @@ void LtiConvolution::onParametersChanged(ParameterSet &) {
       break;
     }
     case 7: {
-      int size = getParameterValue<int>(1);
+      auto size = getParameterValue<int>(1);
       lti::ogd1Kernel<lti::channel::value_type> kernel(size);
       convolveFunctor.setKernel(kernel);
       break;
     }
     case 8: {
-      int size = getParameterValue<int>(1);
+      auto size = getParameterValue<int>(1);
       // Should lti::ogd2Kernel but this does not compile
       lti::ogd1Kernel<lti::channel::value_type> kernel(size);
       convolveFunctor.setKernel(kernel);
       break;
     }
     case 9: {
-      bool normalize = getParameterValue<bool>(3);
+      auto normalize = getParameterValue<bool>(3);
       lti::prewittKernelX<lti::channel::value_type> kernel(normalize);
       convolveFunctor.setKernel(kernel);
       break;
     }
     case 10: {
-      bool normalize = getParameterValue<bool>(3);
+      auto normalize = getParameterValue<bool>(3);
       lti::prewittKernelY<lti::channel::value_type> kernel(normalize);
       convolveFunctor.setKernel(kernel);
       break;
@@ -173,13 +169,13 @@ void LtiConvolution::onParametersChanged(ParameterSet &) {
       break;
     }
     case 13: {
-      bool normalize = getParameterValue<bool>(3);
+      auto normalize = getParameterValue<bool>(3);
       lti::sobelKernelX<lti::channel::value_type> kernel(normalize);
       convolveFunctor.setKernel(kernel);
       break;
     }
     case 14: {
-      bool normalize = getParameterValue<bool>(3);
+      auto normalize = getParameterValue<bool>(3);
       lti::sobelKernelY<lti::channel::value_type> kernel(normalize);
       convolveFunctor.setKernel(kernel);
       break;

@@ -38,21 +38,21 @@
 class LtiLoadImages : public MacroBase {
 public:
   // standard constructor
-  LtiLoadImages(void);
+  LtiLoadImages();
   // standard destructor
-  virtual ~LtiLoadImages(void);
+  ~LtiLoadImages() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiLoadImages(); }
+  MacroBase* clone() const override { return new LtiLoadImages(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 private:
-  std::vector<std::string> fileList;
   std::size_t              fileIndex;
+  std::vector<std::string> fileList;
   lti::ioImage             loadFunctor;
 };
 

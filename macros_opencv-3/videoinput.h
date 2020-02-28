@@ -37,17 +37,17 @@
 class CvVideoInput : public MacroBase {
 public:
   // standard constructor
-  CvVideoInput(void);
+  CvVideoInput();
   // standard destructor
-  virtual ~CvVideoInput(void);
+  ~CvVideoInput() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvVideoInput(); }
+  MacroBase* clone() const override { return new CvVideoInput(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 private:
   cv::VideoCapture* ptrCapture;

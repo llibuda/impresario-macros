@@ -47,10 +47,10 @@ MacroBase::Status ViewerImage::onInit() {
 }
 
 MacroBase::Status ViewerImage::onApply() {
-  auto srcImg = accessInput<lti::image>(0);
-  auto srcChannel8 = accessInput<lti::channel8>(1);
-  auto srcChannel = accessInput<lti::channel>(2);
-  auto widget = accessWidget();
+  const auto* srcImg = accessInput<lti::image>(0);
+  const auto* srcChannel8 = accessInput<lti::channel8>(1);
+  const auto* srcChannel = accessInput<lti::channel>(2);
+  auto* widget = accessWidget();
   if (srcImg != nullptr) {
     widget->updateImage(srcImg);
   }

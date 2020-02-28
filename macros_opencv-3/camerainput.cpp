@@ -31,7 +31,7 @@
 #include "camerainput.h"
 #include <opencv2/core.hpp>
 
-CvCameraInput::CvCameraInput() : MacroBase(), ptrCapture(0) {
+CvCameraInput::CvCameraInput() : MacroBase{}, ptrCapture{nullptr} {
   // set up macro description
   setName(L"cv::CameraInput");
   setCreator(L"Lars Libuda");
@@ -41,11 +41,8 @@ CvCameraInput::CvCameraInput() : MacroBase(), ptrCapture(0) {
   addParameter<int>(L"Camera device ID",L"Camera device id as given by system",0,L"IntSpinBox",L"{\"minValue\": 0, \"maxValue\": 1}");
 }
 
-CvCameraInput::~CvCameraInput() {
-}
-
 MacroBase::Status CvCameraInput::onInit() {
-  const int& deviceId= getParameterValue<int>(0);
+  auto deviceId= getParameterValue<int>(0);
   ptrCapture = new cv::VideoCapture(deviceId);
   if (!ptrCapture || !ptrCapture->isOpened()) {
     setErrorMsg(L"Failed to open camera capture interface.");
@@ -55,7 +52,7 @@ MacroBase::Status CvCameraInput::onInit() {
 }
 
 MacroBase::Status CvCameraInput::onApply() {
-  cv::Mat& output = accessOutput<cv::Mat>(0);
+  auto& output = accessOutput<cv::Mat>(0);
   if (ptrCapture) {
     if (!ptrCapture->read(output)) {
       setErrorMsg(L"Failed to read frame from camera capture interface. Was the camera disconnected?");
@@ -70,6 +67,6 @@ MacroBase::Status CvCameraInput::onApply() {
 
 MacroBase::Status CvCameraInput::onExit() {
   delete ptrCapture;
-  ptrCapture = 0;
+  ptrCapture = nullptr;
   return Ok;
 }

@@ -37,17 +37,17 @@
 class CvMat2LtiImage : public MacroBase {
 public:
   // standard constructor
-  CvMat2LtiImage(void);
+  CvMat2LtiImage();
   // standard destructor
-  virtual ~CvMat2LtiImage(void);
+  ~CvMat2LtiImage() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvMat2LtiImage(); }
+  MacroBase* clone() const override { return new CvMat2LtiImage(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 };
 

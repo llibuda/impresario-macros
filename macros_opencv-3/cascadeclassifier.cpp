@@ -33,7 +33,7 @@
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 
-CvCascadeClassifier::CvCascadeClassifier(void) : MacroBase(), classifier(nullptr) {
+CvCascadeClassifier::CvCascadeClassifier() : MacroBase{}, classifier{nullptr} {
   // set up macro description
   setName(L"cv::CascadeClassifier");
   setCreator(L"Lars Libuda");
@@ -48,12 +48,9 @@ CvCascadeClassifier::CvCascadeClassifier(void) : MacroBase(), classifier(nullptr
   addParameter<int>(L"Max. Size",L"Maximum size for detected object.",50,L"IntSpinBox",L"{ \"minValue\": 1, \"maxValue\": 1000, \"step\": 1 }");
 }
 
-CvCascadeClassifier::~CvCascadeClassifier(void) {
-}
-
 MacroBase::Status CvCascadeClassifier::onInit() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
-  if (input == 0) {
+  const auto* input = accessInput<cv::Mat>(0);
+  if (input == nullptr) {
     setErrorMsg(L"Input image is not connected.");
     return Error;
   }
@@ -61,17 +58,17 @@ MacroBase::Status CvCascadeClassifier::onInit() {
 }
 
 MacroBase::Status CvCascadeClassifier::onApply() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
+  const auto* input = accessInput<cv::Mat>(0);
   if (!input || input->dims != 2 || input->type() != CV_8UC1) {
     setErrorMsg(L"Type of input is not supported. Type CV_8UC1 is required.");
     return Error;
   }
-  cv::Mat& output = accessOutput<cv::Mat>(0);
+  auto& output = accessOutput<cv::Mat>(0);
   RegionsOfInterest regions;
-  const double& scaleFactor = getParameterValue<double>(1);
-  const int& minNeighbors = getParameterValue<int>(2);
-  const int& minSize = getParameterValue<int>(3);
-  const int& maxSize = getParameterValue<int>(3);
+  auto scaleFactor = getParameterValue<double>(1);
+  auto minNeighbors = getParameterValue<int>(2);
+  auto minSize = getParameterValue<int>(3);
+  auto maxSize = getParameterValue<int>(3);
   try {
     classifier->detectMultiScale(*input,regions,scaleFactor,minNeighbors,0,cv::Size(minSize,minSize),cv::Size(maxSize,maxSize));
   }
@@ -97,28 +94,14 @@ MacroBase::Status CvCascadeClassifier::onApply() {
   };
   cv::cvtColor(*input,output,CV_GRAY2RGB);
   int colorIndex = 0;
-  for(RegionsOfInterest::const_iterator it = regions.begin(); it != regions.end(); ++it)
+  for(const cv::Rect& region : regions)
   {
-    cv::rectangle(output,*it,colors[colorIndex++ % 8]);
+    cv::rectangle(output,region,colors[colorIndex++ % 8]);
   }
   return Ok;
 }
 
-void CvCascadeClassifier::onParametersChanged(ParameterSet & parameters) {
-  for(ParameterSet::iterator it = parameters.begin(); it != parameters.end(); ++it)
-  {
-    switch (*it) {
-      case 0: {
-        break;
-      }
-      case 1: {
-
-        break;
-      }
-      default:
-        break;
-    }
-  }
+void CvCascadeClassifier::onParametersChanged(ParameterSet & /*parameters*/) {
 }
 
 MacroBase::Status CvCascadeClassifier::onExit() {

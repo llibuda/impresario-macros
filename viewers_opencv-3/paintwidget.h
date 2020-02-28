@@ -39,11 +39,10 @@
 #include <QRect>
 #include <opencv2/core.hpp>
 
-class PaintWidget : public QWidget
-{
+class PaintWidget : public QWidget {
   Q_OBJECT
 public:
-  explicit PaintWidget(QWidget *parent = 0);
+  explicit PaintWidget(QWidget *parent = nullptr);
 
   void updateImage(const cv::Mat* source);
 
@@ -62,10 +61,10 @@ public slots:
   void zoomImage100();
 
 protected:
-  virtual void paintEvent(QPaintEvent* event);
-  virtual void mouseMoveEvent(QMouseEvent * event);
-  virtual void mousePressEvent(QMouseEvent * event);
-  virtual void mouseReleaseEvent(QMouseEvent * event);
+  void paintEvent(QPaintEvent* event) override;
+  void mouseMoveEvent(QMouseEvent * event) override;
+  void mousePressEvent(QMouseEvent * event) override;
+  void mouseReleaseEvent(QMouseEvent * event) override;
 
   void printValueAtPos(int x, int y);
 
@@ -73,9 +72,9 @@ private:
   cv::Mat        cvImage;
   cv::Mat        imageBuffer;
   QImage         image;
+  QRect          targetRect;
   bool           fitToWindow;
   double         zoomFactor;
-  QRect          targetRect;
   mutable QMutex mutex;
 };
 

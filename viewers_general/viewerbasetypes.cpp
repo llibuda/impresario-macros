@@ -31,7 +31,7 @@
 #include "viewerbasetypes.h"
 #include <string>
 
-ViewerBaseTypes::ViewerBaseTypes() : ViewerBase() {
+ViewerBaseTypes::ViewerBaseTypes() : ViewerBase{} {
   setName(L"Base type viewer");
   setDescription(L"Displays values of base types");
   setCreator(L"Lars Libuda");
@@ -48,29 +48,29 @@ MacroBase::Status ViewerBaseTypes::onInit() {
 }
 
 MacroBase::Status ViewerBaseTypes::onApply() {
-  const int* srcInt = accessInput<int>(0);
-  const bool* srcBool = accessInput<bool>(1);
-  const char* const* srcCString = accessInput<char*>(2);
-  const float* srcFloat = accessInput<float>(3);
-  const double* srcDouble = accessInput<double>(4);
-  WidgetBaseTypes* widget = accessWidget();
-  if (srcInt != 0) {
+  const auto* srcInt = accessInput<int>(0);
+  const auto* srcBool = accessInput<bool>(1);
+  const auto* srcCString = accessInput<char*>(2);
+  const auto* srcFloat = accessInput<float>(3);
+  const auto* srcDouble = accessInput<double>(4);
+  auto* widget = accessWidget();
+  if (srcInt != nullptr) {
     widget->updateValue(srcInt);
   }
-  else if (srcBool != 0) {
+  else if (srcBool != nullptr) {
     widget->updateValue(srcBool);
   }
-  else if (srcCString != 0) {
+  else if (srcCString != nullptr) {
     widget->updateValue(srcCString);
   }
-  else if (srcFloat != 0) {
+  else if (srcFloat != nullptr) {
     widget->updateValue(srcFloat);
   }
-  else if (srcDouble != 0) {
+  else if (srcDouble != nullptr) {
     widget->updateValue(srcDouble);
   }
-  return (srcInt != 0 || srcBool != 0 || srcCString != 0 ||
-          srcFloat != 0 || srcDouble != 0) ? Ok : Error;
+  return (srcInt != nullptr || srcBool != nullptr || srcCString != nullptr ||
+          srcFloat != nullptr || srcDouble != nullptr) ? Ok : Error;
 }
 
 MacroBase::Status ViewerBaseTypes::onExit() {

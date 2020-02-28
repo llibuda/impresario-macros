@@ -33,7 +33,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv/cv.h>
 
-CvtColor::CvtColor() : MacroBase() {
+CvtColor::CvtColor() : MacroBase{} {
   // set up macro description
   setName(L"cv::cvtColor");
   setCreator(L"Lars Libuda");
@@ -51,11 +51,8 @@ CvtColor::CvtColor() : MacroBase() {
                     L"\"CV_BGR2Luv\",\"CV_RGB2Luv\",\"CV_Luv2BGR\",\"CV_Luv2RGB\"] }");
 }
 
-CvtColor::~CvtColor() {
-}
-
 MacroBase::Status CvtColor::onInit() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
+  const auto* input = accessInput<cv::Mat>(0);
   if (!input) {
     setErrorMsg(L"Input image not connected.");
     return Error;
@@ -64,13 +61,13 @@ MacroBase::Status CvtColor::onInit() {
 }
 
 MacroBase::Status CvtColor::onApply() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
+  const auto* input = accessInput<cv::Mat>(0);
   if (input->depth() != CV_8U && input->depth() != CV_16U && input->depth() != CV_32F) {
     setErrorMsg(L"Input image not supported. Supported types are CV_8U, CV_16U, and CV_32F.");
     return Error;
   }
-  cv::Mat& output = accessOutput<cv::Mat>(0);
-  const int& space = getParameterValue<int>(0);
+  auto& output = accessOutput<cv::Mat>(0);
+  const auto& space = getParameterValue<int>(0);
   int conversion;
   switch(space) {
     case 0:

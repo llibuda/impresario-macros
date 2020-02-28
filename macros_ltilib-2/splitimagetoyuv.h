@@ -37,16 +37,16 @@
 class LtiSplitImageToYUV : public MacroBase {
 public:
   // standard constructor
-  LtiSplitImageToYUV(void);
+  LtiSplitImageToYUV();
   // standard destructor
-  virtual ~LtiSplitImageToYUV(void);
+  ~LtiSplitImageToYUV(void) override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiSplitImageToYUV(); }
+  MacroBase* clone() const override { return new LtiSplitImageToYUV(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
+  Status onInit() override;
+  Status onApply() override;
 
 private:
   lti::splitImageToYUV splitFunctor;

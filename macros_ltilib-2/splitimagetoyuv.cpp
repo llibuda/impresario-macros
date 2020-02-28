@@ -32,7 +32,7 @@
 #include "ltiImage.h"
 #include "ltiChannel8.h"
 
-LtiSplitImageToYUV::LtiSplitImageToYUV() : MacroBase() {
+LtiSplitImageToYUV::LtiSplitImageToYUV() : MacroBase{} {
   // set up macro description
   setName(L"lti::splitImageToYUV");
   setCreator(L"Lars Libuda");
@@ -44,12 +44,9 @@ LtiSplitImageToYUV::LtiSplitImageToYUV() : MacroBase() {
   addOutput<lti::channel8>(L"V-component",L"8-bit grey scale image denoting the V-component");
 }
 
-LtiSplitImageToYUV::~LtiSplitImageToYUV() {
-}
-
 MacroBase::Status LtiSplitImageToYUV::onInit() {
-  const lti::image* input = accessInput<lti::image>(0);
-  if (input == 0) {
+  const auto* input = accessInput<lti::image>(0);
+  if (input == nullptr) {
     setErrorMsg(L"Input is not connected.");
     return Error;
   }
@@ -57,10 +54,10 @@ MacroBase::Status LtiSplitImageToYUV::onInit() {
 }
 
 MacroBase::Status LtiSplitImageToYUV::onApply() {
-  const lti::image* input = accessInput<lti::image>(0);
-  lti::channel8& outputY = accessOutput<lti::channel8>(0);
-  lti::channel8& outputU = accessOutput<lti::channel8>(1);
-  lti::channel8& outputV = accessOutput<lti::channel8>(2);
+  const auto* input = accessInput<lti::image>(0);
+  auto& outputY = accessOutput<lti::channel8>(0);
+  auto& outputU = accessOutput<lti::channel8>(1);
+  auto& outputV = accessOutput<lti::channel8>(2);
   return (splitFunctor.apply(*input,outputY,outputU,outputV)) ? Ok : Error;
 }
 

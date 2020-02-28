@@ -34,7 +34,7 @@
 #include <opencv2/core.hpp>
 #include <opencv/cv.h>
 
-ViewerImage::ViewerImage() : ViewerBase() {
+ViewerImage::ViewerImage() : ViewerBase{} {
   setName(L"OpenCV 3.0.0 Image viewer");
   setDescription(L"Displays image types in OpenCV 3.0.0. Currently supported are cv::Mat with types CV_8UC1, CV_8UC3, and CV_8UC4.");
   setCreator(L"Lars Libuda");
@@ -47,9 +47,9 @@ MacroBase::Status ViewerImage::onInit() {
 }
 
 MacroBase::Status ViewerImage::onApply() {
-  const cv::Mat* srcImg = accessInput<cv::Mat>(0);
-  WidgetImage* widget = accessWidget();
-  if (srcImg != 0) {
+  const auto* srcImg = accessInput<cv::Mat>(0);
+  auto* widget = accessWidget();
+  if (srcImg != nullptr) {
     if ((srcImg->depth() == CV_8U || srcImg->depth() == CV_8S || srcImg->depth() == CV_16U ||
          srcImg->depth() == CV_16S || srcImg->depth() == CV_32S || srcImg->depth() == CV_32F || srcImg->depth() == CV_64F) &&
         (srcImg->channels() == 1 || srcImg->channels() == 3 || srcImg->channels() == 4) && (srcImg->dims == 2)) {

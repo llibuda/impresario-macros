@@ -39,14 +39,13 @@
 #include <QSpinBox>
 #include <opencv2/core.hpp>
 
-class WidgetImage : public QWidget
-{
+class WidgetImage : public QWidget {
   Q_OBJECT
 public:
-  explicit WidgetImage(QWidget *parent = 0);
+  explicit WidgetImage(QWidget *parent = nullptr);
 
   void updateImage(const cv::Mat* source) {
-    Q_ASSERT(paintWnd != 0);
+    Q_ASSERT(paintWnd != nullptr);
     paintWnd->updateImage(source);
   }
 

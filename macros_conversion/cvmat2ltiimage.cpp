@@ -34,7 +34,7 @@
 #include <opencv/cv.h>
 #include "ltiImage.h"
 
-CvMat2LtiImage::CvMat2LtiImage() : MacroBase() {
+CvMat2LtiImage::CvMat2LtiImage() : MacroBase{} {
   // set up macro description
   setName(L"cv::Mat_to_lti::image");
   setCreator(L"Lars Libuda");
@@ -44,11 +44,8 @@ CvMat2LtiImage::CvMat2LtiImage() : MacroBase() {
   addOutput<lti::image>(L"LTILib image",L"lti::image containing conversion result");
 }
 
-CvMat2LtiImage::~CvMat2LtiImage() {
-}
-
 MacroBase::Status CvMat2LtiImage::onInit() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
+  const auto* input = accessInput<cv::Mat>(0);
   if (!input) {
     setErrorMsg(L"No input image connected.");
     return Error;
@@ -59,13 +56,14 @@ MacroBase::Status CvMat2LtiImage::onInit() {
 }
 
 MacroBase::Status CvMat2LtiImage::onApply() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
-  lti::image& output = accessOutput<lti::image>(0);
+  const auto* input = accessInput<cv::Mat>(0);
+  auto& output = accessOutput<lti::image>(0);
   output.resize(input->rows,input->cols);
   if (input->type() == CV_8UC3) {
-    typedef cv::Vec<uchar, 3> VT;
-    cv::MatConstIterator_<VT> it1 = input->begin<VT>(), it1_end = input->end<VT>();
-    lti::image::iterator dst_it = output.begin();
+    using VT = cv::Vec<uchar, 3>;
+    auto it1 = input->begin<VT>();
+    auto it1_end = input->end<VT>();
+    auto dst_it = output.begin();
     for( ; it1 != it1_end; ++it1, ++dst_it ) {
       VT pixel = *it1;
       *dst_it = lti::rgbaPixel(pixel[2],pixel[1],pixel[0]);

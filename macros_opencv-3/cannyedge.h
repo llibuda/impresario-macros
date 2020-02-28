@@ -36,17 +36,17 @@
 class CvCannyEdge : public MacroBase {
 public:
   // standard constructor
-  CvCannyEdge(void);
+  CvCannyEdge();
   // standard destructor
-  virtual ~CvCannyEdge(void);
+  ~CvCannyEdge() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvCannyEdge(); }
+  MacroBase* clone() const override { return new CvCannyEdge(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual void onParametersChanged(ParameterSet&);
+  Status onInit() override;
+  Status onApply() override;
+  void onParametersChanged(ParameterSet&) override;
 };
 
 #endif /* CANNYEDGE_H_ */

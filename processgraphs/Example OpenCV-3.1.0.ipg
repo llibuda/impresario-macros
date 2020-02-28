@@ -7,7 +7,7 @@
     <autoUpdateTopologicalOrder>true</autoUpdateTopologicalOrder>
     <autoUpdateStrongComponents>false</autoUpdateStrongComponents>
     <vertices>
-        <vertex class="graph::Vertex" id="{452e9d62-c17d-4b0e-9423-6236eac633c2}" dataTypeSignature="cv::cvtColor_ImageProcessing_opencv-3_1.1.0_642190000r">
+        <vertex class="graph::Vertex" id="{452e9d62-c17d-4b0e-9423-6236eac633c2}" dataTypeSignature="cv::cvtColor_ImageProcessing_opencv-3_1.1.1_641070400r">
             <data class="app::MacroDLL">
                 <parameters>
                     <parameter name="Conversion" type="int">0</parameter>
@@ -35,7 +35,7 @@
                 </pin>
             </pins>
         </vertex>
-        <vertex class="graph::Vertex" id="{7e04ee34-f4f6-4236-83e8-5b607b1f74f0}" dataTypeSignature="cv::Canny_ImageProcessing_opencv-3_1.1.0_642190000r">
+        <vertex class="graph::Vertex" id="{7e04ee34-f4f6-4236-83e8-5b607b1f74f0}" dataTypeSignature="cv::Canny_ImageProcessing_opencv-3_1.1.1_641070400r">
             <data class="app::MacroDLL">
                 <parameters>
                     <parameter name="High threshold" type="double">100</parameter>
@@ -66,7 +66,7 @@
                 </pin>
             </pins>
         </vertex>
-        <vertex class="graph::Vertex" id="{a988bb47-216f-4f17-b14a-5ea7578a54a7}" dataTypeSignature="cv::VideoInput_ImageProcessing_opencv-3_1.1.0_642190000r">
+        <vertex class="graph::Vertex" id="{a988bb47-216f-4f17-b14a-5ea7578a54a7}" dataTypeSignature="cv::VideoInput_ImageProcessing_opencv-3_1.1.1_641070400r">
             <data class="app::MacroDLL">
                 <parameters>
                     <parameter name="Video file" type="std::string"></parameter>
@@ -87,7 +87,7 @@
                 </pin>
             </pins>
         </vertex>
-        <vertex class="graph::Vertex" id="{bd7fac00-8f5b-4c42-b7b3-3d0c5e587d9c}" dataTypeSignature="cv::Mat::convertTo_ImageProcessing_opencv-3_1.1.0_642190000r">
+        <vertex class="graph::Vertex" id="{bd7fac00-8f5b-4c42-b7b3-3d0c5e587d9c}" dataTypeSignature="cv::Mat::convertTo_ImageProcessing_opencv-3_1.1.1_641070400r">
             <data class="app::MacroDLL">
                 <parameters>
                     <parameter name="Conversion type" type="int">2</parameter>

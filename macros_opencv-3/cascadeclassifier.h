@@ -39,22 +39,22 @@
 class CvCascadeClassifier : public MacroBase {
 public:
   // standard constructor
-  CvCascadeClassifier(void);
+  CvCascadeClassifier();
   // standard destructor
-  virtual ~CvCascadeClassifier(void);
+  ~CvCascadeClassifier() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvCascadeClassifier(); }
-
-  typedef std::vector<cv::Rect> RegionsOfInterest;
+  MacroBase* clone() const override { return new CvCascadeClassifier(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
-  virtual void onParametersChanged(ParameterSet&);
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
+  void onParametersChanged(ParameterSet&) override;
 
 private:
+  using RegionsOfInterest = std::vector<cv::Rect>;
+
   Status createAndLoadClassifier(const std::string& fileName);
 
   cv::CascadeClassifier* classifier;

@@ -37,17 +37,17 @@
 class LtiCannyEdge : public MacroBase {
 public:
   // standard constructor
-  LtiCannyEdge(void);
+  LtiCannyEdge();
   // standard destructor
-  virtual ~LtiCannyEdge(void);
+  ~LtiCannyEdge() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiCannyEdge(); }
+  MacroBase* clone() const override { return new LtiCannyEdge(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual void onParametersChanged(ParameterSet&);
+  Status onInit() override;
+  Status onApply() override;
+  void onParametersChanged(ParameterSet&) override;
 
 private:
   lti::cannyEdges             cannyFunctor;

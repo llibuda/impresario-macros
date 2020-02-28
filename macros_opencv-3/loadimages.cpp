@@ -66,7 +66,7 @@
   #endif
 #endif // #ifndef INCLUDE_STD_FILESYSTEM_EXPERIMENTAL
 
-CvLoadImages::CvLoadImages() : MacroBase(), fileList(), fileIndex(0) {
+CvLoadImages::CvLoadImages() : MacroBase{}, fileIndex{0} {
   // set up macro description
   setName(L"cv::loadImages");
   setCreator(L"Lars Libuda");
@@ -80,13 +80,10 @@ CvLoadImages::CvLoadImages() : MacroBase(), fileList(), fileIndex(0) {
   addParameter<std::string>(L"Current File",L"Current loaded image","",L"StringFileSelector");
 }
 
-CvLoadImages::~CvLoadImages() {
-}
-
 MacroBase::Status CvLoadImages::onInit() {
   fileList.clear();
-  const std::string& directory = getParameterValue<std::string>(0);
-  const std::string& pattern = getParameterValue<std::string>(1);
+  const auto& directory = getParameterValue<std::string>(0);
+  const auto& pattern = getParameterValue<std::string>(1);
   if (directory.empty()) {
     setErrorMsg(L"No directory specified in parameters.");
     return Error;
@@ -136,8 +133,8 @@ MacroBase::Status CvLoadImages::onInit() {
 }
 
 MacroBase::Status CvLoadImages::onApply() {
-  cv::Mat& output = accessOutput<cv::Mat>(0);
-  char* & filename = accessOutput<char*>(1);
+  auto& output = accessOutput<cv::Mat>(0);
+  auto& filename = accessOutput<char*>(1);
   if (fileIndex < fileList.size()) {
     filename = const_cast<char*>(fileList[fileIndex].c_str());
     setParameterValue<std::string>(3,std::string(fileList[fileIndex]));
@@ -151,7 +148,7 @@ MacroBase::Status CvLoadImages::onApply() {
     }
     fileIndex++;
     if (fileIndex >= fileList.size()) {
-      const bool& repeat = getParameterValue<bool>(2);
+      auto repeat = getParameterValue<bool>(2);
       if (repeat)
       {
         fileIndex = 0;

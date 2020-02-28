@@ -37,21 +37,21 @@
 class CvLoadImages : public MacroBase {
 public:
   // standard constructor
-  CvLoadImages(void);
+  CvLoadImages();
   // standard destructor
-  virtual ~CvLoadImages(void);
+  ~CvLoadImages() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new CvLoadImages(); }
+  MacroBase* clone() const override { return new CvLoadImages(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 private:
-  std::vector<std::string> fileList;
   std::size_t              fileIndex;
+  std::vector<std::string> fileList;
 };
 
 #endif // LOADIMAGES_H_

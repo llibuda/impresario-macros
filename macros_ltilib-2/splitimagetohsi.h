@@ -37,16 +37,16 @@
 class LtiSplitImageToHSI : public MacroBase {
 public:
   // standard constructor
-  LtiSplitImageToHSI(void);
+  LtiSplitImageToHSI();
   // standard destructor
-  virtual ~LtiSplitImageToHSI(void);
+  ~LtiSplitImageToHSI() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiSplitImageToHSI(); }
+  MacroBase* clone() const override { return new LtiSplitImageToHSI(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
+  Status onInit() override;
+  Status onApply() override;
 
 private:
   lti::splitImageToHSI splitFunctor;

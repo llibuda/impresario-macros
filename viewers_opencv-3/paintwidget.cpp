@@ -37,14 +37,14 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv/cv.h>
 
-PaintWidget::PaintWidget(QWidget *parent) : QWidget(parent), cvImage(), imageBuffer(), image(), fitToWindow(true), zoomFactor(1.0), targetRect() {
+PaintWidget::PaintWidget(QWidget *parent) : QWidget(parent), fitToWindow{true}, zoomFactor{1.0} {
   setMinimumSize(10,10);
   connect(this,SIGNAL(updateGUI()),this,SLOT(update()),Qt::QueuedConnection);
 }
 
 void PaintWidget::updateImage(const cv::Mat* source) {
   QMutexLocker lock(&mutex);
-  if (!((source != 0) && (source->depth() == CV_8U || source->depth() == CV_8S || source->depth() == CV_16U ||
+  if (!((source != nullptr) && (source->depth() == CV_8U || source->depth() == CV_8S || source->depth() == CV_16U ||
        source->depth() == CV_16S || source->depth() == CV_32S || source->depth() == CV_32F || source->depth() == CV_64F) &&
       (source->channels() == 1 || source->channels() == 3 || source->channels() == 4) && (source->dims == 2))) return;
 
@@ -162,14 +162,14 @@ void PaintWidget::paintEvent(QPaintEvent* /*event*/) {
     double arTarget = (double)targetRect.height() / (double)targetRect.width();
     if (arTarget < arImg) {
       int height = targetRect.height();
-      int width = height / arImg;
+      int width = static_cast<int>(height / arImg);
       int x = (targetRect.width() - width) / 2;
       targetRect = QRect(x,0,width,height);
       zoomFactor = (double)targetRect.width() / imgRect.width();
     }
     else {
       int width = targetRect.width();
-      int height = width * arImg;
+      int height = static_cast<int>(width * arImg);
       int y = (targetRect.height() - height) / 2;
       targetRect = QRect(0,y,width,height);
       zoomFactor = (double)targetRect.height() / imgRect.height();

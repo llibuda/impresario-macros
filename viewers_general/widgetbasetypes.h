@@ -38,7 +38,7 @@
 class WidgetBaseTypes : public QLabel {
   Q_OBJECT
 public:
-  explicit WidgetBaseTypes(QWidget *parent = 0);
+  explicit WidgetBaseTypes(QWidget *parent = nullptr);
 
   void updateValue(const int* value);
   void updateValue(const bool* value);

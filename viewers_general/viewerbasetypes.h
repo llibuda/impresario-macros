@@ -37,16 +37,16 @@
 class ViewerBaseTypes : public ViewerBase<WidgetBaseTypes> {
 public:
   ViewerBaseTypes();
-  virtual ~ViewerBaseTypes() {}
+  ~ViewerBaseTypes() override = default;
 
-  virtual MacroBase* clone() const {
+  MacroBase* clone() const override {
     return new ViewerBaseTypes();
   }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 };
 
 #endif // VIEWERBASETYPES_H

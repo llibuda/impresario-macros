@@ -65,7 +65,7 @@
   #endif
 #endif // #ifndef INCLUDE_STD_FILESYSTEM_EXPERIMENTAL
 
-LtiLoadImages::LtiLoadImages() : MacroBase() {
+LtiLoadImages::LtiLoadImages() : MacroBase{}, fileIndex{0} {
   // set up macro description
   setName(L"lti::loadImages");
   setCreator(L"Lars Libuda");
@@ -79,13 +79,10 @@ LtiLoadImages::LtiLoadImages() : MacroBase() {
   addParameter<std::string>(L"Current File",L"Current loaded image","",L"StringFileSelector");
 }
 
-LtiLoadImages::~LtiLoadImages() {
-}
-
 MacroBase::Status LtiLoadImages::onInit() {
   fileList.clear();
-  const std::string& directory = getParameterValue<std::string>(0);
-  const std::string& pattern = getParameterValue<std::string>(1);
+  const auto& directory = getParameterValue<std::string>(0);
+  const auto& pattern = getParameterValue<std::string>(1);
   if (directory.empty()) {
     setErrorMsg(L"No directory specified in parameters.");
     return Error;
@@ -135,8 +132,8 @@ MacroBase::Status LtiLoadImages::onInit() {
 }
 
 MacroBase::Status LtiLoadImages::onApply() {
-  lti::image& output = accessOutput<lti::image>(0);
-  char* & filename = accessOutput<char*>(1);
+  auto& output = accessOutput<lti::image>(0);
+  auto& filename = accessOutput<char*>(1);
   if (fileIndex < fileList.size()) {
     filename = const_cast<char*>(fileList[fileIndex].c_str());
     setParameterValue<std::string>(3,std::string(fileList[fileIndex]));
@@ -150,7 +147,7 @@ MacroBase::Status LtiLoadImages::onApply() {
     }
     fileIndex++;
     if (fileIndex >= fileList.size()) {
-      const bool& repeat = getParameterValue<bool>(2);
+      auto repeat = getParameterValue<bool>(2);
       if (repeat)
       {
         fileIndex = 0;

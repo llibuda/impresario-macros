@@ -37,17 +37,17 @@
 class LtiConvolution : public MacroBase {
 public:
   // standard constructor
-  LtiConvolution(void);
+  LtiConvolution();
   // standard destructor
-  virtual ~LtiConvolution(void);
+  ~LtiConvolution() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiConvolution(); }
+  MacroBase* clone() const override { return new LtiConvolution(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual void onParametersChanged(ParameterSet&);
+  Status onInit() override;
+  Status onApply() override;
+  void onParametersChanged(ParameterSet&) override;
 
 private:
   lti::convolution convolveFunctor;

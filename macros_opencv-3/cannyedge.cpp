@@ -34,7 +34,7 @@
 #include <opencv/cv.h>
 #include <iostream>
 
-CvCannyEdge::CvCannyEdge(void) : MacroBase() {
+CvCannyEdge::CvCannyEdge(void) : MacroBase{} {
   // set up macro description
   setName(L"cv::Canny");
   setCreator(L"Lars Libuda");
@@ -48,12 +48,9 @@ CvCannyEdge::CvCannyEdge(void) : MacroBase() {
   addParameter<int>(L"Gradient norm",L"Gradient norm to be used.",0,L"IntComboBox",L"{ \"items\": [\"L1 norm\", \"L2 norm\"]}");
 }
 
-CvCannyEdge::~CvCannyEdge(void) {
-}
-
 MacroBase::Status CvCannyEdge::onInit() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
-  if (input == 0) {
+  const auto* input = accessInput<cv::Mat>(0);
+  if (input == nullptr) {
     setErrorMsg(L"Input is not connected.");
     return Error;
   }
@@ -61,16 +58,16 @@ MacroBase::Status CvCannyEdge::onInit() {
 }
 
 MacroBase::Status CvCannyEdge::onApply() {
-  const cv::Mat* input = accessInput<cv::Mat>(0);
+  const auto* input = accessInput<cv::Mat>(0);
   if (!input || input->dims != 2 || input->type() != CV_8UC1) {
     setErrorMsg(L"Type of input is not supported. Type CV_8UC1 is required.");
     return Error;
   }
-  cv::Mat& output = accessOutput<cv::Mat>(0);
-  const double& threshold1 = getParameterValue<double>(0);
-  const double& threshold2 = getParameterValue<double>(1);
-  const int& kernelSize = getParameterValue<int>(2);
-  bool L2gradient = (getParameterValue<int>(3) == 1);
+  auto& output = accessOutput<cv::Mat>(0);
+  auto threshold1 = getParameterValue<double>(0);
+  auto threshold2 = getParameterValue<double>(1);
+  auto kernelSize = getParameterValue<int>(2);
+  auto L2gradient = (getParameterValue<int>(3) == 1);
   try {
     cv::Canny(*input,output,threshold1,threshold2,kernelSize,L2gradient);
   }
@@ -84,6 +81,5 @@ MacroBase::Status CvCannyEdge::onApply() {
 }
 
 void CvCannyEdge::onParametersChanged(ParameterSet &) {
-
 }
 

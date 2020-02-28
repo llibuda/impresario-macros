@@ -36,34 +36,34 @@
 class LtiChannel8ToChannel : public MacroBase {
 public:
   // standard constructor
-  LtiChannel8ToChannel(void);
+  LtiChannel8ToChannel();
   // standard destructor
-  virtual ~LtiChannel8ToChannel(void);
+  ~LtiChannel8ToChannel() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiChannel8ToChannel(); }
+  MacroBase* clone() const override { return new LtiChannel8ToChannel(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 };
 
 class LtiChannelToChannel8 : public MacroBase {
 public:
   // standard constructor
-  LtiChannelToChannel8(void);
+  LtiChannelToChannel8();
   // standard destructor
-  virtual ~LtiChannelToChannel8(void);
+  ~LtiChannelToChannel8() override = default;
 
   // override clone method to provide correct class instance
-  virtual MacroBase* clone() const { return new LtiChannelToChannel8(); }
+  MacroBase* clone() const override { return new LtiChannelToChannel8(); }
 
 protected:
-  virtual Status onInit();
-  virtual Status onApply();
-  virtual Status onExit();
+  Status onInit() override;
+  Status onApply() override;
+  Status onExit() override;
 
 };
 

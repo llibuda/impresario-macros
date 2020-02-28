@@ -31,7 +31,7 @@
 #include "widgetbasetypes.h"
 #include <QMutexLocker>
 
-WidgetBaseTypes::WidgetBaseTypes(QWidget *parent) :  QLabel(parent) {
+WidgetBaseTypes::WidgetBaseTypes(QWidget *parent) : QLabel{parent} {
   setTextInteractionFlags(Qt::NoTextInteraction);
   setWordWrap(true);
   connect(this,SIGNAL(updateText(QString)),this,SLOT(setText(QString)),Qt::QueuedConnection);

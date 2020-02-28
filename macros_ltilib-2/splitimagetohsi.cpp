@@ -32,7 +32,7 @@
 #include "ltiImage.h"
 #include "ltiChannel8.h"
 
-LtiSplitImageToHSI::LtiSplitImageToHSI() : MacroBase() {
+LtiSplitImageToHSI::LtiSplitImageToHSI() : MacroBase{} {
   // set up macro description
   setName(L"lti::splitImageToHSI");
   setCreator(L"Lars Libuda");
@@ -44,12 +44,9 @@ LtiSplitImageToHSI::LtiSplitImageToHSI() : MacroBase() {
   addOutput<lti::channel8>(L"I-component",L"8-bit grey scale image denoting the I-component");
 }
 
-LtiSplitImageToHSI::~LtiSplitImageToHSI() {
-}
-
 MacroBase::Status LtiSplitImageToHSI::onInit() {
-  const lti::image* input = accessInput<lti::image>(0);
-  if (input == 0) {
+  const auto* input = accessInput<lti::image>(0);
+  if (input == nullptr) {
     setErrorMsg(L"Input is not connected.");
     return Error;
   }
@@ -57,9 +54,9 @@ MacroBase::Status LtiSplitImageToHSI::onInit() {
 }
 
 MacroBase::Status LtiSplitImageToHSI::onApply() {
-  const lti::image* input = accessInput<lti::image>(0);
-  lti::channel8& outputH = accessOutput<lti::channel8>(0);
-  lti::channel8& outputS = accessOutput<lti::channel8>(1);
-  lti::channel8& outputI = accessOutput<lti::channel8>(2);
+  const auto* input = accessInput<lti::image>(0);
+  auto& outputH = accessOutput<lti::channel8>(0);
+  auto& outputS = accessOutput<lti::channel8>(1);
+  auto& outputI = accessOutput<lti::channel8>(2);
   return (splitFunctor.apply(*input,outputH,outputS,outputI)) ? Ok : Error;
 }
