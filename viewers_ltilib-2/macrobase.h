@@ -106,7 +106,6 @@ struct TypeName<std::wstring> {
 //------------------------------------------
 class ValueBase {
 public:
-  ValueBase() = delete;
   ValueBase(const ValueBase&) = delete;
   ValueBase& operator=(const ValueBase&) = delete;
   ValueBase(ValueBase&&) = delete;
@@ -140,7 +139,6 @@ private:
 template <typename T>
 class MacroInput : public ValueBase {
 public:
-  MacroInput() = delete;
   MacroInput(const MacroInput&) = delete;
   MacroInput& operator=(const MacroInput&) = delete;
   MacroInput(MacroInput&&) = delete;
@@ -163,7 +161,6 @@ private:
 template <typename T>
 class MacroOutput : public ValueBase {
 public:
-  MacroOutput() = delete;
   MacroOutput(const MacroOutput&) = delete;
   MacroOutput& operator=(const MacroOutput&) = delete;
   MacroOutput(MacroOutput&&) = delete;
@@ -185,7 +182,6 @@ private:
 //------------------------------------------
 class ValueParameter : public ValueBase {
 public:
-  ValueParameter() = delete;
   ValueParameter(const ValueParameter&) = delete;
   ValueParameter& operator=(const ValueParameter&) = delete;
   ValueParameter(ValueParameter&&) = delete;
@@ -276,7 +272,6 @@ public:
 template <typename T>
 class MacroParameter : public ValueParameter {
 public:
-  MacroParameter() = delete;
   MacroParameter(const MacroParameter&) = delete;
   MacroParameter& operator=(const MacroParameter&) = delete;
   MacroParameter(MacroParameter&&) = delete;
