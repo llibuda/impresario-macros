@@ -112,9 +112,9 @@ public:
   ValueBase& operator=(ValueBase&&) = delete;
   virtual ~ValueBase() = default;
 
-  const std::wstring& getName() const        { return m_strName; }
-  const std::wstring& getDescription() const { return m_strDescription; }
-  DataDescriptor* getDescriptorPtr()         { return &m_dataDescriptor; }
+  const std::wstring& getName() const            { return m_strName; }
+  const std::wstring& getDescription() const     { return m_strDescription; }
+  DataDescriptor* getDescriptorPtr()             { return &m_dataDescriptor; }
 
 protected:
   ValueBase(const std::wstring& strName, const std::wstring& strDescription, void* dataPtr, const std::string& typeName) :
@@ -314,9 +314,6 @@ private:
 //------------------------------------------
 class MacroBase {
 public:
-  // data type to hold inputs, outputs, and parameters
-  using ValueVector = std::vector<ValueBase*>;
-
   MacroBase(const MacroBase&) = delete;
   MacroBase& operator=(const MacroBase&) = delete;
   MacroBase(MacroBase&&) = delete;
@@ -326,20 +323,7 @@ public:
   MacroBase() = default;
 
   // standard destructor
-  virtual ~MacroBase() {
-    while(!m_vecInput.empty()) {
-      delete m_vecInput.front();
-      m_vecInput.erase(m_vecInput.begin());
-    }
-    while(!m_vecOutput.empty()) {
-      delete m_vecOutput.front();
-      m_vecOutput.erase(m_vecOutput.begin());
-    }
-    while(!m_vecParams.empty()) {
-      delete m_vecParams.front();
-      m_vecParams.erase(m_vecParams.begin());
-    }
-  }
+  virtual ~MacroBase() = default;
 
   // clone is called every time this macro is selected by the user and added to the editor
   // override to provide a copy of the original macro, which is created when the DLL is loaded
@@ -352,30 +336,30 @@ public:
   const   std::wstring& getDescription() const             { return m_strMacroDescription; }
   const   std::wstring& getErrorMsg() const                { return m_strMacroMsg; }
   const   std::wstring& getPropertyWidgetComponent() const { return m_strPropWidgetFile; }
-  const   ValueVector&  getInputs() const                  { return m_vecInput; }
-  const   ValueVector&  getOutputs() const                 { return m_vecOutput; }
-  const   ValueVector&  getParameters() const              { return m_vecParams; }
   virtual MacroType     getType() const                    { return Macro; }
+
+  // C-Interface for API to access inputs, outputs, and parameters
+  using CInterface = std::pair<DataDescriptor*, unsigned int>;
+  CInterface getInputsCInterface() const {
+    return std::make_pair(m_vecInput.empty() ? nullptr : m_vecInput[0]->getDescriptorPtr(), static_cast<unsigned int>(m_vecInput.size()));
+  }
+  CInterface getOutputsCInterface() const {
+    return std::make_pair(m_vecOutput.empty() ? nullptr : m_vecOutput[0]->getDescriptorPtr(), static_cast<unsigned int>(m_vecOutput.size()));
+  }
+  CInterface getParametersCInterface() const {
+    return std::make_pair(m_vecParams.empty() ? nullptr : m_vecParams[0]->getDescriptorPtr(), static_cast<unsigned int>(m_vecParams.size()));
+  }
 
   // methods to read and write parameters
   const std::wstring& getParameterValueAsString(unsigned int parameterIndex) const {
     assert(parameterIndex < m_vecParams.size());
-    return dynamic_cast<ValueParameter*>(m_vecParams[parameterIndex])->getValueAsString();
+    return dynamic_cast<ValueParameter*>(m_vecParams[parameterIndex].get())->getValueAsString();
   }
 
   void setParameterValueAsString(unsigned int parameterIndex, std::wstring& value) {
     assert(parameterIndex < m_vecParams.size());
     m_setChangedParams.insert(parameterIndex);
-    dynamic_cast<ValueParameter*>(m_vecParams[parameterIndex])->setValueAsString(value);
-  }
-
-  // methods to set and read the data ptr set by Impresario
-  void* getImpresarioDataPtr() const {
-    return m_ptrImpresarioData;
-  }
-
-  void setImpresarioDataPtr(void* dataPtr) {
-    m_ptrImpresarioData = dataPtr;
+    dynamic_cast<ValueParameter*>(m_vecParams[parameterIndex].get())->setValueAsString(value);
   }
 
   // methods for executing macro
@@ -434,19 +418,19 @@ protected:
     if (name.empty()) {
       return false;
     }
-    auto input = new MacroInput<T>{name,description};
+    auto input = std::unique_ptr<ValueBase>(new MacroInput<T>{name,description});
     if (!m_vecInput.empty()) {
       auto descr = m_vecInput.back()->getDescriptorPtr();
       descr->next = input->getDescriptorPtr();
     }
-    m_vecInput.push_back(input);
+    m_vecInput.push_back(std::move(input));
     return true;
   }
 
   template<typename T>
   const T* accessInput(std::size_t index) {
     assert(index >= 0 && index < m_vecInput.size());
-    auto input = dynamic_cast<MacroInput<T>*>(m_vecInput.at(index));
+    auto input = dynamic_cast<MacroInput<T>*>(m_vecInput.at(index).get());
     auto value = input->readAccess();
     return value;
   }
@@ -457,19 +441,19 @@ protected:
     if (name.empty()) {
       return false;
     }
-    auto output = new MacroOutput<T>{name,description};
+    auto output = std::unique_ptr<ValueBase>(new MacroOutput<T>{name,description});
     if (!m_vecOutput.empty()) {
       auto descr = m_vecOutput.back()->getDescriptorPtr();
       descr->next = output->getDescriptorPtr();
     }
-    m_vecOutput.push_back(output);
+    m_vecOutput.push_back(std::move(output));
     return true;
   }
 
   template<typename T>
   T& accessOutput(std::size_t index) {
     assert(index >= 0 && index < m_vecOutput.size());
-    auto output = dynamic_cast<MacroOutput<T>*>(m_vecOutput.at(index));
+    auto output = dynamic_cast<MacroOutput<T>*>(m_vecOutput.at(index).get());
     return output->writeAccess();
   }
 
@@ -479,33 +463,36 @@ protected:
     if (name.empty()) {
       return false;
     }
-    auto param = new MacroParameter<T>{name,description,tDefaultValue,qmlUIComponent,qmlUIProperties,converter};
+    auto param = std::unique_ptr<ValueBase>(new MacroParameter<T>{name,description,tDefaultValue,qmlUIComponent,qmlUIProperties,converter});
     if (!m_vecParams.empty()) {
       auto descr = m_vecParams.back()->getDescriptorPtr();
       descr->next = param->getDescriptorPtr();
     }
-    m_vecParams.push_back(param);
+    m_vecParams.push_back(std::move(param));
     return true;
   }
 
   template<typename T>
   const T& getParameterValue(std::size_t index) {
     assert(index >= 0 && index < m_vecParams.size());
-    auto param = dynamic_cast<MacroParameter<T>*>(m_vecParams.at(index));
+    auto param = dynamic_cast<MacroParameter<T>*>(m_vecParams.at(index).get());
     return param->getValue();
   }
 
   template<typename T>
   void setParameterValue(std::size_t index, const T& value) {
     assert(index >= 0 && index < m_vecParams.size());
-    auto param = dynamic_cast<MacroParameter<T>*>(m_vecParams.at(index));
+    auto param = dynamic_cast<MacroParameter<T>*>(m_vecParams.at(index).get());
     if (value != param->getValue()) {
       param->setValue(value);
-      notifyParameterChanged((MacroHandle)this,static_cast<unsigned int>(index),m_ptrImpresarioData);
+      notifyParameterChanged((MacroHandle)this,static_cast<unsigned int>(index));
     }
   }
 
 private:
+  // data type to hold inputs, outputs, and parameters
+  using ValueVector = std::vector<std::unique_ptr<ValueBase>>;
+
   // attributes describing the macro class by its name, group, creator, and additional text
   std::wstring m_strMacroName;
   std::wstring m_strMacroGroup;
@@ -517,7 +504,6 @@ private:
   ValueVector  m_vecOutput;
   ValueVector  m_vecParams;
   ParameterSet m_setChangedParams;
-  void*        m_ptrImpresarioData{nullptr};
 };
 
 #endif /* MACROBASE_H_ */

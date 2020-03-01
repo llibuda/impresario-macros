@@ -34,6 +34,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <vector>
+#include <map>
 #include <iostream>
 #include <climits>
 #include <streambuf>
@@ -157,6 +158,7 @@ namespace {
   std::editstreambuf*         g_cerrStream = nullptr;
   std::basic_streambuf<char>* g_pCoutOld = nullptr;
   std::basic_streambuf<char>* g_pCerrOld = nullptr;
+  std::map<MacroHandle,void*> g_MacroBackReference;
   PFN_MACROPARAM_CHANGED      g_cbMacroParamChanged;
 
   void initCompiler()
@@ -381,15 +383,18 @@ MacroHandle macroClone(MacroHandle handle) {
 }
 
 void macroSetImpresarioDataPtr(MacroHandle handle, void *dataPtr) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  macro->setImpresarioDataPtr(dataPtr);
+  if (handle != nullptr) {
+    g_MacroBackReference[handle] = dataPtr;
+  }
 }
 
 void* macroGetImpresarioDataPtr(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  return macro->getImpresarioDataPtr();
+  if (handle != nullptr) {
+    return g_MacroBackReference[handle];
+  }
+  else {
+    return nullptr;
+  }
 }
 
 bool macroDelete(MacroHandle handle) {
@@ -453,40 +458,25 @@ const wchar_t* macroGetPropertyWidgetComponent(MacroHandle handle) {
 DataDescriptor* macroGetInputs(MacroHandle handle, unsigned int* count) {
   auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  auto inputs = macro->getInputs();
-  *count = static_cast<unsigned int>(inputs.size());
-  if (inputs.size() > 0) {
-    return inputs[0]->getDescriptorPtr();
-  }
-  else {
-    return nullptr;
-  }
+  auto inputsPair = macro->getInputsCInterface();
+  *count = inputsPair.second;
+  return inputsPair.first;
 }
 
 DataDescriptor* macroGetOutputs(MacroHandle handle, unsigned int* count) {
   auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  auto outputs = macro->getOutputs();
-  *count = static_cast<unsigned int>(outputs.size());
-  if (outputs.size() > 0) {
-    return outputs[0]->getDescriptorPtr();
-  }
-  else {
-    return nullptr;
-  }
+  auto outputsPair = macro->getOutputsCInterface();
+  *count = outputsPair.second;
+  return outputsPair.first;
 }
 
 DataDescriptor* macroGetParameters(MacroHandle handle, unsigned int* count) {
   auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  auto params = macro->getParameters();
-  *count = static_cast<unsigned int>(params.size());
-  if (params.size() > 0) {
-    return params[0]->getDescriptorPtr();
-  }
-  else {
-    return nullptr;
-  }
+  auto paramsPair = macro->getParametersCInterface();
+  *count = paramsPair.second;
+  return paramsPair.first;
 }
 
 int macroStart(MacroHandle handle) {
@@ -510,8 +500,8 @@ int macroStop(MacroHandle handle) {
 void macroSetParameterValue(MacroHandle handle, unsigned int parameter, const wchar_t* strValue) {
   auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  auto params = macro->getParameters();
-  if (parameter < params.size()) {
+  auto paramsPair = macro->getParametersCInterface();
+  if (parameter < paramsPair.second) {
     std::wstring value(strValue);
     macro->setParameterValueAsString(parameter,value);
   }
@@ -520,8 +510,8 @@ void macroSetParameterValue(MacroHandle handle, unsigned int parameter, const wc
 const wchar_t* macroGetParameterValue(MacroHandle handle, unsigned int parameter) {
   auto macro = static_cast<MacroBase*>(handle);
   assert(macro != nullptr);
-  auto params = macro->getParameters();
-  if (parameter < params.size()) {
+  auto paramsPair = macro->getParametersCInterface();
+  if (parameter < paramsPair.second) {
     return macro->getParameterValueAsString(parameter).c_str();
   }
   else
@@ -564,9 +554,9 @@ void macroDestroyWidget(MacroHandle /*handle*/) {
 
 #endif
 
-void notifyParameterChanged(MacroHandle handle, unsigned int parameter, void* dataPtr) {
+void notifyParameterChanged(MacroHandle handle, unsigned int parameter) {
   if (g_cbMacroParamChanged) {
-    g_cbMacroParamChanged(handle,parameter,dataPtr);
+    g_cbMacroParamChanged(handle,parameter,g_MacroBackReference[handle]);
   }
 }
 
