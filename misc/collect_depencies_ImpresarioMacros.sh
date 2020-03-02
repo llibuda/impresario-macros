@@ -37,9 +37,10 @@ do
 done
 
 # compress all files
-tar -czf $deps_path/common.tar.gz $deps_path/*.so.*
+cd $deps_path
+tar -czf common.tar.gz *.so.*
 
 # clean up
-rm $deps_path/*.so.*
+rm *.so.*
 
 
