@@ -18,7 +18,7 @@ checkCommand sort
 cd bin 2>/dev/null
 
 # setup LD_LIBRARY_PATH
-LD_LIBRARY_PATH=./qtlib:../lib/ltilib-2:../lib/opencv-3.4.1:../lib/common
+LD_LIBRARY_PATH=./qtlib:../lib/ltilib-2:../lib/opencv-3:../lib/common
 export LD_LIBRARY_PATH
 
 path_pattern="../lib/*.so.*"

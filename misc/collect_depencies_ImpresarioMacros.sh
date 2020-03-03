@@ -19,7 +19,7 @@ checkCommand sed
 checkCommand sort
 
 # setup LD_LIBRARY_PATH
-LD_LIBRARY_PATH=./qtlib:../lib/ltilib-2:../lib/opencv-3.4.1
+LD_LIBRARY_PATH=./qtlib:../lib/ltilib-2:../lib/opencv-3
 export LD_LIBRARY_PATH
 
 # find all depencies and copy them to ../lib/common
