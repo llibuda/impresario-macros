@@ -2,7 +2,7 @@
 <Settings>
     <Data>
         <Paths>
-            <DepLibs>../lib/ltilib-2|../lib/opencv-3.1.0|../lib/common</DepLibs>
+            <DepLibs>../lib/ltilib-2|../lib/opencv-3|../lib/common</DepLibs>
             <Macros>../lib</Macros>
             <ProcessGraphs>../processgraphs</ProcessGraphs>
             <Resources>../resources</Resources>
