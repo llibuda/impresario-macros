@@ -43,10 +43,6 @@ public:
   // standard destructor
   ~CvCascadeClassifier() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new CvCascadeClassifier(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;

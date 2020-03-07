@@ -42,10 +42,6 @@ public:
   // standard destructor
   ~LtiLoadImages() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new LtiLoadImages(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;

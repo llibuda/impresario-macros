@@ -40,10 +40,6 @@ public:
   // standard destructor
   ~CvMatConvert() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new CvMatConvert(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;

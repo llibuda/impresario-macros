@@ -313,6 +313,7 @@ private:
 // Class MacroBase
 //------------------------------------------
 class MacroBase {
+  friend class MacroAPIWrapper;
 public:
   MacroBase(const MacroBase&) = delete;
   MacroBase& operator=(const MacroBase&) = delete;
@@ -325,11 +326,7 @@ public:
   // standard destructor
   virtual ~MacroBase() = default;
 
-  // clone is called every time this macro is selected by the user and added to the editor
-  // override to provide a copy of the original macro, which is created when the DLL is loaded
-  virtual MacroBase* clone() const { return nullptr; }
-
-  // methods to access private attributes, neccessary for the main application
+  // methods to read private attributes
   const   std::wstring& getName() const                    { return m_strMacroName; }
   const   std::wstring& getGroup() const                   { return m_strMacroGroup; }
   const   std::wstring& getCreator() const                 { return m_strMacroCreator; }
@@ -338,64 +335,12 @@ public:
   const   std::wstring& getPropertyWidgetComponent() const { return m_strPropWidgetFile; }
   virtual MacroType     getType() const                    { return Macro; }
 
-  // C-Interface for API to access inputs, outputs, and parameters
-  using CInterface = std::pair<DataDescriptor*, unsigned int>;
-  CInterface getInputsCInterface() const {
-    return std::make_pair(m_vecInput.empty() ? nullptr : m_vecInput[0]->getDescriptorPtr(), static_cast<unsigned int>(m_vecInput.size()));
-  }
-  CInterface getOutputsCInterface() const {
-    return std::make_pair(m_vecOutput.empty() ? nullptr : m_vecOutput[0]->getDescriptorPtr(), static_cast<unsigned int>(m_vecOutput.size()));
-  }
-  CInterface getParametersCInterface() const {
-    return std::make_pair(m_vecParams.empty() ? nullptr : m_vecParams[0]->getDescriptorPtr(), static_cast<unsigned int>(m_vecParams.size()));
-  }
-
-  // methods to read and write parameters
-  const std::wstring& getParameterValueAsString(unsigned int parameterIndex) const {
-    assert(parameterIndex < m_vecParams.size());
-    return dynamic_cast<ValueParameter*>(m_vecParams[parameterIndex].get())->getValueAsString();
-  }
-
-  void setParameterValueAsString(unsigned int parameterIndex, std::wstring& value) {
-    assert(parameterIndex < m_vecParams.size());
-    m_setChangedParams.insert(parameterIndex);
-    dynamic_cast<ValueParameter*>(m_vecParams[parameterIndex].get())->setValueAsString(value);
-  }
-
   // methods for executing macro
   enum Status {
     Ok,
     Stop,
     Error
   };
-
-  Status init()  {
-    m_strMacroMsg.clear();
-    for(std::size_t index = 0; index < m_vecParams.size(); ++index) {
-      m_setChangedParams.insert(static_cast<unsigned int>(index));
-    }
-    onParametersChanged(m_setChangedParams);
-    m_setChangedParams.clear();
-    return onInit();
-  }
-
-  Status apply() {
-    if (!m_setChangedParams.empty()) {
-      onParametersChanged(m_setChangedParams);
-      m_setChangedParams.clear();
-    }
-    return onApply();
-  }
-
-  Status exit()  {
-    if (!m_setChangedParams.empty()) {
-      onParametersChanged(m_setChangedParams);
-      m_setChangedParams.clear();
-    }
-    return onExit();
-  }
-
-protected:
   using ParameterSet = std::set<unsigned int>;
 
   // methods to be overwritten in derived classes to perfrom required actions
@@ -404,12 +349,14 @@ protected:
   virtual Status onExit()  { return Ok; }
   virtual void   onParametersChanged(ParameterSet&) {}
 
+protected:
+
   // API methods to set up derived classes
   void setName(const std::wstring& strName)                              { m_strMacroName = strName; }
   void setGroup(const std::wstring& strGroup)                            { m_strMacroGroup = strGroup; }
   void setCreator(const std::wstring& strCreator)                        { m_strMacroCreator = strCreator; }
   void setDescription(const std::wstring& strDescription)                { m_strMacroDescription = strDescription; }
-  void setErrorMsg(const std::wstring& strErrorMsg)                      { m_strMacroMsg = strErrorMsg; }
+  void setErrorMsg(const std::wstring& strErrorMsg = std::wstring{})     { m_strMacroMsg = strErrorMsg; }
   void setPropertyWidgetComponent(const std::wstring& strPropWidgetFile) { m_strPropWidgetFile = strPropWidgetFile; }
 
   // API methods to set up and access macro inputs
@@ -485,13 +432,18 @@ protected:
     auto param = dynamic_cast<MacroParameter<T>*>(m_vecParams.at(index).get());
     if (value != param->getValue()) {
       param->setValue(value);
-      notifyParameterChanged((MacroHandle)this,static_cast<unsigned int>(index));
+      notifyParameterChanged(static_cast<MacroHandle>(this),static_cast<unsigned int>(index));
     }
   }
 
 private:
   // data type to hold inputs, outputs, and parameters
   using ValueVector = std::vector<std::unique_ptr<ValueBase>>;
+
+  // these three methods are called by friend class MacroAPIWrapper only
+  const ValueVector& getInputs() const     { return m_vecInput; }
+  const ValueVector& getOutputs() const    { return m_vecOutput; }
+  const ValueVector& getParameters() const { return m_vecParams; }
 
   // attributes describing the macro class by its name, group, creator, and additional text
   std::wstring m_strMacroName;
@@ -503,7 +455,6 @@ private:
   ValueVector  m_vecInput;
   ValueVector  m_vecOutput;
   ValueVector  m_vecParams;
-  ParameterSet m_setChangedParams;
 };
 
 #endif /* MACROBASE_H_ */

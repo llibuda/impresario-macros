@@ -48,7 +48,7 @@ public:
   // standard destructor
   ~MacroExtBase() override = default;
 
-  // methods to access private attributes, neccessary for the main application
+  // methods to read private attributes
   MacroType getType() const override { return ExtendedMacro; }
 
   // methods to create and destroy custom widget
@@ -83,7 +83,7 @@ public:
     widgetPtr = nullptr;
   }
 
-  // methods to access private attributes, neccessary for the main application
+  // methods to read private attributes
   MacroType getType() const override { return Viewer; }
 
 protected:

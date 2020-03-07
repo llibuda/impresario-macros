@@ -41,10 +41,6 @@ public:
   // standard destructor
   ~CvMat2LtiImage() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new CvMat2LtiImage(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;

@@ -40,10 +40,6 @@ public:
   // standard destructor
   ~CvCannyEdge() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new CvCannyEdge(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   void onParametersChanged(ParameterSet&) override;

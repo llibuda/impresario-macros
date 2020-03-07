@@ -40,10 +40,6 @@ public:
   // standard destructor
   ~LtiChannel8ToChannel() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new LtiChannel8ToChannel(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;
@@ -57,10 +53,6 @@ public:
   // standard destructor
   ~LtiChannelToChannel8() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new LtiChannelToChannel8(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;

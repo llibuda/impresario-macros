@@ -41,10 +41,6 @@ public:
   // standard destructor
   ~LtiConvolution() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new LtiConvolution(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   void onParametersChanged(ParameterSet&) override;

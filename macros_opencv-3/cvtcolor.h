@@ -40,10 +40,6 @@ public:
   // standard destructor
   ~CvtColor() override = default;
 
-  // override clone method to provide correct class instance
-  MacroBase* clone() const override { return new CvtColor(); }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;

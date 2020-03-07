@@ -264,6 +264,117 @@ namespace {
 }
 
 //----------------------------------------------------------------------------------------------
+//------------- API Wrapper class for accessing individial MacroBase instances -----------------
+//----------------------------------------------------------------------------------------------
+class MacroAPIWrapper
+{
+public:
+  MacroAPIWrapper(const MacroAPIWrapper&) = delete;
+  MacroAPIWrapper& operator=(const MacroAPIWrapper&) = delete;
+  MacroAPIWrapper(MacroAPIWrapper&&) = delete;
+  MacroAPIWrapper& operator=(MacroAPIWrapper&&) = delete;
+
+  MacroAPIWrapper(MacroBase* macro) : m_macroPtr{macro} {
+    assert(macro != nullptr);
+  }
+
+  virtual ~MacroAPIWrapper() = default;
+
+  virtual MacroAPIWrapper* clone() = 0;
+
+  MacroBase*     data() const                       { return m_macroPtr.get(); }
+  const wchar_t* getName() const                    { return m_macroPtr->getName().c_str(); }
+  const wchar_t* getGroup() const                   { return m_macroPtr->getGroup().c_str(); }
+  const wchar_t* getCreator() const                 { return m_macroPtr->getCreator().c_str(); }
+  const wchar_t* getDescription() const             { return m_macroPtr->getDescription().c_str(); }
+  const wchar_t* getErrorMsg() const                { return m_macroPtr->getErrorMsg().c_str(); }
+  const wchar_t* getPropertyWidgetComponent() const { return m_macroPtr->getPropertyWidgetComponent().c_str(); }
+  MacroType      getType() const                    { return m_macroPtr->getType(); }
+
+  // C-Interface for API to access inputs, outputs, and parameters
+  DataDescriptor* getInputsCInterface(unsigned int* count) const {
+    auto& inputs = m_macroPtr->getInputs();
+    *count = static_cast<unsigned int>(inputs.size());
+    return (inputs.empty()) ? nullptr : inputs[0]->getDescriptorPtr();
+  }
+
+  DataDescriptor* getOutputsCInterface(unsigned int* count) const {
+    auto& outputs = m_macroPtr->getOutputs();
+    *count = static_cast<unsigned int>(outputs.size());
+    return (outputs.empty()) ? nullptr : outputs[0]->getDescriptorPtr();
+  }
+
+  DataDescriptor* getParametersCInterface(unsigned int* count) const {
+    auto& params = m_macroPtr->getParameters();
+    *count = static_cast<unsigned int>(params.size());
+    return (params.empty()) ? nullptr : params[0]->getDescriptorPtr();
+  }
+
+  const wchar_t* getParameterValueAsString(unsigned int parameterIndex) const {
+    auto& params = m_macroPtr->getParameters();
+    if (parameterIndex < params.size()) {
+      return dynamic_cast<ValueParameter*>(params[parameterIndex].get())->getValueAsString().c_str();
+    }
+    else
+    {
+      return nullptr;
+    }
+  }
+
+  void setParameterValueAsString(unsigned int parameterIndex, const wchar_t* cstrValue) {
+    auto& params = m_macroPtr->getParameters();
+    if (parameterIndex < params.size()) {
+      std::wstring value(cstrValue);
+      dynamic_cast<ValueParameter*>(params[parameterIndex].get())->setValueAsString(value);
+      m_setChangedParams.insert(parameterIndex);
+    }
+  }
+
+  MacroBase::Status init()  {
+    m_macroPtr->setErrorMsg();
+    for(std::size_t index = 0; index < m_macroPtr->m_vecParams.size(); ++index) {
+      m_setChangedParams.insert(static_cast<unsigned int>(index));
+    }
+    m_macroPtr->onParametersChanged(m_setChangedParams);
+    m_setChangedParams.clear();
+    return m_macroPtr->onInit();
+  }
+
+  MacroBase::Status apply() {
+    if (!m_setChangedParams.empty()) {
+      m_macroPtr->onParametersChanged(m_setChangedParams);
+      m_setChangedParams.clear();
+    }
+    return m_macroPtr->onApply();
+  }
+
+  MacroBase::Status exit()  {
+    if (!m_setChangedParams.empty()) {
+      m_macroPtr->onParametersChanged(m_setChangedParams);
+      m_setChangedParams.clear();
+    }
+    return m_macroPtr->onExit();
+  }
+
+protected:
+  using MacroPtr = std::unique_ptr<MacroBase>;
+  using ParameterSet = MacroBase::ParameterSet;
+
+  MacroPtr     m_macroPtr;
+  ParameterSet m_setChangedParams;
+};
+
+template<typename T>
+class MacroAPITypeWrapper : public MacroAPIWrapper {
+public:
+  MacroAPITypeWrapper() : MacroAPIWrapper{ new T{} } {
+  }
+  ~MacroAPITypeWrapper() override = default;
+
+  MacroAPIWrapper* clone() override { return new MacroAPITypeWrapper<T>{}; }
+};
+
+//----------------------------------------------------------------------------------------------
 //--------------------- include library configuration from libconfig.h -------------------------
 //----------------------------------------------------------------------------------------------
 // NOTE: The function
@@ -282,7 +393,7 @@ namespace {
                                       try {
 
 #undef MACRO_ADD
-#define MACRO_ADD(class_name) g_Macros.push_back(new class_name);
+#define MACRO_ADD(class_name) g_Macros.push_back(new MacroAPITypeWrapper<class_name>{});
 
 #undef MACRO_REGISTRATION_END
 #define MACRO_REGISTRATION_END   }                                       \
@@ -364,17 +475,17 @@ void libTerminate() {
   undoConsoleRedirect();
   // delete macro list
   for(MacroHandle gMacroHandle : g_Macros) {
-    auto macro = static_cast<MacroBase*>(gMacroHandle);
-    delete macro;
+    auto macroWrapper = static_cast<MacroAPIWrapper*>(gMacroHandle);
+    delete macroWrapper;
   }
   g_Macros.clear();
 }
 
 MacroHandle macroClone(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
   try {
-    auto clone = macro->clone();
+    auto clone = macroWrapper->clone();
     return static_cast<MacroHandle>(clone);
   }
   catch(...) {
@@ -384,13 +495,17 @@ MacroHandle macroClone(MacroHandle handle) {
 
 void macroSetImpresarioDataPtr(MacroHandle handle, void *dataPtr) {
   if (handle != nullptr) {
-    g_MacroBackReference[handle] = dataPtr;
+    auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+    assert(macroWrapper != nullptr);
+    g_MacroBackReference[macroWrapper->data()] = dataPtr;
   }
 }
 
 void* macroGetImpresarioDataPtr(MacroHandle handle) {
   if (handle != nullptr) {
-    return g_MacroBackReference[handle];
+    auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+    assert(macroWrapper != nullptr);
+    return g_MacroBackReference[macroWrapper->data()];
   }
   else {
     return nullptr;
@@ -401,133 +516,110 @@ bool macroDelete(MacroHandle handle) {
   if (handle == nullptr || std::find(g_Macros.cbegin(),g_Macros.cend(),handle) != g_Macros.cend()) {
     return false;
   }
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  delete macro;
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  delete macroWrapper;
   return true;
 }
 
 unsigned int macroGetType(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  return static_cast<unsigned int>(macro->getType());
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return static_cast<unsigned int>(macroWrapper->getType());
 }
 
 const wchar_t* macroGetName(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  const std::wstring& str = macro->getName();
-  return str.c_str();
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getName();
 }
 
 const wchar_t* macroGetCreator(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  const std::wstring& str = macro->getCreator();
-  return str.c_str();
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getCreator();
 }
 
 const wchar_t* macroGetGroup(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  const std::wstring& str = macro->getGroup();
-  return str.c_str();
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getGroup();
 }
 
 const wchar_t* macroGetDescription(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  const std::wstring& str = macro->getDescription();
-  return str.c_str();
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getDescription();
 }
 
 const wchar_t* macroGetErrorMsg(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  const std::wstring& str = macro->getErrorMsg();
-  return str.c_str();
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getErrorMsg();
 }
 
 const wchar_t* macroGetPropertyWidgetComponent(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  const std::wstring& str = macro->getPropertyWidgetComponent();
-  return str.c_str();
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getPropertyWidgetComponent();
 }
 
 DataDescriptor* macroGetInputs(MacroHandle handle, unsigned int* count) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  auto inputsPair = macro->getInputsCInterface();
-  *count = inputsPair.second;
-  return inputsPair.first;
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getInputsCInterface(count);
 }
 
 DataDescriptor* macroGetOutputs(MacroHandle handle, unsigned int* count) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  auto outputsPair = macro->getOutputsCInterface();
-  *count = outputsPair.second;
-  return outputsPair.first;
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getOutputsCInterface(count);
 }
 
 DataDescriptor* macroGetParameters(MacroHandle handle, unsigned int* count) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  auto paramsPair = macro->getParametersCInterface();
-  *count = paramsPair.second;
-  return paramsPair.first;
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getParametersCInterface(count);
 }
 
 int macroStart(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  return static_cast<int>(macro->init());
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return static_cast<int>(macroWrapper->init());
 }
 
 int macroApply(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  return static_cast<int>(macro->apply());
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return static_cast<int>(macroWrapper->apply());
 }
 
 int macroStop(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  return static_cast<int>(macro->exit());
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return static_cast<int>(macroWrapper->exit());
 }
 
-void macroSetParameterValue(MacroHandle handle, unsigned int parameter, const wchar_t* strValue) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  auto paramsPair = macro->getParametersCInterface();
-  if (parameter < paramsPair.second) {
-    std::wstring value(strValue);
-    macro->setParameterValueAsString(parameter,value);
-  }
+void macroSetParameterValue(MacroHandle handle, unsigned int parameter, const wchar_t* cstrValue) {
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  macroWrapper->setParameterValueAsString(parameter,cstrValue);
 }
 
 const wchar_t* macroGetParameterValue(MacroHandle handle, unsigned int parameter) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  auto paramsPair = macro->getParametersCInterface();
-  if (parameter < paramsPair.second) {
-    return macro->getParameterValueAsString(parameter).c_str();
-  }
-  else
-  {
-    return nullptr;
-  }
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  return macroWrapper->getParameterValueAsString(parameter);
 }
 
 #if defined(QT_VERSION)
 #include "macroextended.h"
 
 void* macroCreateWidget(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  if (macro->getType() != Macro) {
-    auto macroExt = dynamic_cast<MacroExtBase*>(macro);
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  if (macroWrapper->getType() != Macro) {
+    auto macroExt = dynamic_cast<MacroExtBase*>(macroWrapper->data());
     assert(macroExt != nullptr);
     return reinterpret_cast<void*>(macroExt->createWidget());
   }
@@ -535,10 +627,10 @@ void* macroCreateWidget(MacroHandle handle) {
 }
 
 void macroDestroyWidget(MacroHandle handle) {
-  auto macro = static_cast<MacroBase*>(handle);
-  assert(macro != nullptr);
-  if (macro->getType() != Macro) {
-    auto macroExt = dynamic_cast<MacroExtBase*>(macro);
+  auto macroWrapper = static_cast<MacroAPIWrapper*>(handle);
+  assert(macroWrapper != nullptr);
+  if (macroWrapper->getType() != Macro) {
+    auto macroExt = dynamic_cast<MacroExtBase*>(macroWrapper->data());
     assert(macroExt != nullptr);
     macroExt->destroyWidget();
   }

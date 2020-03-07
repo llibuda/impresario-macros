@@ -39,11 +39,6 @@ public:
   ViewerImage();
   ~ViewerImage() override = default;
 
-  MacroBase* clone() const override {
-    return new ViewerImage();
-  }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;

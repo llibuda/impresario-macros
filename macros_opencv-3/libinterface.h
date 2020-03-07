@@ -110,6 +110,8 @@ extern "C" {
 #define MACRO_REGISTRATION_BEGIN
 #define MACRO_ADD(class_name)
 #define MACRO_REGISTRATION_END
+class MacroAPIWrapper;
+
 void notifyParameterChanged(MacroHandle handle, unsigned int parameter);
 
 #endif /* LIBINTERFACE_H_ */

@@ -39,11 +39,6 @@ public:
   ViewerBaseTypes();
   ~ViewerBaseTypes() override = default;
 
-  MacroBase* clone() const override {
-    return new ViewerBaseTypes();
-  }
-
-protected:
   Status onInit() override;
   Status onApply() override;
   Status onExit() override;
