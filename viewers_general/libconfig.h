@@ -36,7 +36,7 @@
 #define LIB_NAME           L"Viewers_BasicTypes"
 #define LIB_VERSION_MAJOR  1
 #define LIB_VERSION_MINOR  0
-#define LIB_VERSION_PATCH  1
+#define LIB_VERSION_PATCH  2
 #define LIB_DESCRIPTION    L"<html><body>"\
   L"<p><b>Library with viewers for basic C types.</b></p>"\
   L"<p>Copyright (C) 2015-2020  Lars Libuda</p>"\

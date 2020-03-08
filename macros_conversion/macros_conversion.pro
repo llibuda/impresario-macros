@@ -34,7 +34,7 @@ CONFIG += shared
 CONFIG -= app_bundle
 CONFIG -= qt
 
-VERSION = 1.1.1
+VERSION = 1.1.2
 DESTDIR = ../lib
 
 TARGET = conversion_ltilib-2_opencv-3

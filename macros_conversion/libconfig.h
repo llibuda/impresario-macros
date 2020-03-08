@@ -36,7 +36,7 @@
 #define LIB_NAME           L"Conversion_ltilib-2_opencv-3"
 #define LIB_VERSION_MAJOR  1
 #define LIB_VERSION_MINOR  1
-#define LIB_VERSION_PATCH  1
+#define LIB_VERSION_PATCH  2
 #define LIB_DESCRIPTION    L"<html><body>"\
   L"<p><b>Library with macros for converting image types between ltilib-2 and OpenCV 3.</b></p>"\
   L"<p>Copyright (C) 2015-2020  Lars Libuda</p>"\

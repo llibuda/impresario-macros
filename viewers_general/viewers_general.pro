@@ -33,7 +33,7 @@ CONFIG += c++11
 CONFIG += shared
 QT += core widgets gui
 
-VERSION = 1.0.1
+VERSION = 1.0.2
 DESTDIR = ../lib
 
 TARGET = viewers_general

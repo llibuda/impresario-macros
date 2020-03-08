@@ -33,7 +33,7 @@
 
 #define INTERFACE_API_MAJOR 1
 #define INTERFACE_API_MINOR 0
-#define INTERFACE_API_PATCH 0
+#define INTERFACE_API_PATCH 1
 
 #ifdef _IMPRESARIO_WIN
   // definition for Windows platform

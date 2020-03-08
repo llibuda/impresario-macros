@@ -33,7 +33,7 @@ CONFIG += shared
 CONFIG += c++11
 QT += core widgets gui
 
-VERSION = 1.0.1
+VERSION = 1.0.2
 DESTDIR = ../lib
 
 TARGET = viewers-ltilib-2

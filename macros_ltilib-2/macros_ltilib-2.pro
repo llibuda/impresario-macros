@@ -33,7 +33,7 @@ CONFIG += shared
 CONFIG -= app_bundle
 CONFIG -= qt
 
-VERSION = 1.0.1
+VERSION = 1.0.2
 DESTDIR = ../lib
 
 TARGET = imgproc-ltilib-2
