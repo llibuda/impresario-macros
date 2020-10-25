@@ -77,7 +77,7 @@ CvLoadImages::CvLoadImages() : MacroBase{}, fileIndex{0} {
   addParameter<std::string>(L"Source directory",L"Directory where to load images from","",L"StringDirSelector");
   addParameter<std::string>(L"File pattern",L"Regular expression for matching file names (including suffix) found in source directory",".*\\.(jpg|png)",L"StringLineEdit");
   addParameter<bool>(L"Repeat",L"Starts loading images from beginning when end was reached.",false,L"BoolComboBox");
-  addParameter<std::string>(L"Current File",L"Current loaded image","",L"StringFileSelector");
+  addParameter<std::string>(L"Current File",L"Current loaded image (read-only)","",L"StringLineEdit",L"{ \"readOnly\": true }");
 }
 
 MacroBase::Status CvLoadImages::onInit() {

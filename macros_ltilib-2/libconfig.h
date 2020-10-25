@@ -36,7 +36,7 @@
 #define LIB_NAME           L"ImageProcessing_ltilib-2"
 #define LIB_VERSION_MAJOR  1
 #define LIB_VERSION_MINOR  0
-#define LIB_VERSION_PATCH  2
+#define LIB_VERSION_PATCH  3
 #define LIB_DESCRIPTION    L"<html><body>"\
   L"<p><b>Library with macros dedicated to image processing with the ltilib-2.</b></p>"\
   L"<p>Copyright (C) 2015-2020  Lars Libuda</p>"\

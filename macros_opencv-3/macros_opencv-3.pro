@@ -34,7 +34,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 #CONFIG += c++17 # not yet supported by QMAKE
 
-VERSION = 1.1.2
+VERSION = 1.1.3
 DESTDIR = ../lib
 
 TARGET = imgproc_opencv-3
