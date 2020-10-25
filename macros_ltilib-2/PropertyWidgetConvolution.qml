@@ -1,99 +1,94 @@
-/****************************************************************************************************
-**   Impresario Library ImageProcessing_ltilib-2
-**   This file is part of the Impresario Library ImageProcessing_ltilib-2.
-**
+/******************************************************************************************
+**   Impresario - Image Processing Engineering System applying Reusable Interactive Objects
 **   Copyright (C) 2015-2020  Lars Libuda
-**   All rights reserved.
 **
-**   Redistribution and use in source and binary forms, with or without
-**   modification, are permitted provided that the following conditions are met:
-**       * Redistributions of source code must retain the above copyright
-**         notice, this list of conditions and the following disclaimer.
-**       * Redistributions in binary form must reproduce the above copyright
-**         notice, this list of conditions and the following disclaimer in the
-**         documentation and/or other materials provided with the distribution.
-**       * Neither the name of the copyright holder nor the
-**         names of its contributors may be used to endorse or promote products
-**         derived from this software without specific prior written permission.
+**   This file is part of Impresario.
 **
-**   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-**   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-**   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-**   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
-**   DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-**   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-**   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-**   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-**   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-**   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**   Impresario is free software: you can redistribute it and/or modify
+**   it under the terms of the GNU General Public License as published by
+**   the Free Software Foundation, either version 3 of the License, or
+**   (at your option) any later version.
 **
-*****************************************************************************************************/
-import QtQuick 2.5
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.4
+**   Impresario is distributed in the hope that it will be useful,
+**   but WITHOUT ANY WARRANTY; without even the implied warranty of
+**   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+**   GNU General Public License for more details.
+**
+**   You should have received a copy of the GNU General Public License
+**   along with Impresario in subdirectory "licenses", file "LICENSE_Impresario.GPLv3".
+**   If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************************/
+import QtQml 2.15
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import Qt.labs.qmlmodels 1.0
 
 Item {
+    // "macro" is passed as QML Context by Impresario
+
     width: 300
     height: 300
 
-    ListModel {
-        id: itemProperties;
+    onWidthChanged: propertyView.forceLayout()
+    onHeightChanged: propertyView.forceLayout()
 
-        signal adaptList(int selection);
-        property variant props: macro.parameters();
+    SystemPalette {
+        id: palette
+        colorGroup: SystemPalette.Active
+    }
 
-        Component.onCompleted: {
-            append({"property": props[0].name, "value": props[0].value, "component": props[0].component, "properties": props[0].properties, "tagIndex": 0 });
-            adaptList(props[0].value);
-            // NOTE: There is a nasty bug in the TableView component introduced in Qt 5.6
-            // It seems like a racing condition between this method and loading the TableView
-            // Assigned the model to the TableView here fixes this problem
-            propertyView.model = this;
+    TableModel {
+        id: itemModel
+
+        property variant props: (macro === null) ? null : macro.parameters()
+
+        TableModelColumn {
+            display: "name"
+        }
+        TableModelColumn {
+            display: "value"
+            edit: "component"              // misuse of edit role to pass editor component to model
+            accessibleText: "properties"   // misuse of accessibleText role to pass properties for editor component to model
+            accessibleDescription: "name"  // misuse of accessibleDescription role to have the name of the property in model
         }
 
-        onDataChanged: {
-            //console.log("onDataChanged",propertyView.currentRow);
-            if (propertyView.currentRow >= 0 && propertyView.currentRow < itemProperties.count) {
-                var index = itemProperties.get(propertyView.currentRow).tagIndex;
-                props[index].value = itemProperties.get(propertyView.currentRow).value;
-                if (index === 0) {
-                    adaptList(props[index].value);
+        Component.onCompleted: function() {
+            appendRow({"name": props[0].name, "value": props[0].value, "component": props[0].component, "properties": props[0].properties, "description": props[0].description, "tagIndex": 0 });
+            adaptList(props[0].value)
+        }
+
+        onDataChanged: function(modelIndex) {
+            var rowIndex = getRow(modelIndex.row).tagIndex
+            if (props[rowIndex].value !== data(modelIndex,"display")) {
+                //console.log("OnDataChanged: " + props[rowIndex].name + " Value: " + data(modelIndex,"display"))
+                props[rowIndex].value = data(modelIndex,"display")
+                if (rowIndex === 0) {
+                    adaptList(props[0].value)
                 }
             }
         }
 
-        onAdaptList: {
-            //console.log("adaptList",selection);
-            propertyView.currentRow = -1;
-            if (count > 1) {
-                remove(1,count-1);
-            }
-            var prop;
-            var elements = [];
-            switch(selection) {
+        signal adaptList(int kernelType)
+
+        onAdaptList: function(kernelType) {
+            if (rowCount > 1) removeRow(1,rowCount - 1)
+
+            switch(kernelType) {
             case 2:
-                for(prop = 1; prop <= 2; prop++) {
-                    elements.push({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
-                }
-                append(elements);
+                appendRow({"name": props[1].name, "value": props[1].value, "component": props[1].component, "properties": props[1].properties, "description": props[1].description, "tagIndex": 1 });
+                appendRow({"name": props[2].name, "value": props[2].value, "component": props[2].component, "properties": props[2].properties, "description": props[2].description, "tagIndex": 2 });
                 break;
             case 0:
             case 1:
             case 7:
             case 8:
-                for(prop = 1; prop <= 1; prop++) {
-                    elements.push({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
-                }
-                append(elements);
+                appendRow({"name": props[1].name, "value": props[1].value, "component": props[1].component, "properties": props[1].properties, "description": props[1].description, "tagIndex": 1 });
                 break;
             case 9:
             case 10:
             case 13:
             case 14:
-                for(prop = 3; prop <= 3; prop++) {
-                    elements.push({"property": props[prop].name, "value": props[prop].value, "component": props[prop].component, "properties": props[prop].properties, "tagIndex": prop });
-                }
-                append(elements);
+                appendRow({"name": props[3].name, "value": props[3].value, "component": props[3].component, "properties": props[3].properties, "description": props[3].description, "tagIndex": 3 });
                 break;
             case 3:
             case 4:
@@ -106,149 +101,206 @@ Item {
             default:
                 break;
             }
-            propertyView.currentRow = 0;
         }
     }
 
-
     Connections {
-        target: macro;
-        onParameterUpdated: {
-            itemProperties.set(index,{"value": itemProperties.props[index].value });
+        target: macro
+        function onParameterUpdated(index) {
+            itemModel.setData(itemModel.index(index,1), "display", itemModel.props[index].value)
         }
     }
 
     Component {
-        id: propertyDelegate
+        id: propertyValueDelegate
 
         Item {
-            SystemPalette { id: palette; colorGroup: SystemPalette.Active }
             id: propertyDelegateItem
-            Component.onCompleted: {
-                if (styleData.column === 0) {
-                    Qt.createQmlObject(
-                        'import QtQuick 2.5
-                         Text {
-                            id: propertyDelegateText
-                            anchors.fill: parent
-                            anchors.leftMargin: 3.0
-                            text: styleData.value
-                            elide: styleData.elideMode
-                            verticalAlignment: Text.AlignVCenter
-                            renderType: Text.NativeRendering
-                            color: if (styleData.selected) {
-                                return palette.highlightedText
-                            }
-                            else {
-                                return palette.text
-                            }
-                         }',propertyDelegateItem,"propertyNameItem");
+            Component.onCompleted: function() {
+                var component = Qt.createComponent(model.edit + ".qml")
+                if (component.status === Component.Error) {
+                    component = Qt.createComponent("StringLineEdit.qml")
                 }
-                else if (styleData.column === 1) {
-                    var index = itemProperties.get(styleData.row).tagIndex;
-                    var component = Qt.createComponent(itemProperties.props[index].component + ".qml");
-                    if (component.status === Component.Error) {
-                        component = Qt.createComponent("StringLineEdit.qml");
-                    }
-                    if (component.status === Component.Error) {
-                        throw "\nFailed to load custom component '" + itemProperties.props[index].component + ".qml'" +
-                              "and default component 'StringLineEdit.qml' as backup for parameter '" + itemProperties.props[index].name + "'";
-                    }
+                if (component.status === Component.Error) {
+                    throw "\nFailed to load custom component '" + model.edit + ".qml'" +
+                            "and default component 'StringLineEdit.qml' as backup for parameter '" + model.accessibleDescription + "'"
+                }
 
-                    if (itemProperties.props[index].properties.length > 0) {
-                        var errorCaught = false;
-                        var props;
-                        try {
-                            props = JSON.parse(itemProperties.props[index].properties);
+                if (model.accessibleText.length > 0) {
+                    var errorCaught = false
+                    var props;
+                    try {
+                        props = JSON.parse(model.accessibleText)
+                    }
+                    catch(error) {
+                        errorCaught = true;
+                        throw "\nFailed to correctly parse custom properties '" + model.accessibleText + "'\n" +
+                                "for parameter '" + model.accessibleDescription + "':" +
+                                error.message +
+                                "\nProperties are ignored."
+                    }
+                    finally {
+                        if (errorCaught) {
+                            component.createObject(propertyDelegateItem)
                         }
-                        catch(error) {
-                            errorCaught = true;
-                            throw "\nFailed to correctly parse custom properties '" + itemProperties.props[index].properties + "'\n" +
-                                  "for parameter '" + itemProperties.props[index].name + "':" +
-                                  error.message +
-                                  "\nProperties are ignored.";
-                        }
-                        finally {
-                            if (errorCaught) {
-                                component.createObject(propertyDelegateItem);
-                            }
-                            else {
-                                component.createObject(propertyDelegateItem,props);
-                            }
+                        else {
+                            component.createObject(propertyDelegateItem,props)
                         }
                     }
-                    else {
-                        component.createObject(propertyDelegateItem);
-                    }
+                }
+                else {
+                    component.createObject(propertyDelegateItem)
                 }
             }
 
             Rectangle {
                 anchors.fill: parent
-                color: palette.midlight
-
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.bottomMargin: 1.0
-                    anchors.rightMargin: 1.0
-                    color: {
-                        if (styleData.selected) {
-                            return palette.highlight;
-                        }
-                        else if ((propertyView.rowCount - styleData.row) % 2 === 1) {
-                            return palette.alternateBase
-                        }
-                        else {
-                            return palette.base;
-                        }
+                z: -1
+                border.width: 1
+                border.color: palette.midlight
+                color: {
+                    if (propertyView.currentItemRow === model.row) {
+                        return palette.highlight
+                    }
+                    else if ((model.row) % 2 === 0) {
+                        return palette.alternateBase
+                    }
+                    else {
+                        return palette.base;
                     }
                 }
             }
         }
     }
 
-    Component {
-        id: propertyRowDelegate
+    HorizontalHeaderView {
+        id: headerView
+        boundsBehavior: Flickable.StopAtBounds
+        syncView: propertyView
+        anchors.left: propertyView.left
+        width: parent.width
+        model: ["Property","Value"]
+        MouseArea {
+            anchors.fill: parent
+            anchors.leftMargin: parent.width * propertyView.columnDevider - 3
+            anchors.rightMargin: parent.width * (1 - propertyView.columnDevider) - 3
+            cursorShape: Qt.SplitHCursor
+            acceptedButtons: Qt.LeftButton
 
-        Rectangle {
-            SystemPalette { id: palette; colorGroup: SystemPalette.Active }
-            FontMetrics { id: defaultFont; }
-            id: rowRectangle
-            height: defaultFont.height + 7
-            color: palette.base
+            onPositionChanged: function(mouse) {
+                var pos = mapToItem(parent,mouse.x,mouse.y)
+                var devider = pos.x / parent.width
+                if (devider < 0.1) devider = 0.1
+                if (devider > 0.9) devider = 0.9
+                propertyView.columnDevider = devider
+                propertyView.forceLayout()
+            }
         }
     }
 
     TableView {
-        id : propertyView;
-        // NOTE: No model assignment here any more, see also comment in ListModel:Component.onCompleted
-        //model: itemProperties;
-        anchors.fill: parent;
-        itemDelegate: propertyDelegate
-        rowDelegate: propertyRowDelegate
-        selectionMode: SelectionMode.SingleSelection;
+        id: propertyView
+        model: itemModel;
+        boundsBehavior: Flickable.StopAtBounds
+        anchors.fill: parent
+        anchors.topMargin: headerView.height
+        clip: true
+        focus: true
+        reuseItems: false
 
-        onClicked: {
-            macro.showDescription(itemProperties.get(row).tagIndex);
+        Connections {
+            target: itemModel
+            function onAdaptList(kernelIndex) {
+                //console.log("Layout update for kernel " + kernelIndex)
+                propertyView.forceLayout()
+            }
         }
 
-        TableViewColumn {
-            id: colPropertyName
-            role: "property"
-            title: "Property"
-            width: 120
-            resizable: true
-            movable: false
-        }
-        TableViewColumn {
-            id: colPropertyValue
-            role: "value"
-            title: "Value"
-            width: propertyView.width - colPropertyName.width - 2
-            resizable: false
-            movable: false
+        property int currentItemRow: -1
+        property real columnDevider: 0.3
+        property int rowHeight: 0
+
+        columnWidthProvider: function(column) {
+            if (column === 0)
+                return parent.width * columnDevider
+            else
+                return parent.width * (1 - columnDevider)
         }
 
+        onContentHeightChanged: function() {
+            if (contentHeight > 0 && rowHeight === 0) {
+                rowHeight = contentHeight / itemModel.rowCount
+                contentHeight = Qt.binding(function() { return rowHeight * itemModel.rowCount })
+            }
+        }
+
+        onActiveFocusChanged: function(hasFocus) {
+            if (!hasFocus) {
+                propertyView.currentItemRow = -1
+                macro.showDescription(propertyView.currentItemRow)
+            }
+        }
+
+        Keys.onPressed: function(event) {
+            if (event.key === Qt.Key_Up) {
+                if (propertyView.currentItemRow < 0) propertyView.currentItemRow = 0
+                else if (propertyView.currentItemRow > 0) propertyView.currentItemRow--
+                macro.showDescription(propertyView.currentItemRow)
+                event.accepted = true;
+            }
+            else if (event.key === Qt.Key_Down) {
+                if (propertyView.currentItemRow < 0) propertyView.currentItemRow = 0
+                else if (propertyView.currentItemRow < propertyView.rows - 1) propertyView.currentItemRow++
+                macro.showDescription(propertyView.currentItemRow)
+                event.accepted = true;
+            }
+        }
+
+        MouseArea{
+            id: propertyViewMouseArea
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onPressed: function(mouse) {
+                // the following formular implies that all rows have the same height ...
+                propertyView.currentItemRow = Math.min(mouse.y / propertyView.contentHeight * propertyView.rows, propertyView.rows - 1)
+                macro.showDescription(propertyView.currentItemRow)
+                mouse.accepted = true
+            }
+        }
+
+        delegate: DelegateChooser {
+            DelegateChoice {
+                column: 0
+                delegate: Text {
+                    text: model.display
+                    elide: Text.ElideRight
+                    color: (propertyView.currentItemRow === model.row) ? palette.highlightedText : text
+                    padding: 5
+                    Rectangle {
+                        anchors.fill: parent
+                        z: -1
+                        border.width: 1
+                        border.color: palette.midlight
+                        color: {
+                            if (propertyView.currentItemRow === model.row) {
+                                return palette.highlight
+                            }
+                            else if ((model.row) % 2 === 0) {
+                                return palette.alternateBase
+                            }
+                            else {
+                                return palette.base;
+                            }
+                        }
+                    }
+                }
+            }
+            DelegateChoice {
+                column: 1
+                delegate: propertyValueDelegate
+            }
+        }
+
+        ScrollBar.vertical: ScrollBar { }
     }
-
 }
