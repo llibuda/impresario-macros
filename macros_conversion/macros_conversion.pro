@@ -61,23 +61,30 @@ win32 {
   LIBS += $$quote(-L../../../ltilib-2-build/lib) -lltilib-2_$${BUILD_POSTFIX}
 
   # check support for open-cv
-  OPENCV_BASE_PATH = "../../opencv-3.4.1/build"
-  OPENCV_LIB_PATH =
-  if(win32-msvc*) {
-    contains(QT_ARCH, i386) {
-      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x32/vc$${section(MSVC_VER,.,0,0)}/lib
-    }
-    else {
-      OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}/x64/vc$${section(MSVC_VER,.,0,0)}/lib
-    }
-  }
+  OPENCV_BASE_PATH = "../../opencv-3.4.1"
+  OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}-build/lib
   OPENCV_LIB = opencv_world341
   CONFIG(debug, release|debug):OPENCV_LIB = $${OPENCV_LIB}d
   !exists($${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib) {
-    error(Current Kit is not supported by OpenCV-3. Library $${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib does not exist.)
+    error(Library $${OPENCV_LIB_PATH}/$${OPENCV_LIB}.lib does not exist.)
   }
 
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}-build)
   INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/core/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/imgproc/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/photo/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/video/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/features2d/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/flann/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/objdetect/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/calib3d/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/imgcodecs/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/videoio/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/highgui/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/ml/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/hal/include)
+
   LIBS += $$quote(-L../$${OPENCV_LIB_PATH}) -l$${OPENCV_LIB}
 }
 
@@ -96,30 +103,33 @@ unix {
   INCLUDEPATH += $$quote(../../ltilib-2/src/types)
   INCLUDEPATH += $$quote(../../ltilib-2/src/viewer)
 
-  INCLUDEPATH += $$quote(../../opencv-3.4.1-build)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/core/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/imgproc/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/photo/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/video/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/features2d/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/flann/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/objdetect/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/calib3d/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/imgcodecs/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/videoio/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/highgui/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/ml/include)
-  INCLUDEPATH += $$quote(../../opencv-3.4.1/modules/hal/include)
+  OPENCV_BASE_PATH = "../../opencv-3.4.1"
+  OPENCV_LIB_PATH = $${OPENCV_BASE_PATH}-build/lib
+
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}-build)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/core/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/imgproc/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/photo/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/video/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/features2d/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/flann/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/objdetect/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/calib3d/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/imgcodecs/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/videoio/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/highgui/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/ml/include)
+  INCLUDEPATH += $$quote($${OPENCV_BASE_PATH}/modules/hal/include)
 
   CONFIG(release, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltir
-    LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
+    LIBS += $$quote(-L../$${OPENCV_LIB_PATH}) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
   }
 
   CONFIG(debug, release|debug) {
     LIBS += $$quote(-L../../../ltilib-2/lib) -lltid
-    LIBS += $$quote(-L../../../opencv-3.4.1-build/lib) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
+    LIBS += $$quote(-L../$${OPENCV_LIB_PATH}) -lopencv_core #-lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videoio
   }
 }
 

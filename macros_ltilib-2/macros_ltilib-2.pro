@@ -46,7 +46,6 @@ win32 {
   DEFINES += _IMPRESARIO_WIN
 
   # C++17 support for MSVC
-  DEFINES += _HAS_CXX17
   QMAKE_CXXFLAGS += -std:c++17
 
   INCLUDEPATH += $$quote(../../ltilib-2/ltilib-2/src/basics)
