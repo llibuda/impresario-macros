@@ -208,14 +208,6 @@ Item {
         focus: true
         reuseItems: false
 
-        Connections {
-            target: itemModel
-            function onAdaptList(kernelIndex) {
-                //console.log("Layout update for kernel " + kernelIndex)
-                propertyView.forceLayout()
-            }
-        }
-
         property int currentItemRow: -1
         property real columnDevider: 0.3
         property int rowHeight: 0
@@ -272,7 +264,7 @@ Item {
             DelegateChoice {
                 column: 0
                 delegate: Text {
-                    text: model.display
+                    text: (model.display) ? model.display : ""
                     elide: Text.ElideRight
                     color: (propertyView.currentItemRow === model.row) ? palette.highlightedText : text
                     padding: 5
